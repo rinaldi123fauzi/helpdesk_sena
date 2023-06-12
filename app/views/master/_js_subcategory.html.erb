@@ -1,0 +1,111 @@
+<script>
+  $(document).on('click','#simpanSubKategori',function(e){
+    e.preventDefault();
+    var namaSubKategori = $('#nama_subkategori').val();
+    var id_subkategori = $('#id_subkategori').val();
+    var category_id = $('#kategori').val();
+    $('#simpanSubKategori').text('Loading...');
+    if (id_subkategori == "") {
+      $.ajax({
+        url: "<%= simpanSubKategori_helper_json_index_path %>",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          namaSubKategori:namaSubKategori,
+          category_id:category_id
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Data Sub Kategori";
+          }
+        }
+      });
+    }else{
+      $.ajax({
+        url: "<%= updateSubKategori_helper_json_index_path %>",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          namaSubKategori:namaSubKategori,
+          id_subkategori:id_subkategori,
+          category_id:category_id
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Data Sub Kategori";
+          }
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '#ubahSubKategori', function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $('#id_subkategori').empty();
+    $('#nama_subkategori').empty();
+    $('#kategori').empty();
+    $('.modal-title').text('Ubah Data');
+    $.ajax({
+      url: "<%= getDetailSubKategori_helper_json_index_path %>",
+      method: 'GET',
+      data : {
+        id:id
+      },
+      success: function(data)
+      {
+        $('#id_subkategori').val(id);
+        for (let i = 0; i < data[0]['categories'].length; i++) {
+            const element = data[0]['categories'][i];
+            if (data[0]['category_id'] == element['id']) {
+                $('#kategori').append(`<option value="${element['id']}" selected>${element['nama_kategori']}</option>`);
+            }else{
+                $('#kategori').append(`<option value="${element['id']}">${element['nama_kategori']}</option>`);
+            }
+        }
+        $('#nama_subkategori').val(data[0]['nama']);
+      }
+    });
+  });
+
+  $(document).on('click', '.tambah-subkategori', function(){
+      $('#nama_subkategori').val('');
+      $('#id_subkategori').val('');
+      $('.modal-title').text('Tambah Data');
+      
+      $.ajax({
+        url: "<%= getAllKategori_helper_json_index_path %>",
+        method: 'GET',
+        data:{
+            id:1
+        },
+        success: function(data){
+            for (let i = 0; i < data[0]['data_categories'].length; i++) {
+                const element = data[0]['data_categories'][i];
+                $('#kategori').append(`<option value="${element['id']}">${element['nama_kategori']}</option>`)
+            }
+        }
+      });
+  });
+
+  $(document).on('click','#hapusSubKategori',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $.ajax({
+      url: "<%= hapusSubKategori_helper_json_index_path %>",
+      method: 'GET',
+      data : {
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id
+      },
+      success: function(data)
+      {
+        if (data[0]['status'] == "terhapus") {
+          window.location.href = "/master/index?pilihan=Data Sub Kategori";
+        }
+      }
+    });
+  });
+</script>

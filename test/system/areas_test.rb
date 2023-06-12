@@ -14,7 +14,7 @@ class AreasTest < ApplicationSystemTestCase
     visit areas_url
     click_on "New Area"
 
-    fill_in "Nama area", with: @area.nama_area
+    fill_in "Nama", with: @area.nama
     click_on "Create Area"
 
     assert_text "Area was successfully created"
@@ -25,7 +25,7 @@ class AreasTest < ApplicationSystemTestCase
     visit areas_url
     click_on "Edit", match: :first
 
-    fill_in "Nama area", with: @area.nama_area
+    fill_in "Nama", with: @area.nama
     click_on "Update Area"
 
     assert_text "Area was successfully updated"

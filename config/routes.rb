@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :sub_categories
   resources :inventories
   resources :items
   resources :approvals
@@ -59,6 +60,25 @@ Rails.application.routes.draw do
     get :checkInventory, on: :collection
     get :deleteFile, on: :collection
     post :activationUser, on: :collection
+
+    # Master Area
+    post :simpanArea, on: :collection
+    post :updateArea, on: :collection
+    get :getDetailArea, on: :collection
+    get :hapusArea, on: :collection
+
+    # Master Kategori
+    post :simpanKategori, on: :collection
+    post :updateKategori, on: :collection
+    get :getDetailKategori, on: :collection
+    get :hapusKategori, on: :collection
+
+    # Master SubKategori
+    post :simpanSubKategori, on: :collection
+    post :updateSubKategori, on: :collection
+    get :getDetailSubKategori, on: :collection
+    get :hapusSubKategori, on: :collection
+    get :getAllKategori, on: :collection
     member do
       get "/sub_work_category", to: "helper_json#getSubWorkCategory"
     end

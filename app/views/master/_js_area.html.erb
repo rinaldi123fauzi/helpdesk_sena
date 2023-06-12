@@ -1,0 +1,85 @@
+<script>
+  $(document).on('click','#simpanArea',function(e){
+    e.preventDefault();
+    var namaArea = $('#nama_area').val();
+    var id_area = $('#id_area').val();
+    $('#simpanArea').text('Loading...');
+    if (id_area == "") {
+      $.ajax({
+        url: "<%= simpanArea_helper_json_index_path %>",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          namaArea:namaArea,
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Data Area";
+          }
+        }
+      });
+    }else{
+      $.ajax({
+        url: "<%= updateArea_helper_json_index_path %>",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          namaArea:namaArea,
+          id_area:id_area
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Data Area";
+          }
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '#ubahArea', function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $('#id_area').empty();
+    $('#nama_area').empty();
+    $('.modal-title').text('Ubah Data');
+    $.ajax({
+      url: "<%= getDetailArea_helper_json_index_path %>",
+      method: 'GET',
+      data : {
+        id:id
+      },
+      success: function(data)
+      {
+        $('#id_area').val(id);
+        $('#nama_area').val(data[0]['nama']);
+      }
+    });
+  });
+
+  $(document).on('click', '.tambah-area', function(){
+      $('#nama_area').val('');
+      $('#id_area').val('');
+      $('.modal-title').text('Tambah Data');
+  });
+
+  $(document).on('click','#hapusArea',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $.ajax({
+      url: "<%= hapusArea_helper_json_index_path %>",
+      method: 'GET',
+      data : {
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id
+      },
+      success: function(data)
+      {
+        if (data[0]['status'] == "terhapus") {
+          window.location.href = "/master/index?pilihan=Data Area";
+        }
+      }
+    });
+  });
+</script>

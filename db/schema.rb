@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_26_033113) do
+ActiveRecord::Schema.define(version: 2023_06_12_043900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,18 @@ ActiveRecord::Schema.define(version: 2023_03_26_033113) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["loan_id"], name: "index_approvals_on_loan_id"
+  end
+
+  create_table "areas", force: :cascade do |t|
+    t.string "nama"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "nama_kategori"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "employees", force: :cascade do |t|
@@ -118,6 +130,14 @@ ActiveRecord::Schema.define(version: 2023_03_26_033113) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sub_categories", force: :cascade do |t|
+    t.bigint "category_id"
+    t.string "nama_sub_kategori"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_sub_categories_on_category_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -149,4 +169,5 @@ ActiveRecord::Schema.define(version: 2023_03_26_033113) do
   add_foreign_key "loans", "users"
   add_foreign_key "role_assignments", "roles"
   add_foreign_key "role_assignments", "users"
+  add_foreign_key "sub_categories", "categories"
 end

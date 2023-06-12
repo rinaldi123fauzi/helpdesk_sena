@@ -1,0 +1,85 @@
+<script>
+  $(document).on('click','#simpanKategori',function(e){
+    e.preventDefault();
+    var namaKategori = $('#nama_kategori').val();
+    var id_kategori = $('#id_kategori').val();
+    $('#simpanKategori').text('Loading...');
+    if (id_kategori == "") {
+      $.ajax({
+        url: "<%= simpanKategori_helper_json_index_path %>",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          namaKategori:namaKategori,
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Data Kategori";
+          }
+        }
+      });
+    }else{
+      $.ajax({
+        url: "<%= updateKategori_helper_json_index_path %>",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          namaKategori:namaKategori,
+          id_kategori:id_kategori
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Data Kategori";
+          }
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '#ubahKategori', function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $('#id_kategori').empty();
+    $('#nama_kategori').empty();
+    $('.modal-title').text('Ubah Data');
+    $.ajax({
+      url: "<%= getDetailKategori_helper_json_index_path %>",
+      method: 'GET',
+      data : {
+        id:id
+      },
+      success: function(data)
+      {
+        $('#id_kategori').val(id);
+        $('#nama_kategori').val(data[0]['nama']);
+      }
+    });
+  });
+
+  $(document).on('click', '.tambah-kategori', function(){
+      $('#nama_kategori').val('');
+      $('#id_kategori').val('');
+      $('.modal-title').text('Tambah Data');
+  });
+
+  $(document).on('click','#hapusKategori',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $.ajax({
+      url: "<%= hapusKategori_helper_json_index_path %>",
+      method: 'GET',
+      data : {
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id
+      },
+      success: function(data)
+      {
+        if (data[0]['status'] == "terhapus") {
+          window.location.href = "/master/index?pilihan=Data Kategori";
+        }
+      }
+    });
+  });
+</script>

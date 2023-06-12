@@ -6,5 +6,8 @@ class MasterController < ApplicationController
     @work_units = WorkUnit.all.order("CREATED_AT DESC")
     @inventories = Inventory.all.order("CREATED_AT DESC")
     @items = Item.all.order("CREATED_AT DESC")
+    @areas = Area.all.order("CREATED_AT DESC")
+    @categories = Category.all.order("CREATED_AT DESC")
+    @sub_categories = SubCategory.all.order("CREATED_AT DESC")
   end
 end
