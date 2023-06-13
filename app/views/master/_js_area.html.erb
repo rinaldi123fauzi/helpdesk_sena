@@ -6,7 +6,7 @@
     $('#simpanArea').text('Loading...');
     if (id_area == "") {
       $.ajax({
-        url: "<%= simpanArea_helper_json_index_path %>",
+        url: "/master_data/areas/create",
         method: 'POST',
         data : {
           authenticity_token: '<%= form_authenticity_token %>',
@@ -21,7 +21,7 @@
       });
     }else{
       $.ajax({
-        url: "<%= updateArea_helper_json_index_path %>",
+        url: "/master_data/areas/update",
         method: 'POST',
         data : {
           authenticity_token: '<%= form_authenticity_token %>',
@@ -45,7 +45,7 @@
     $('#nama_area').empty();
     $('.modal-title').text('Ubah Data');
     $.ajax({
-      url: "<%= getDetailArea_helper_json_index_path %>",
+      url: "/master_data/areas/detail",
       method: 'GET',
       data : {
         id:id
@@ -68,8 +68,8 @@
     e.preventDefault();
     var id = $(this).data('id');
     $.ajax({
-      url: "<%= hapusArea_helper_json_index_path %>",
-      method: 'GET',
+      url: "/master_data/areas/delete",
+      method: 'DELETE',
       data : {
         authenticity_token: '<%= form_authenticity_token %>',
         id:id

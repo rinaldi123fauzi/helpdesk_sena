@@ -19,6 +19,8 @@ services:
       - "4321:3000"
     depends_on:
       - thedatabase
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   redis:
     image: redis:7.0

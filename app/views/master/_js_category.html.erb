@@ -6,7 +6,7 @@
     $('#simpanKategori').text('Loading...');
     if (id_kategori == "") {
       $.ajax({
-        url: "<%= simpanKategori_helper_json_index_path %>",
+        url: "/master_data/categories/create",
         method: 'POST',
         data : {
           authenticity_token: '<%= form_authenticity_token %>',
@@ -21,7 +21,7 @@
       });
     }else{
       $.ajax({
-        url: "<%= updateKategori_helper_json_index_path %>",
+        url: "/master_data/categories/update",
         method: 'POST',
         data : {
           authenticity_token: '<%= form_authenticity_token %>',
@@ -45,7 +45,7 @@
     $('#nama_kategori').empty();
     $('.modal-title').text('Ubah Data');
     $.ajax({
-      url: "<%= getDetailKategori_helper_json_index_path %>",
+      url: "/master_data/categories/detail",
       method: 'GET',
       data : {
         id:id
@@ -68,8 +68,8 @@
     e.preventDefault();
     var id = $(this).data('id');
     $.ajax({
-      url: "<%= hapusKategori_helper_json_index_path %>",
-      method: 'GET',
+      url: "/master_data/categories/delete",
+      method: 'DELETE',
       data : {
         authenticity_token: '<%= form_authenticity_token %>',
         id:id

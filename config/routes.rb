@@ -61,30 +61,35 @@ Rails.application.routes.draw do
     get :deleteFile, on: :collection
     post :activationUser, on: :collection
 
-    # Master Area
-    post :simpanArea, on: :collection
-    post :updateArea, on: :collection
-    get :getDetailArea, on: :collection
-    get :hapusArea, on: :collection
-
-    # Master Kategori
-    post :simpanKategori, on: :collection
-    post :updateKategori, on: :collection
-    get :getDetailKategori, on: :collection
-    get :hapusKategori, on: :collection
-
-    # Master SubKategori
-    post :simpanSubKategori, on: :collection
-    post :updateSubKategori, on: :collection
-    get :getDetailSubKategori, on: :collection
-    get :hapusSubKategori, on: :collection
-    get :getAllKategori, on: :collection
     member do
       get "/sub_work_category", to: "helper_json#getSubWorkCategory"
     end
   end
 
-  
+  namespace :master_data do
+    scope :categories do
+      post 'create' => 'categories#create'
+      post 'update' => 'categories#update'
+      get 'detail' => 'categories#detail'
+      delete 'delete' => 'categories#delete'
+      get 'getAll' => 'categories#getAll'
+    end
+
+    scope :areas do
+      post 'create' => 'areas#create'
+      post 'update' => 'areas#update'
+      get 'detail' => 'areas#detail'
+      delete 'delete' => 'areas#delete'
+    end
+
+    scope :sub_categories do
+      post 'create' => 'sub_categories#create'
+      post 'update' => 'sub_categories#update'
+      get 'detail' => 'sub_categories#detail'
+      delete 'delete' => 'sub_categories#delete'
+    end
+  end
+
   # resources :categories do
   #   resources :contacts, only: [:index], module: :categories
   # end

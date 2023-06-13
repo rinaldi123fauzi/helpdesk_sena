@@ -1,5 +1,5 @@
 //= require js/app.min.js
-     
+
 //= require js/scripts.js
 //= require js/custom.js
 
@@ -11,6 +11,7 @@
 //= require bundles/datatables/export-tables/pdfmake.min.js
 //= require bundles/datatables/export-tables/vfs_fonts.js
 //= require bundles/datatables/export-tables/buttons.print.min.js
+//= require bundles/select2/dist/js/select2.full.min.js
 //= require js/page/datatables.js
 //= require bundles/prism/prism.js
 

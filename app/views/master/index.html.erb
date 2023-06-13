@@ -9,7 +9,7 @@
         <div class="col-sm-4">
           <%= form_tag master_index_path, method: "GET" %>
           <% if current_user.roles.any? { |r| r.name == 'superadmin'} %>
-            <%= select_tag :pilihan, options_for_select(["Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Karyawan","Data Inventory","Data Item","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control" %>
+            <%= select_tag :pilihan, options_for_select(["Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Karyawan","Data Inventory","Data Item","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
           <% else %>
             <%= select_tag :pilihan, options_for_select(["Data Inventory","Data Item"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control" %>
           <% end %>
@@ -550,7 +550,7 @@
     <% end %>
 
     <% if params[:pilihan] == "Data Sub Kategori" %>
-      <div class="modal fade" id="subkategori" tabindex="-1" role="dialog" aria-labelledby="formModal"
+      <div class="modal fade" id="subkategori" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -566,7 +566,7 @@
                 <div class="form-group">
                   <label>Kategori</label>
                   <div class="input-group">
-                    <select id="kategori" class="form-control"></select>
+                    <select id="kategori" class="form-control select2" style="width: 100%;"></select>
                   </div>
                 </div>
                 <div class="form-group">

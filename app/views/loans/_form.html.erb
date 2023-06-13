@@ -46,7 +46,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <%= form.label :inventory_id %>
-                  <select name="loan[inventory_id]" id="inventory_id" class="form-control" required>
+                  <select name="loan[inventory_id]" id="inventory_id" class="form-control select2" required>
                     <option value="" selected>--Pilih--</option>
                     <% @inventories.each do |inventory| %>
                       <% if @loan.id.nil? %>
@@ -88,7 +88,6 @@
 </div>
 
 <script>
-  $('#inventory_id').select2();
 
   function fromDate(){
     const from_date = $('.from-date').val();

@@ -28,3 +28,4 @@ Gemfile.log
 /config/master.key
 .env
 .ruby-version
+/database
