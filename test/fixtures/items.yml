@@ -1,4 +1,12 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# == Schema Information
+#
+# Table name: items
+#
+#  id         :bigint           not null, primary key
+#  nama_item  :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 
 one:
   nama_item: MyString

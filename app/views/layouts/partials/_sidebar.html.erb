@@ -13,5 +13,6 @@
                 <li class="<%= params[:controller] == "master" ? " active" : ""%>"><a class="nav-link" href="<%= master_index_path %>"><i data-feather="file"></i><span>Master Data</span></a></li>
               <% end %>
               <li class="<%= params[:controller] == "loans" ? " active" : ""%>"><a class="nav-link" href="<%= loans_path %>"><i data-feather="file"></i><span>List Peminjaman</span></a></li>
+              <li class="<%= params[:controller] == "tickets" ? " active" : ""%>"><a class="nav-link" href="<%= tickets_path %>"><i data-feather="file"></i><span>Ticket</span></a></li>
           </ul>
         </aside>

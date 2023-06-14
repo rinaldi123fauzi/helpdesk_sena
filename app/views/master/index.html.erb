@@ -575,6 +575,12 @@
                     <input type="text" class="form-control" id="nama_subkategori">
                   </div>
                 </div>
+                <div class="form-group">
+                  <label>Kategori</label>
+                  <div class="input-group">
+                    <select id="priority" class="form-control select2" style="width: 100%;"></select>
+                  </div>
+                </div>
                 <button type="submit" class="btn btn-primary m-t-15 waves-effect" id="simpanSubKategori">Simpan</button>
               </form>
             </div>
@@ -601,6 +607,7 @@
                 <th style="width: 50px;" class="text-center">No</th>
                 <th>Nama Kategori</th>
                 <th>Nama Sub Kategori</th>
+                <th>Priority</th>
                 <th style="width: 150px;" class="text-center">Aksi</th>
               </tr>
             </thead>
@@ -610,6 +617,7 @@
                 <td style="width: 50px;" class="text-center"><%= index+1 %></td>
                 <td><%= work_unit.category.nama_kategori %></td>
                 <td><%= work_unit.nama_sub_kategori %></td>
+                <td><%= work_unit.priority %></td>
                 <td style="width: 150px;" class="text-center">
                   <%# if current_user.can? { |permissions| permissions.category.update? } %>
                   <a href="#" class="btn btn-warning btn-circle btn-sm" id="ubahSubKategori" data-toggle="modal" data-target="#subkategori" data-id="<%= work_unit.id %>">

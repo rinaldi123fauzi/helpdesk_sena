@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_12_043900) do
+ActiveRecord::Schema.define(version: 2023_06_14_040348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,7 +135,26 @@ ActiveRecord::Schema.define(version: 2023_06_12_043900) do
     t.string "nama_sub_kategori"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "priority"
     t.index ["category_id"], name: "index_sub_categories_on_category_id"
+  end
+
+  create_table "tickets", force: :cascade do |t|
+    t.bigint "category_id"
+    t.bigint "sub_category_id"
+    t.bigint "work_unit_id"
+    t.string "issued_by"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "area_id"
+    t.string "status"
+    t.string "assigned_by"
+    t.string "no_ticket"
+    t.index ["area_id"], name: "index_tickets_on_area_id"
+    t.index ["category_id"], name: "index_tickets_on_category_id"
+    t.index ["sub_category_id"], name: "index_tickets_on_sub_category_id"
+    t.index ["work_unit_id"], name: "index_tickets_on_work_unit_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -170,4 +189,8 @@ ActiveRecord::Schema.define(version: 2023_06_12_043900) do
   add_foreign_key "role_assignments", "roles"
   add_foreign_key "role_assignments", "users"
   add_foreign_key "sub_categories", "categories"
+  add_foreign_key "tickets", "areas"
+  add_foreign_key "tickets", "categories"
+  add_foreign_key "tickets", "sub_categories"
+  add_foreign_key "tickets", "work_units"
 end

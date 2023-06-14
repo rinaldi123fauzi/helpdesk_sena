@@ -2,7 +2,8 @@ class MasterData::SubCategoriesController < ApplicationController
   def create
     SubCategory.create!(
       'nama_sub_kategori' => params[:namaSubKategori],
-      'category_id' => params[:category_id]
+      'category_id' => params[:category_id],
+      'priority' => params[:priority]
     )
     render json: [  
       "status" => "tersimpan"
@@ -13,7 +14,8 @@ class MasterData::SubCategoriesController < ApplicationController
     @data = SubCategory.update(params[:id_subkategori],
       {
         :nama_sub_kategori => params[:namaSubKategori],
-        :category_id => params[:category_id]
+        :category_id => params[:category_id],
+        :priority => params[:priority]
       }
     )
     if (@data)
@@ -30,6 +32,7 @@ class MasterData::SubCategoriesController < ApplicationController
     render json:[
       "nama" => @data.nama_sub_kategori,
       "category_id" => @data.category_id,
+      "priority" => @data.priority,
       "categories" => @categories
     ]
   end

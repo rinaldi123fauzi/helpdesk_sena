@@ -34,7 +34,7 @@ RoleCore.permission_set_class.draw do
   #     end
   #   end
   #
-  %w(role user category contact data_company work_unit).each do |item|
+  %w(role user category contact data_company work_unit ticket).each do |item|
     group item.to_sym, model_name: "#{item.camelcase}" do
       permission :index
       permission :create

@@ -1,0 +1,306 @@
+<div class="modal fade" id="form-ticket" role="dialog" aria-labelledby="formModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="formModal"></h5>
+          <button type="button" class="close" id="close-modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" enctype="multipart/form-data" id="post">
+            <input type="hidden" name="authenticity_token" id="authenticity_token" value="<%= form_authenticity_token %>">
+            <input type="hidden" id="id_tiket">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Nomor Tiket</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="nomor-tiket" name="nomor_tiket" readonly>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Layanan</label>
+                  <div class="input-group">
+                    <select class="form-control select2" id="layanan" name="layanan" style="width: 100%;">
+                      <option value="">--Pilih--</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Dibuat Oleh</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="dibuat_oleh" id="dibuat-oleh" readonly>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Sub Layanan</label>
+                  <div class="input-group">
+                    <select class="form-control select2" id="sub-layanan" name="sub_layanan" style="width: 100%;">
+                      <option value="">--Pilih--</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Satuan Kerja</label>
+                  <div class="input-group">
+                    <select class="form-control select2" id="satuan-kerja" name="satuan_kerja" style="width: 100%;">
+                      <option value="">--Pilih--</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Area</label>
+                  <div class="input-group">
+                    <select class="form-control select2" id="area" name="area" style="width: 100%;">
+                      <option value="">--Pilih--</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Deskripsi</label>
+                  <div class="input-group">
+                    <textarea class="form-control" name="deskripsi" id="deskripsi"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>File</label>
+                  <div class="input-group">
+                    <input type="file" name="file_tiket" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <button class="form-control btn btn-md btn-info" id="simpan">Simpan</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+      <div class="card-header mt-2">
+        <h4>Data Tiket</h4>
+        <div class="card-header-form">
+          <% if current_user.can? { |permissions| permissions.ticket.create? } %>
+            <div class="align-items-center">
+              <button class="form-control tambah-ticket btn btn-info btn-md" data-backdrop="true" data-toggle="modal" data-target="#form-ticket">+ Tiket</button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="formModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="formModal">Detail</h5>
+              <button type="button" class="close" id="close-modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Nama Peminjam</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="nama_peminjam" disabled>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>Atasan Langsung</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="penanggung_jawab" disabled>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Inventory</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="inventory" disabled>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label>Deskripsi</label>
+                      <div class="input-group">
+                        <textarea class="form-control" id="deskripsi" disabled></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>From Date</label>
+                      <div class="input-group">
+                        <input type="date" class="form-control" id="from_date" disabled>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>To Date</label>
+                      <div class="input-group">
+                        <input type="date" class="form-control" id="to_date" disabled>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Status</label>
+                      <div class="input-group">
+                        <div id="status"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable_user" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 20px;">No</th>
+              <th>Nomor Tiket</th>
+              <th>Kategori</th>
+              <th>Sub Kategori</th>
+              <th>Satuan Kerja</th>
+              <th>Dibuat Oleh</th>
+              <th>Deskripsi</th>
+              <th>Prioritas</th>
+              <th>Status Tiket</th>
+              <th class="text-center" style="width: 100px;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @tickets.each_with_index do |ticket, index| %>
+              <tr>
+                <td><%= index+1 %></td>
+                <td><%= ticket.no_ticket %></td>
+                <td><%= ticket.category.nama_kategori %></td>
+                <td><%= ticket.sub_category.nama_sub_kategori %></td>
+                <td><%= ticket.work_unit.nama %></td>
+                <td><%= ticket.issued_by %></td>
+                <td><%= ticket.description %></td>
+                <td><%= ticket.sub_category.priority %></td>
+                <td><%= ticket.status %></td>
+                <td><%= link_to 'Show', ticket %>
+                <%= link_to 'Edit', edit_ticket_path(ticket) %>
+                <%= link_to 'Destroy', ticket, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).on('click', '.tambah-ticket', function(){
+    $('.modal-title').text('Buat Tiket');
+    $.ajax({
+      url: "/transaksi/tickets/list-form",
+      method: 'GET',
+      success: function(data)
+      {
+        $('#nomor-tiket').val(data[0]['no_ticket']);
+        $('#dibuat-oleh').val(data[0]['dibuat_oleh']);
+        for (let i = 0; i < data[0]['categories'].length; i++) {
+          const element = data[0]['categories'][i];
+          $('#layanan').append(`
+            <option value="${element['id']}">${element['nama_kategori']}</option>
+          `);
+        }
+
+        for (let i = 0; i < data[0]['areas'].length; i++) {
+          const element = data[0]['areas'][i];
+          $('#area').append(`
+            <option value="${element['id']}">${element['nama']}</option>
+          `);
+        }
+
+        for (let i = 0; i < data[0]['work_units'].length; i++) {
+          const element = data[0]['work_units'][i];
+          $('#satuan-kerja').append(`
+            <option value="${element['id']}">${element['nama']}</option>
+          `);
+        }
+
+        $(document).on('change', '#layanan', function(){
+          var id = $(this).val();
+          $.ajax({
+            url: "/transaksi/tickets/list-sub-category",
+            method: 'GET',
+            data :{
+              category_id:id
+            },
+            success: function(data)
+            {
+              $('#sub-layanan').empty();
+              $('#sub-layanan').append(`
+                    <option value="">--Pilih--</option>
+              `);
+              for (let i = 0; i < data[0]['sub_category'].length; i++) {
+                const element = data[0]['sub_category'][i];
+                $('#sub-layanan').append(`
+                  <option value="${element['id']}">${element['nama_sub_kategori']}</option>
+                `);
+              }
+            }
+          });
+        });
+      }
+    });
+  });
+
+  const btn_simpan = document.querySelector('#simpan');
+  const form_inventory = document.querySelector('form');
+
+  btn_simpan.addEventListener('click', (e) => {
+    e.preventDefault();
+    const formData = new FormData(form_inventory);
+    var id_tiket = $('#id_tiket').val();
+    $('#simpan').text('Loading...');
+    let xhr = new XMLHttpRequest();  
+    if (id_tiket == "") {
+      xhr.open("POST", "/transaksi/tickets/create", true);
+      xhr.send(formData);
+    }else{
+      xhr.open("POST", "/transaksi/tickets/update", true);
+      xhr.send(formData);
+    }
+
+    xhr.addEventListener("load", function(e){
+      let result = JSON.parse(xhr.response);
+      if (result.status == "tersimpan") {
+        window.location.href = "/tickets";
+      }
+    });
+  });
+</script>
+

@@ -1,6 +1,7 @@
 <script>
   $(document).on('click','#simpanSubKategori',function(e){
     e.preventDefault();
+    var priority = $('#priority').val();
     var namaSubKategori = $('#nama_subkategori').val();
     var id_subkategori = $('#id_subkategori').val();
     var category_id = $('#kategori').val();
@@ -12,7 +13,8 @@
         data : {
           authenticity_token: '<%= form_authenticity_token %>',
           namaSubKategori:namaSubKategori,
-          category_id:category_id
+          category_id:category_id,
+          priority:priority
         },
         success: function(data)
         {
@@ -29,7 +31,8 @@
           authenticity_token: '<%= form_authenticity_token %>',
           namaSubKategori:namaSubKategori,
           id_subkategori:id_subkategori,
-          category_id:category_id
+          category_id:category_id,
+          priority:priority
         },
         success: function(data)
         {
@@ -47,6 +50,7 @@
     $('#id_subkategori').empty();
     $('#nama_subkategori').empty();
     $('#kategori').empty();
+    $('#priority').empty();
     $('.modal-title').text('Ubah Data');
     $.ajax({
       url: "/master_data/sub_categories/detail",
@@ -56,6 +60,26 @@
       },
       success: function(data)
       {
+        select_priority = "";
+        if (data[0]['priority'] == "normal") {
+          select_priority += '<option value="normal" selected>Normal</option>';
+          select_priority += '<option value="medium">Medium</option>';
+          select_priority += '<option value="high">High</option>';
+        }else if(data[0]['priority'] == "medium"){
+          select_priority += '<option value="normal">Normal</option>';
+          select_priority += '<option value="medium" selected>Medium</option>';
+          select_priority += '<option value="high">High</option>';
+        }else if(data[0]['priority'] == "high"){
+          select_priority += '<option value="normal">Normal</option>';
+          select_priority += '<option value="medium">Medium</option>';
+          select_priority += '<option value="high" selected>High</option>';
+        }else{
+          select_priority += '<option value="normal">Normal</option>';
+          select_priority += '<option value="medium">Medium</option>';
+          select_priority += '<option value="high">High</option>';
+        }
+
+        $('#priority').append(select_priority);
         $('#id_subkategori').val(id);
         for (let i = 0; i < data[0]['categories'].length; i++) {
             const element = data[0]['categories'][i];
@@ -80,6 +104,11 @@
         url: "/master_data/categories/getAll",
         method: 'GET',
         success: function(data){
+            $('#priority').append(`
+              <option value="normal">Normal</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            `);
             for (let i = 0; i < data[0]['data_categories'].length; i++) {
                 const element = data[0]['data_categories'][i];
                 $('#kategori').append(`<option value="${element['id']}">${element['nama_kategori']}</option>`)

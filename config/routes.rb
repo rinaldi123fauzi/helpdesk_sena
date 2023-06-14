@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :tickets
   resources :sub_categories
   resources :inventories
   resources :items
@@ -87,6 +88,14 @@ Rails.application.routes.draw do
       post 'update' => 'sub_categories#update'
       get 'detail' => 'sub_categories#detail'
       delete 'delete' => 'sub_categories#delete'
+    end
+  end
+
+  namespace :transaksi do
+    scope :tickets do
+      get 'list-form' => 'tickets#listForm'
+      get 'list-sub-category' => 'tickets#listSubCategory'
+      post 'create' => 'tickets#create'
     end
   end
 

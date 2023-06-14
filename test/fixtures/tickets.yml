@@ -1,0 +1,31 @@
+# == Schema Information
+#
+# Table name: tickets
+#
+#  id              :bigint           not null, primary key
+#  category_id     :bigint
+#  sub_category_id :bigint
+#  work_unit_id    :bigint
+#  issued_by       :string
+#  description     :text
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  area_id         :bigint
+#  status          :string
+#  assigned_by     :string
+#  no_ticket       :string
+#
+
+one:
+  category: one
+  sub_category: one
+  work_unit: one
+  issued_by: MyString
+  description: MyText
+
+two:
+  category: two
+  sub_category: two
+  work_unit: two
+  issued_by: MyString
+  description: MyText

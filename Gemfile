@@ -77,3 +77,4 @@ gem 'wkhtmltopdf-binary'
 gem 'inline_svg'
 gem 'toastr-rails'
 gem 'rails_performance' #monitoring
+gem "annotate"
