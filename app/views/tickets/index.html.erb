@@ -94,6 +94,86 @@
     </div>
   </div>
 
+
+  <!-- Modal Detail-->
+
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="formModal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Detail</h5>
+        <button type="button" class="close" id="close-modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Nomor Tiket</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-nomor-tiket" disabled>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Layanan</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-layanan" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Dibuat Oleh</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-dibuat-oleh" disabled>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Sub Layanan</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-sub-layanan" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Satuan Kerja</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-satuan-kerja" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Area</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-area" disabled>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Deskripsi</label>
+              <div class="input-group">
+                <textarea class="form-control" id="detail-deskripsi" disabled></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <div class="assign-button"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid">
   <div class="card shadow mb-4">
       <div class="card-header mt-2">
@@ -107,84 +187,12 @@
         </div>
       </div>
 
-      <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="formModal"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="formModal">Detail</h5>
-              <button type="button" class="close" id="close-modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Nama Peminjam</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" id="nama_peminjam" disabled>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label>Atasan Langsung</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" id="penanggung_jawab" disabled>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Inventory</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" id="inventory" disabled>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label>Deskripsi</label>
-                      <div class="input-group">
-                        <textarea class="form-control" id="deskripsi" disabled></textarea>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>From Date</label>
-                      <div class="input-group">
-                        <input type="date" class="form-control" id="from_date" disabled>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>To Date</label>
-                      <div class="input-group">
-                        <input type="date" class="form-control" id="to_date" disabled>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Status</label>
-                      <div class="input-group">
-                        <div id="status"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
     <div class="modal fade" id="assign" role="dialog" aria-labelledby="formModal"
       aria-hidden="true">
       <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="formModal">Assigning Ticket</h5>
+            <h5>Assigning Ticket</h5>
             <button type="button" class="close" id="close-modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -222,8 +230,6 @@
             <tr>
               <th class="text-center" style="width: 20px;">No</th>
               <th>Nomor Tiket</th>
-              <th>Kategori</th>
-              <th>Sub Kategori</th>
               <th>Satuan Kerja</th>
               <th>Dibuat Oleh</th>
               <th>Prioritas</th>
@@ -236,19 +242,18 @@
               <tr>
                 <td><%= index+1 %></td>
                 <td><%= ticket.no_ticket %></td>
-                <td><%= ticket.category.nama_kategori %></td>
-                <td><%= ticket.sub_category.nama_sub_kategori %></td>
                 <td><%= ticket.work_unit.nama %></td>
                 <td><%= ticket.issued_by %></td>
                 <td><%= ticket.sub_category.priority %></td>
                 <td><%= ticket.status %></td>
                 <td>
-                  <%= link_to 'Show', ticket %>
-                  <%= link_to 'Edit', edit_ticket_path(ticket) %>
-                  <%= link_to 'Destroy', ticket, method: :delete, data: { confirm: 'Are you sure?' } %>
-                  <% if ticket.status == "created" %>
-                    <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="<%= ticket.id %>">Assigning</button>
-                  <% elsif ticket.status == "assigned" %>
+                  <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>">Detail</button>
+
+                  <% unless ticket.status == "assigned" || ticket.status == "closed" %>
+                    <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>">Edit</button>
+                    <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>">Hapus</button>
+                  <% end %>
+                  <% if ticket.status == "assigned" %>
                     <button class="btn btn-info btn-sm done" data-id="<%= ticket.id %>">Close</button>
                   <% end %>
                 </td>
@@ -262,6 +267,187 @@
 </div>
 
 <script>
+  $(document).on('click', '.detailTiket', function(){
+    var id = $(this).data('id');
+    $.ajax({
+      url: "/transaksi/tickets/detail",
+      method: 'GET',
+      data : {
+        id:id
+      },
+      success: function(data)
+      {
+        $('#detail-nomor-tiket').val(data['data_ticket']['nomor_tiket']);
+        $('#detail-dibuat-oleh').val(data['data_ticket']['dibuat_oleh']);
+        $('#detail-layanan').val(data['data_ticket']['layanan']);
+        $('#detail-sub-layanan').val(data['data_ticket']['sub_layanan']);
+        $('#detail-area').val(data['data_ticket']['area']);
+        $('#detail-satuan-kerja').val(data['data_ticket']['satuan_kerja']);
+        $('#detail-deskripsi').val(data['data_ticket']['deskripsi']);
+        $('#detail-teknisi').val(data['data_ticket']['teknisi']);
+        $('.assign-button').empty();
+        if (data['data_ticket']['status'] == "created") {
+          $('.assign-button').append(`
+            <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
+          `);
+        }else{
+          $('.assign-button').append(`
+            <label>Teknisi</label>
+            <input type="text" class="form-control" value="${data['data_ticket']['teknisi']}" disabled>
+          `);
+        }
+      }
+    });
+  });
+
+  $(document).on('click', '.editTiket', function(){
+    $('.modal-title').text('Ubah Tiket');
+    var id = $(this).data('id');
+    $.ajax({
+      url: "/transaksi/tickets/detail-tiket",
+      method: 'GET',
+      data : {
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id
+      },
+      success: function(data)
+      {
+        $('#id_tiket').val(data[0]['data_ticket']['id'])
+        $('#nomor-tiket').val(data[0]['data_ticket']['no_ticket']);
+        $('#dibuat-oleh').val(data[0]['data_ticket']['issued_by']);
+        $('#deskripsi').val(data[0]['data_ticket']['description']);
+        var sub_category_id = data[0]['data_ticket']['sub_category_id'];
+        for (let i = 0; i < data[0]['categories'].length; i++) {
+          const element = data[0]['categories'][i];
+          if (data[0]['data_ticket']['category_id'] == element['id']) {
+            $('#layanan').append(`
+              <option value="${element['id']}" selected>${element['nama_kategori']}</option>
+            `);
+          }else{
+            $('#layanan').append(`
+              <option value="${element['id']}">${element['nama_kategori']}</option>
+            `);
+          }
+        }
+
+        for (let i = 0; i < data[0]['areas'].length; i++) {
+          const element = data[0]['areas'][i];
+          if (data[0]['data_ticket']['area_id'] == element['id']) {
+            $('#area').append(`
+              <option value="${element['id']}" selected>${element['nama']}</option>
+            `);
+          }else{
+            $('#area').append(`
+              <option value="${element['id']}">${element['nama']}</option>
+            `);
+          }
+        }
+
+        for (let i = 0; i < data[0]['work_units'].length; i++) {
+          const element = data[0]['work_units'][i];
+          if (data[0]['data_ticket']['work_unit_id'] == element['id']) {
+            $('#satuan-kerja').append(`
+              <option value="${element['id']}" selected>${element['nama']}</option>
+            `);
+          }else{
+            $('#satuan-kerja').append(`
+              <option value="${element['id']}">${element['nama']}</option>
+            `);
+          }
+        }
+
+        var kategori = $('#layanan option:selected').val();
+        $.ajax({
+          url: "/transaksi/tickets/list-sub-category",
+          method: 'GET',
+          data :{
+            category_id:kategori
+          },
+          success: function(data)
+          {
+            $('#sub-layanan').empty();
+            $('#sub-layanan').append(`
+                  <option value="">--Pilih--</option>
+            `);
+            for (let i = 0; i < data[0]['sub_category'].length; i++) {
+              const element = data[0]['sub_category'][i];
+              if (sub_category_id == element['id']) {
+                $('#sub-layanan').append(`
+                  <option value="${element['id']}" selected>${element['nama_sub_kategori']}</option>
+                `);
+              }else{
+                $('#sub-layanan').append(`
+                  <option value="${element['id']}">${element['nama_sub_kategori']}</option>
+                `);
+              }
+            }
+          }
+        });
+
+        $(document).on('change', '#layanan', function(){
+          var id = $(this).val();
+          $.ajax({
+            url: "/transaksi/tickets/list-sub-category",
+            method: 'GET',
+            data :{
+              category_id:id
+            },
+            success: function(data)
+            {
+              $('#sub-layanan').empty();
+              $('#sub-layanan').append(`
+                    <option value="">--Pilih--</option>
+              `);
+              for (let i = 0; i < data[0]['sub_category'].length; i++) {
+                const element = data[0]['sub_category'][i];
+                $('#sub-layanan').append(`
+                  <option value="${element['id']}">${element['nama_sub_kategori']}</option>
+                `);
+              }
+            }
+          });
+        });
+      }
+    });
+  });
+
+  $(document).on('click','.hapusTiket',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "/transaksi/tickets/delete-ticket",
+          method: 'DELETE',
+          data : {
+            authenticity_token: '<%= form_authenticity_token %>',
+            id:id
+          },
+          success: function(data)
+          {
+            if (data['status'] == 200) {
+              window.location.href = "/tickets";
+            }else if (data['status'] == 500) {
+              window.location.href = "/tickets";
+            }
+          }
+        });
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      }
+    });    
+  });
   $(document).on('click', '.assign', function(){
     var id = $(this).data('id');
     $('#id_tiket_assign').val(id);
@@ -290,25 +476,47 @@
 
   $(document).on('click', '.done', function(){
     var id = $(this).data('id');
-    $('.done').text('Loading...');
-    $.ajax({
-      url: "/transaksi/tickets/ticket-close",
-      method: 'PUT',
-      data:{
-        authenticity_token: '<%= form_authenticity_token %>',
-        id:id
-      },
-      success: function(data)
-      {
-        if (result.status == "tersimpan") {
-          window.location.href = "/tickets";
-        }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "/transaksi/tickets/ticket-close",
+          method: 'PUT',
+          data:{
+            authenticity_token: '<%= form_authenticity_token %>',
+            id:id
+          },
+          success: function(data)
+          {
+            if (result.status == "tersimpan") {
+              window.location.href = "/tickets";
+            }
+          }
+        });
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
       }
     });
   });
 
   $(document).on('click', '.tambah-ticket', function(){
     $('.modal-title').text('Buat Tiket');
+    // reset form
+    $('#post')[0].reset();
+    $('#layanan').find('option:not(:first)').remove();
+    $('#sub-layanan').find('option:not(:first)').remove();
+    $('#area').find('option:not(:first)').remove();
+    $('#satuan-kerja').find('option:not(:first)').remove();
     $.ajax({
       url: "/transaksi/tickets/list-form",
       method: 'GET',
@@ -377,7 +585,7 @@
       xhr.open("POST", "/transaksi/tickets/create", true);
       xhr.send(formData);
     }else{
-      xhr.open("POST", "/transaksi/tickets/update", true);
+      xhr.open("PUT", "/transaksi/tickets/update", true);
       xhr.send(formData);
     }
 

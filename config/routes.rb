@@ -120,11 +120,15 @@ Rails.application.routes.draw do
 
   namespace :transaksi do
     scope :tickets do
+      get 'detail' => 'tickets#detail'
+      get 'detail-tiket' => 'tickets#detailTicket'
       get 'list-form' => 'tickets#listForm'
       get 'list-sub-category' => 'tickets#listSubCategory'
       post 'create' => 'tickets#create'
+      put 'update' => 'tickets#update'
       put 'ticket-assign' => 'tickets#assignTicket'
       put 'ticket-close' => 'tickets#ticketClose'
+      delete 'delete-ticket' => 'tickets#deleteTicket'
     end
 
     scope :dashboard do
