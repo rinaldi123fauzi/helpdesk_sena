@@ -1,0 +1,102 @@
+<script>
+  $(document).on('click','#simpanTeknisi',function(e){
+    e.preventDefault();
+    var namaTeknisi = $('#nama_teknisi').val();
+    var id_teknisi = $('#id_teknisi').val();
+    $('#simpanTeknisi').text('Loading...');
+    if (id_teknisi == "") {
+      $.ajax({
+        url: "/master_data/technician/create",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          namaTeknisi:namaTeknisi,
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Teknisi";
+          }
+        }
+      });
+    }else{
+      $.ajax({
+        url: "/master_data/areas/update",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          namaTeknisi:namaTeknisi,
+          id_teknisi:id_teknisi
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Teknisi";
+          }
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '#ubahTeknisi', function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $('#id_teknisi').empty();
+    $('#nama_teknisi').empty();
+    $('.modal-title').text('Ubah Data');
+    $.ajax({
+      url: "/master_data/technician/detail",
+      method: 'GET',
+      data : {
+        id:id
+      },
+      success: function(data)
+      {
+        for (let i = 0; i < data[0]['data_users'].length; i++) {
+          const element = data[0]['data_users'][i];
+          if (element['id'] == data[0]['user_id']) {
+            $('#nama_teknisi').append(`<option value="${element['id']}" selected>${element['username']}</option>`);
+          }else{
+            $('#nama_teknisi').append(`<option value="${element['id']}">${element['username']}</option>`);
+          }
+        }
+      }
+    });
+  });
+
+  $(document).on('click', '.tambah-teknisi', function(){
+      $('#nama_teknisi').val('');
+      $('#id_teknisi').val('');
+      $('.modal-title').text('Tambah Data');
+      $.ajax({
+        url: "/master_data/technician/all-user",
+        method: 'GET',
+        success: function(data)
+        {
+          for (let i = 0; i < data[0]['data_users'].length; i++) {
+            const element = data[0]['data_users'][i];
+            $('#nama_teknisi').append(`<option value="${element['id']}">${element['username']}</option>`);
+          }
+        }
+      });
+  });
+
+  $(document).on('click','#hapusTeknisi',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $.ajax({
+      url: "/master_data/technician/delete",
+      method: 'DELETE',
+      data : {
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id
+      },
+      success: function(data)
+      {
+        if (data[0]['status'] == "terhapus") {
+          window.location.href = "/master/index?pilihan=Teknisi";
+        }
+      }
+    });
+  });
+</script>

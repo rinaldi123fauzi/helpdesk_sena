@@ -9,5 +9,6 @@
 #
 class Category < ApplicationRecord
     has_many :sub_category, dependent: :destroy
-    has_many :ticket
+    has_many :ticket, dependent: :destroy
+    has_many :sla, dependent: :destroy
 end

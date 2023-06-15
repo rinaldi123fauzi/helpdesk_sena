@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  resources :positions
+  resources :technicians
   resources :slas
   resources :tickets
   resources :sub_categories
@@ -96,6 +98,22 @@ Rails.application.routes.draw do
       put 'update' => 'slas#update'
       get 'detail' => 'slas#detail'
       delete 'delete' => 'slas#delete'
+    end
+    
+    scope :technician do
+      post 'create' => 'technician#create'
+      put 'update' => 'technician#update'
+      get 'detail' => 'technician#detail'
+      get 'all-user' => 'technician#getUser'
+      delete 'delete' => 'technician#delete'
+    end
+
+    scope :position do
+      post 'create' => 'position#create'
+      put 'update' => 'position#update'
+      get 'detail' => 'position#detail'
+      get 'all-item' => 'position#listForm'
+      delete 'delete' => 'position#delete'
     end
   end
 

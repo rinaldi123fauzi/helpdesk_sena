@@ -11,7 +11,7 @@
 #
 class SubCategory < ApplicationRecord
   belongs_to :category
-  has_many :ticket
+  has_many :ticket, dependent: :destroy
 
   validates :priority, inclusion: { in: %w(high normal medium), allow_nil: true, message: "%{value} bukan status yang benar" }
 end

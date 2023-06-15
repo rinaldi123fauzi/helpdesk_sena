@@ -37,18 +37,11 @@ class MasterData::SlasController < ApplicationController
     end
   
     def delete
-      @data = Category.find(params[:id]).destroy
+      @data = Sla.find(params[:id]).destroy
       if (@data)
         render json: [  
             "status" => "terhapus",
         ]
       end
-    end
-  
-    def getAll
-      @data = Category.all
-      render json: [
-        "data_categories" => @data
-      ]
     end
   end

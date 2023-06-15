@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @position.user %>
+</p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @position.role %>
+</p>
+
+<p>
+  <strong>Work unit:</strong>
+  <%= @position.work_unit %>
+</p>
+
+<%= link_to 'Edit', edit_position_path(@position) %> |
+<%= link_to 'Back', positions_path %>

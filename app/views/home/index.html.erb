@@ -7,7 +7,7 @@
             <div class="row ">
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                 <div class="card-content">
-                  <h5 class="font-15">Open</h5>
+                  <h5 class="font-15">Created</h5>
                   <h2 class="mb-3 font-24">5</h2>
                 </div>
               </div>
@@ -28,7 +28,7 @@
             <div class="row ">
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                 <div class="card-content">
-                  <h5 class="font-15"> Progress</h5>
+                  <h5 class="font-15"> Assigned</h5>
                   <h2 class="mb-3 font-24">10</h2>
                 </div>
               </div>
@@ -49,7 +49,28 @@
             <div class="row ">
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                 <div class="card-content">
-                  <h5 class="font-15">Solved</h5>
+                  <h5 class="font-15">Overdue</h5>
+                  <h2 class="mb-3 font-24">35</h2>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                <div class="banner-img">
+                  <img src="assets/img/banner/3.png" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+      <div class="card">
+        <div class="card-statistic-4">
+          <div class="align-items-center justify-content-between">
+            <div class="row ">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                <div class="card-content">
+                  <h5 class="font-15">Closed</h5>
                   <h2 class="mb-3 font-24">35</h2>
                 </div>
               </div>
@@ -92,19 +113,43 @@
         <div class="form-group">
           <label>Tahun</label>
           <select class="form-control select2" id="tahun">
-            <option disabled>--Pilih Tahun--</option>
+            <option disabled>--Pilih--</option>
             <% @year=Date.today.year %>
               <% for a in 2022..@year %>
                 <% if @year %>
                   <option value="<%= a %>" selected>
                     <%= a %>
                   </option>
-                  <% else %>
-                    <option value="<%= a %>">
-                      <%= a %>
-                    </option>
-                    <% end %>
-                      <% end %>
+                <% else %>
+                  <option value="<%= a %>">
+                    <%= a %>
+                  </option>
+                <% end %>
+              <% end %>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Bulan</label>
+          <select class="form-control" id="bulan">
+            <option value="">--Pilih--</option>
+              <% for a in 01..12 %>
+                <option value="<%= a %>">
+                  <%= a %>
+                </option>
+              <% end %>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Teknisi</label>
+          <select class="form-control select2" id="teknisi">
+            <option value="">--Pilih--</option>
+            <% Technician.all.each do |data| %>
+              <option value="<%= data.id %>"><%= data.user.username %></option>
+            <% end %>
           </select>
         </div>
       </div>
@@ -118,7 +163,7 @@
     <div class="col-lg-12">
       <div class="card card-primary">
         <div class="card-header">
-          <h4>Card Header</h4>
+          <h4>Tiket</h4>
         </div>
         <div class="card-body">
           <div id="chart1"></div>

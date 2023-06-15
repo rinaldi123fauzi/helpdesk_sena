@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_15_010051) do
+ActiveRecord::Schema.define(version: 2023_06_15_034612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,6 +113,17 @@ ActiveRecord::Schema.define(version: 2023_06_15_010051) do
     t.index ["user_id"], name: "index_loans_on_user_id"
   end
 
+  create_table "positions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "role_id"
+    t.bigint "work_unit_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_positions_on_role_id"
+    t.index ["user_id"], name: "index_positions_on_user_id"
+    t.index ["work_unit_id"], name: "index_positions_on_work_unit_id"
+  end
+
   create_table "role_assignments", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "role_id"
@@ -146,6 +157,13 @@ ActiveRecord::Schema.define(version: 2023_06_15_010051) do
     t.datetime "updated_at", null: false
     t.string "priority"
     t.index ["category_id"], name: "index_sub_categories_on_category_id"
+  end
+
+  create_table "technicians", force: :cascade do |t|
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_technicians_on_user_id"
   end
 
   create_table "tickets", force: :cascade do |t|
@@ -195,10 +213,14 @@ ActiveRecord::Schema.define(version: 2023_06_15_010051) do
   add_foreign_key "inventories", "users"
   add_foreign_key "loans", "inventories"
   add_foreign_key "loans", "users"
+  add_foreign_key "positions", "roles"
+  add_foreign_key "positions", "users"
+  add_foreign_key "positions", "work_units"
   add_foreign_key "role_assignments", "roles"
   add_foreign_key "role_assignments", "users"
   add_foreign_key "slas", "categories"
   add_foreign_key "sub_categories", "categories"
+  add_foreign_key "technicians", "users"
   add_foreign_key "tickets", "areas"
   add_foreign_key "tickets", "categories"
   add_foreign_key "tickets", "sub_categories"

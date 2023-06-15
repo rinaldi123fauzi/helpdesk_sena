@@ -1,0 +1,141 @@
+<script>
+  $(document).on('click','#simpanJabatan',function(e){
+    e.preventDefault();
+    var user = $('#user').val();
+    var role = $('#role').val();
+    var satker = $('#satuan-kerja').val();
+    var id_jabatan = $('#id_jabatan').val();
+    $('#simpanJabatan').text('Loading...');
+    if (id_jabatan == "") {
+      $.ajax({
+        url: "/master_data/position/create",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          user:user,
+          role:role,
+          satker:satker
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Jabatan";
+          }
+        }
+      });
+    }else{
+      $.ajax({
+        url: "/master_data/position/update",
+        method: 'PUT',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          user:user,
+          role:role,
+          satker:satker,
+          id_jabatan:id_jabatan
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Jabatan";
+          }
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '#ubahJabatan', function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $('#user').empty();
+    $('#role').empty();
+    $('#satuan-kerja').empty();
+    $('.modal-title').text('Ubah Data');
+    $.ajax({
+      url: "/master_data/position/detail",
+      method: 'GET',
+      data : {
+        id:id
+      },
+      success: function(data)
+      {
+        $('#id_jabatan').val(id);
+        for (let i = 0; i < data[0]['users'].length; i++) {
+          const element = data[0]['users'][i];
+          if (data[0]['user_id'] == element['id']) {
+            $('#user').append(`<option value="${element['id']}" selected>${element['username']}</option>`);
+          }else{
+            $('#user').append(`<option value="${element['id']}">${element['username']}</option>`);
+          }
+        }
+
+        for (let i = 0; i < data[0]['roles'].length; i++) {
+          const element = data[0]['roles'][i];
+          if (data[0]['role_id'] == element['id']) {
+            $('#role').append(`<option value="${element['id']}" selected>${element['name']}</option>`);
+          }else{
+            $('#role').append(`<option value="${element['id']}">${element['name']}</option>`);
+          }
+        }
+
+        for (let i = 0; i < data[0]['work_units'].length; i++) {
+          const element = data[0]['work_units'][i];
+          if (data[0]['work_unit_id'] == element['id']) {
+            $('#satuan-kerja').append(`<option value="${element['id']}" selected>${element['nama']}</option>`);
+          }else{
+            $('#satuan-kerja').append(`<option value="${element['id']}">${element['nama']}</option>`);
+          }
+        }
+      }
+    });
+  });
+
+  $(document).on('click', '.tambah-jabatan', function(){
+    $('#role').val('');
+    $('#user').val('');
+    $('#satuan-kerja').val('');
+    $('#id_jabatan').val('');
+    $('.modal-title').text('Tambah Data');
+
+    $.ajax({
+      url: "/master_data/position/all-item",
+      method: 'GET',
+      success: function(data)
+      {
+        for (let i = 0; i < data[0]['data_users'].length; i++) {
+          const element = data[0]['data_users'][i];
+          $('#user').append(`<option value="${element['id']}">${element['username']}</option>`);
+        }
+
+        for (let i = 0; i < data[0]['data_roles'].length; i++) {
+          const element = data[0]['data_roles'][i];
+          $('#role').append(`<option value="${element['id']}">${element['name']}</option>`);
+        }
+
+        for (let i = 0; i < data[0]['data_work_units'].length; i++) {
+          const element = data[0]['data_work_units'][i];
+          $('#satuan-kerja').append(`<option value="${element['id']}">${element['nama']}</option>`);
+        }
+      }
+    });
+  });
+
+  $(document).on('click','#hapusJabatan',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $.ajax({
+      url: "/master_data/position/delete",
+      method: 'DELETE',
+      data : {
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id
+      },
+      success: function(data)
+      {
+        if (data[0]['status'] == "terhapus") {
+          window.location.href = "/master/index?pilihan=Jabatan";
+        }
+      }
+    });
+  });
+</script>
