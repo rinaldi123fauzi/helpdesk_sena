@@ -124,8 +124,15 @@ class Transaksi::TicketsController < ApplicationController
         area: @data.area.nama,
         deskripsi: @data.description,
         teknisi: @data.assigned_by,
-        status: @data.status
+        status: @data.status,
+        current_user: getRole
       }
     }
+  end
+
+  def getRole
+    @roleAssign = RoleAssignment.left_outer_joins(:role).where(user_id: current_user.id).select('roles.name AS nameroles, role_assignments.role_id')
+    @value = @roleAssign.each_with_index.map { |role| "#{role.try(:nameroles)}" }.join(", ").gsub(",","")
+    return @value
   end
 end

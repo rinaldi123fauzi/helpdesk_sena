@@ -253,8 +253,10 @@
                     <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>">Edit</button>
                     <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>">Hapus</button>
                   <% end %>
-                  <% if ticket.status == "assigned" %>
-                    <button class="btn btn-info btn-sm done" data-id="<%= ticket.id %>">Close</button>
+                  <% if current_user.roles.any? {|r| r.name == "admin"} %>
+                    <% if ticket.status == "assigned" %>
+                      <button class="btn btn-info btn-sm done" data-id="<%= ticket.id %>">Close</button>
+                    <% end %>
                   <% end %>
                 </td>
               </tr>
@@ -286,7 +288,7 @@
         $('#detail-deskripsi').val(data['data_ticket']['deskripsi']);
         $('#detail-teknisi').val(data['data_ticket']['teknisi']);
         $('.assign-button').empty();
-        if (data['data_ticket']['status'] == "created") {
+        if (data['data_ticket']['status'] == "created" && data['data_ticket']['current_user'] == "admin") {
           $('.assign-button').append(`
             <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
           `);
