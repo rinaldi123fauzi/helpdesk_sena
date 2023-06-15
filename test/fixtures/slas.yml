@@ -1,0 +1,21 @@
+# == Schema Information
+#
+# Table name: slas
+#
+#  id          :bigint           not null, primary key
+#  category_id :bigint
+#  period      :integer
+#  status      :boolean
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+
+one:
+  category: one
+  period: 1
+  status: false
+
+two:
+  category: two
+  period: 1
+  status: false

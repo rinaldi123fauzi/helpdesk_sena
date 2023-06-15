@@ -9,7 +9,7 @@
         <div class="col-sm-4">
           <%= form_tag master_index_path, method: "GET" %>
           <% if current_user.roles.any? { |r| r.name == 'superadmin'} %>
-            <%= select_tag :pilihan, options_for_select(["Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Karyawan","Data Inventory","Data Item","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
+            <%= select_tag :pilihan, options_for_select(["SLA Layanan","Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Karyawan","Data Inventory","Data Item","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
           <% else %>
             <%= select_tag :pilihan, options_for_select(["Data Inventory","Data Item"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control" %>
           <% end %>
@@ -391,6 +391,95 @@
                   <%# end %>
                   <%# if current_user.can? { |permissions| permissions.category.destroy? } %>
                   <a href="#" class="btn btn-danger btn-circle btn-sm" id="hapusSatker" data-id="<%= work_unit.id %>" data-confirm="Are you sure?">
+                      <i class="fas fa-trash-alt"></i>
+                  </a>
+                  <%# end %>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
+    <% if params[:pilihan] == "SLA Layanan" %>
+      <div class="modal fade" id="sla" tabindex="-1" role="dialog" aria-labelledby="formModal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="formModal"></h5>
+              <button type="button" class="close" id="close-modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <input type="hidden" id="id_sla">
+                <div class="form-group">
+                  <label>Layanan</label>
+                  <div class="input-group">
+                    <select class="form-group select2" id="layanan" style="width: 100%;"></select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Periode <small>hours</small></label>
+                  <div class="input-group">
+                    <input type="number" class="form-control" id="periode">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Status</label>
+                  <div class="input-group">
+                    <select class="form-control" id="status"></select>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary m-t-15 waves-effect" id="simpanSla">Simpan</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-header mt-2">
+        <h4>Data SLA</h4>
+        <div class="card-header-form">
+              <%# if current_user.can? { |permissions| permissions.category.create? } %>
+            <div class="align-items-center">
+              <%# <%= link_to "+ Data Kategori", new_employee_path, class: "btn btn-primary btn-sm" %>
+              <button type="button" class="btn btn-primary btn-sm tambah-sla" data-backdrop="true" data-toggle="modal" data-target="#sla">+Tambah</button>
+            </div>
+          <%# end %>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable_kategori" width="100%" cellspacing="0" id="table-1">
+            <thead>
+              <tr>
+                <th style="width: 50px;" class="text-center">No</th>
+                <th>Layanan</th>
+                <th>Periode</th>
+                <th>Status</th>
+                <th style="width: 150px;" class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @sla.each_with_index do |work_unit, index| %>
+              <tr>
+                <td style="width: 50px;" class="text-center"><%= index+1 %></td>
+                <td><%= work_unit.category.nama_kategori %></td>
+                <td><%= work_unit.period %></td>
+                <td><%= work_unit.status %></td>
+                <td style="width: 150px;" class="text-center">
+                  <%# if current_user.can? { |permissions| permissions.category.update? } %>
+                  <a href="#" class="btn btn-warning btn-circle btn-sm" id="ubahSla" data-toggle="modal" data-target="#sla" data-id="<%= work_unit.id %>">
+                      <i class="fas fa-pencil-alt"></i>
+                  </a>
+                  <%# end %>
+                  <%# if current_user.can? { |permissions| permissions.category.destroy? } %>
+                  <a href="#" class="btn btn-danger btn-circle btn-sm" id="hapusSla" data-id="<%= work_unit.id %>" data-confirm="Are you sure?">
                       <i class="fas fa-trash-alt"></i>
                   </a>
                   <%# end %>
@@ -979,3 +1068,4 @@
 <%= render "js_area" %>
 <%= render "js_category" %>
 <%= render "js_subcategory" %>
+<%= render "js_sla" %>

@@ -190,7 +190,6 @@
               <th>Sub Kategori</th>
               <th>Satuan Kerja</th>
               <th>Dibuat Oleh</th>
-              <th>Deskripsi</th>
               <th>Prioritas</th>
               <th>Status Tiket</th>
               <th class="text-center" style="width: 100px;">Action</th>
@@ -205,7 +204,6 @@
                 <td><%= ticket.sub_category.nama_sub_kategori %></td>
                 <td><%= ticket.work_unit.nama %></td>
                 <td><%= ticket.issued_by %></td>
-                <td><%= ticket.description %></td>
                 <td><%= ticket.sub_category.priority %></td>
                 <td><%= ticket.status %></td>
                 <td><%= link_to 'Show', ticket %>

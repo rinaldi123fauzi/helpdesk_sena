@@ -9,5 +9,6 @@ class MasterController < ApplicationController
     @areas = Area.all.order("CREATED_AT DESC")
     @categories = Category.all.order("CREATED_AT DESC")
     @sub_categories = SubCategory.all.order("CREATED_AT DESC")
+    @sla = Sla.all.order("CREATED_AT DESC")
   end
 end

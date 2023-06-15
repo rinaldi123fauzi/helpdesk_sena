@@ -1,0 +1,131 @@
+<script>
+  $(document).on('click','#simpanSla',function(e){
+    e.preventDefault();
+    var layanan = $('#layanan').val();
+    var periode = $('#periode').val();
+    var status = $('#status').val();
+    var id_sla = $('#id_sla').val();
+    $('#simpanSla').text('Loading...');
+    if (id_sla == "") {
+      $.ajax({
+        url: "/master_data/slas/create",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          layanan:layanan,
+          periode:periode,
+          status:status
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=SLA Layanan";
+          }
+        }
+      });
+    }else{
+      $.ajax({
+        url: "/master_data/slas/update",
+        method: 'PUT',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          layanan:layanan,
+          periode:periode,
+          status:status,
+          id_sla:id_sla
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=SLA Layanan";
+          }
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '#ubahSla', function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $('#id_sla').empty();
+    $('#layanan').empty();
+    $('#periode').empty();
+    $('#status').empty();
+    $('.modal-title').text('Ubah Data');
+    $.ajax({
+      url: "/master_data/slas/detail",
+      method: 'GET',
+      data : {
+        id:id
+      },
+      success: function(data)
+      {
+        status = "";
+        if (data[0]['status'] == 1) {
+          status += `<option value="1" selected>Enable</option>`;
+          status += `<option value="0">Disable</option>`;
+        }else{
+          status += `<option value="1">Enable</option>`;
+          status += `<option value="0" selected>Disable</option>`; 
+        }
+
+        $('#status').append(status);
+        $('#periode').val(data[0]['periode']);
+
+        $('#id_sla').val(id);
+        for (let i = 0; i < data[0]['data_categories'].length; i++) {
+            const element = data[0]['data_categories'][i];
+            if (element['id'] == data[0]['category_id']) {
+                $('#layanan').append(`<option value="${element['id']}" selected>${element['nama_kategori']}</option>`);            
+            }else{
+                $('#layanan').append(`<option value="${element['id']}">${element['nama_kategori']}</option>`);            
+            }
+        }
+      }
+    });
+  });
+
+  $(document).on('click', '.tambah-sla', function(){
+      $('#layanan').val('');
+      $('#periode').val('');
+      $('#status').val('');
+      $('#id_sla').val('');
+      $('.modal-title').text('Tambah Data');
+      $.ajax({
+        url: "/master_data/categories/getAll",
+        method: 'GET',
+        success: function(data)
+        {
+            for (let i = 0; i < data[0]['data_categories'].length; i++) {
+                const element = data[0]['data_categories'][i];
+                $('#layanan').append(`<option value="${element['id']}">${element['nama_kategori']}</option>`)
+            }
+            
+            var status = "";
+            $('#status').append(`
+                <option value="1">Enable</option>
+                <option value="0">Disable</option>
+            `);
+        }
+        });
+  });
+
+  $(document).on('click','#hapusKategori',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $.ajax({
+      url: "/master_data/categories/delete",
+      method: 'DELETE',
+      data : {
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id
+      },
+      success: function(data)
+      {
+        if (data[0]['status'] == "terhapus") {
+          window.location.href = "/master/index?pilihan=Data Kategori";
+        }
+      }
+    });
+  });
+</script>

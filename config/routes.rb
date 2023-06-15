@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :slas
   resources :tickets
   resources :sub_categories
   resources :inventories
@@ -88,6 +89,13 @@ Rails.application.routes.draw do
       post 'update' => 'sub_categories#update'
       get 'detail' => 'sub_categories#detail'
       delete 'delete' => 'sub_categories#delete'
+    end
+
+    scope :slas do
+      post 'create' => 'slas#create'
+      put 'update' => 'slas#update'
+      get 'detail' => 'slas#detail'
+      delete 'delete' => 'slas#delete'
     end
   end
 

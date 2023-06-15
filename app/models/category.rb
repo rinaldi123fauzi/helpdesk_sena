@@ -8,6 +8,6 @@
 #  updated_at    :datetime         not null
 #
 class Category < ApplicationRecord
-    has_many :sub_category
+    has_many :sub_category, dependent: :destroy
     has_many :ticket
 end
