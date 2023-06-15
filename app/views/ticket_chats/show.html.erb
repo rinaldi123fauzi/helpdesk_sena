@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Sender:</strong>
+  <%= @ticket_chat.sender %>
+</p>
+
+<p>
+  <strong>Receiver:</strong>
+  <%= @ticket_chat.receiver %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @ticket_chat.description %>
+</p>
+
+<%= link_to 'Edit', edit_ticket_chat_path(@ticket_chat) %> |
+<%= link_to 'Back', ticket_chats_path %>

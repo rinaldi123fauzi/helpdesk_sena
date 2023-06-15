@@ -1,0 +1,2 @@
+module TicketChatsHelper
+end

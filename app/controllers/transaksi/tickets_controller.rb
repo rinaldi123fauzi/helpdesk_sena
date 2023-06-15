@@ -43,4 +43,25 @@ class Transaksi::TicketsController < ApplicationController
       "status" => "tersimpan"
     }
   end
+
+  def assignTicket
+    ticket = Ticket.find_by_id(params[:id])
+    ticket.assigned_by = params[:teknisi]
+    ticket.status = "assigned"
+    ticket.save
+
+    render json:[
+      "status" => "tersimpan"
+    ]
+  end
+
+  def ticketClose
+    ticket = Ticket.find_by_id(params[:id])
+    ticket.status = "closed"
+    ticket.save
+
+    render json:[
+      "status" => "tersimpan"
+    ]
+  end
 end

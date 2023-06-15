@@ -179,6 +179,42 @@
         </div>
       </div>
 
+    <div class="modal fade" id="assign" role="dialog" aria-labelledby="formModal"
+      aria-hidden="true">
+      <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="formModal">Assigning Ticket</h5>
+            <button type="button" class="close" id="close-modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="row">
+                <input type="hidden" id="id_tiket_assign">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Teknisi</label>
+                    <div class="input-group">
+                      <select class="form-control select2" id="assign_teknisi" style="width: 100%;">
+                        <% Technician.all.each do |data| %>
+                          <option value="<%= data.user.username %>"><%= data.user.username %></option>
+                        <% end %>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <button class="form-control btn btn-md btn-info" id="kirimTiket">Simpan</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable_user" width="100%" cellspacing="0">
@@ -206,9 +242,16 @@
                 <td><%= ticket.issued_by %></td>
                 <td><%= ticket.sub_category.priority %></td>
                 <td><%= ticket.status %></td>
-                <td><%= link_to 'Show', ticket %>
-                <%= link_to 'Edit', edit_ticket_path(ticket) %>
-                <%= link_to 'Destroy', ticket, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                <td>
+                  <%= link_to 'Show', ticket %>
+                  <%= link_to 'Edit', edit_ticket_path(ticket) %>
+                  <%= link_to 'Destroy', ticket, method: :delete, data: { confirm: 'Are you sure?' } %>
+                  <% if ticket.status == "created" %>
+                    <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="<%= ticket.id %>">Assigning</button>
+                  <% elsif ticket.status == "assigned" %>
+                    <button class="btn btn-info btn-sm done" data-id="<%= ticket.id %>">Close</button>
+                  <% end %>
+                </td>
               </tr>
             <% end %>
           </tbody>
@@ -219,6 +262,51 @@
 </div>
 
 <script>
+  $(document).on('click', '.assign', function(){
+    var id = $(this).data('id');
+    $('#id_tiket_assign').val(id);
+  });
+
+  $(document).on('click', '#kirimTiket', function(){
+    var id = $('#id_tiket_assign').val();
+    var teknisi = $('#assign_teknisi').val();
+    $('#kirimTiket').text('Loading...');
+    $.ajax({
+      url: "/transaksi/tickets/ticket-assign",
+      method: 'PUT',
+      data:{
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id,
+        teknisi:teknisi
+      },
+      success: function(data)
+      {
+        if (result.status == "tersimpan") {
+          window.location.href = "/tickets";
+        }
+      }
+    });
+  });
+
+  $(document).on('click', '.done', function(){
+    var id = $(this).data('id');
+    $('.done').text('Loading...');
+    $.ajax({
+      url: "/transaksi/tickets/ticket-close",
+      method: 'PUT',
+      data:{
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id
+      },
+      success: function(data)
+      {
+        if (result.status == "tersimpan") {
+          window.location.href = "/tickets";
+        }
+      }
+    });
+  });
+
   $(document).on('click', '.tambah-ticket', function(){
     $('.modal-title').text('Buat Tiket');
     $.ajax({

@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :ticket_chats
   resources :positions
   resources :technicians
   resources :slas
@@ -122,6 +123,11 @@ Rails.application.routes.draw do
       get 'list-form' => 'tickets#listForm'
       get 'list-sub-category' => 'tickets#listSubCategory'
       post 'create' => 'tickets#create'
+      put 'ticket-assign' => 'tickets#assignTicket'
+      put 'ticket-close' => 'tickets#ticketClose'
+    end
+
+    scope :dashboard do
     end
   end
 

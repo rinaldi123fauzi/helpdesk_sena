@@ -3,7 +3,13 @@ class TicketsController < ApplicationController
 
   # GET /tickets or /tickets.json
   def index
-    @tickets = Ticket.all
+    if current_user.roles.any? {|r| r.name == "user"}
+      @tickets = Ticket.where(issued_by: current_user.username).order(:id => :desc)
+    elsif current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
+      @tickets = Ticket.where(follow_up: current_user.username).order(:id => :desc)
+    else
+      @tickets = Ticket.order(:id => :desc)
+    end
   end
 
   # GET /tickets/1 or /tickets/1.json

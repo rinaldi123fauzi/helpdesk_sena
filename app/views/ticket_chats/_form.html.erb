@@ -1,0 +1,32 @@
+<%= form_with(model: ticket_chat, local: true) do |form| %>
+  <% if ticket_chat.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(ticket_chat.errors.count, "error") %> prohibited this ticket_chat from being saved:</h2>
+
+      <ul>
+      <% ticket_chat.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :sender %>
+    <%= form.text_field :sender %>
+  </div>
+
+  <div class="field">
+    <%= form.label :receiver %>
+    <%= form.text_field :receiver %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
