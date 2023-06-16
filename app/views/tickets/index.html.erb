@@ -79,7 +79,7 @@
                 <div class="form-group">
                   <label>File</label>
                   <div class="input-group">
-                    <input type="file" name="file_tiket" class="form-control">
+                    <input type="file" name="file_tiket[]" class="form-control" multiple>
                   </div>
                 </div>
               </div>
@@ -168,6 +168,14 @@
               <div class="assign-button"></div>
             </div>
           </div>
+
+           <div class="col-md-9">
+            <div class="form-group">
+              <label>Attachment</label>
+              <div class="file-button"></div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -271,6 +279,7 @@
 <script>
   $(document).on('click', '.detailTiket', function(){
     var id = $(this).data('id');
+    $('.file-button').empty()
     $.ajax({
       url: "/transaksi/tickets/detail",
       method: 'GET',
@@ -297,6 +306,13 @@
             <label>Teknisi</label>
             <input type="text" class="form-control" value="${data['data_ticket']['teknisi']}" disabled>
           `);
+        }
+
+        for (let i = 0; i < data['data_ticket']['file'].length; i++) {
+          const element = data['data_ticket']['file'][i];
+          $('.file-button').append(`
+            <a href="${element['link']}" target="_blank">${element['nama_file']}</a><br>
+          `);          
         }
       }
     });
@@ -469,7 +485,7 @@
       },
       success: function(data)
       {
-        if (result.status == "tersimpan") {
+        if (data.status == "tersimpan") {
           window.location.href = "/tickets";
         }
       }
@@ -485,7 +501,7 @@
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Yes, assigned it!'
       }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
@@ -497,7 +513,7 @@
           },
           success: function(data)
           {
-            if (result.status == "tersimpan") {
+            if (data.status == "tersimpan") {
               window.location.href = "/tickets";
             }
           }

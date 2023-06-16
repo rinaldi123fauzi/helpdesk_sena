@@ -78,3 +78,4 @@ gem 'inline_svg'
 gem 'toastr-rails'
 gem 'rails_performance' #monitoring
 gem "annotate"
+gem 'active_model_serializers'

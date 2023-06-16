@@ -34,7 +34,9 @@ class Transaksi::TicketsController < ApplicationController
       ticket.work_unit_id = params[:satuan_kerja]
       ticket.area_id = params[:area]
       if params[:file_tiket].present?
-        ticket.file_ticket = params[:file_tiket]
+        params[:file_tiket].each do |data|
+          ticket.file_ticket = data
+        end
       end
       ticket.save!
     end
@@ -55,7 +57,9 @@ class Transaksi::TicketsController < ApplicationController
       ticket.work_unit_id = params[:satuan_kerja]
       ticket.area_id = params[:area]
       if params[:file_tiket].present?
-        ticket.file_ticket = params[:file_tiket]
+        params[:file_tiket].each do |data|
+          ticket.file_ticket = data
+        end
       end
       ticket.save
     end
@@ -71,9 +75,10 @@ class Transaksi::TicketsController < ApplicationController
     ticket.status = "assigned"
     ticket.save
 
-    render json:[
-      "status" => "tersimpan"
-    ]
+    render json:{
+      status: "tersimpan"
+    }
+    flash[:notice] = "Data berhasil disimpan"
   end
 
   def ticketClose
@@ -81,9 +86,10 @@ class Transaksi::TicketsController < ApplicationController
     ticket.status = "closed"
     ticket.save
 
-    render json:[
-      "status" => "tersimpan"
-    ]
+    render json:{
+      status: "tersimpan"
+    }
+    flash[:notice] = "Data berhasil disimpan"
   end
 
   def deleteTicket
@@ -114,6 +120,16 @@ class Transaksi::TicketsController < ApplicationController
 
   def detail
     @data = Ticket.find(params[:id])
+
+    @data_attach = []
+
+    @data.file_ticket.order(:created_at => :desc).each do |data|
+      @data_attach.push(
+        "link" => url_for(data),
+        "nama_file" => data.filename
+      )
+    end
+    
     render json:{
       data_ticket:{
         nomor_tiket: @data.no_ticket,
@@ -125,7 +141,8 @@ class Transaksi::TicketsController < ApplicationController
         deskripsi: @data.description,
         teknisi: @data.assigned_by,
         status: @data.status,
-        current_user: getRole
+        current_user: getRole,
+        file: @data_attach
       }
     }
   end

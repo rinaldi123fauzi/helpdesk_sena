@@ -12,6 +12,13 @@
     <% if current_user.roles.any? { |r| r.name != 'user'} %>
       <li class="<%= params[:controller] == "master" ? " active" : ""%>"><a class="nav-link" href="<%= master_index_path %>"><i data-feather="file"></i><span>Master Data</span></a></li>
     <% end %>
-    <li class="<%= params[:controller] == "tickets" ? " active" : ""%>"><a class="nav-link" href="<%= tickets_path %>"><i data-feather="file"></i><span>Tiket</span></a></li>
+    <li class="<%= params[:controller] == "tickets" ? " active" : ""%>">
+      <% 
+        if current_user.roles.any? { |r| r.name == 'admin' || r.name == 'superadmin'}
+          @countTicket = Ticket.where(status: 'created').count
+        end 
+      %>
+      <a class="nav-link" href="<%= tickets_path %>"><i data-feather="file"></i><span>Tiket</span><p class="mb-0"><span class="col-green"><%= @countTicket %></span></p></a>
+    </li>
   </ul>
 </aside>
