@@ -48,7 +48,7 @@ class Transaksi::TicketsController < ApplicationController
 
   def update
     ActiveRecord::Base.transaction do
-      ticket = Ticket.find_by_id(params[:id])
+      ticket = Ticket.find_by_id(params[:id_tiket])
       ticket.no_ticket = params[:nomor_tiket]
       ticket.category_id = params[:layanan]
       ticket.sub_category_id = params[:sub_layanan]
@@ -93,6 +93,15 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def deleteTicket
+    begin
+      @attachment = ActiveStorage::Attachment.find_by_record_id(params[:id])
+      unless @attachment.nil?
+        @attachment.purge
+      end
+    rescue
+      puts "data tidak ada"
+    end
+
     @data = Ticket.find(params[:id]).destroy
     if (@data)
       render json: {

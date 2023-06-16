@@ -11,7 +11,7 @@
         <div class="modal-body">
           <form method="POST" enctype="multipart/form-data" id="post">
             <input type="hidden" name="authenticity_token" id="authenticity_token" value="<%= form_authenticity_token %>">
-            <input type="hidden" id="id_tiket">
+            <input type="hidden" id="id_tiket" name="id_tiket">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -297,7 +297,7 @@
         $('#detail-deskripsi').val(data['data_ticket']['deskripsi']);
         $('#detail-teknisi').val(data['data_ticket']['teknisi']);
         $('.assign-button').empty();
-        if (data['data_ticket']['status'] == "created" && data['data_ticket']['current_user'] == "admin") {
+        if (data['data_ticket']['status'] == "created" && data['data_ticket']['current_user'] == "admin" || data['data_ticket']['current_user'] == "teknisi") {
           $('.assign-button').append(`
             <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
           `);
