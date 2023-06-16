@@ -72,7 +72,7 @@ class Transaksi::TicketsController < ApplicationController
   def assignTicket
     ticket = Ticket.find_by_id(params[:id])
     ticket.assigned_by = params[:teknisi]
-    ticket.status = "assigned"
+    ticket.status = "inprogress"
     ticket.save
 
     render json:{

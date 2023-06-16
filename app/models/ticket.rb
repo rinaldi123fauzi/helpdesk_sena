@@ -22,5 +22,5 @@ class Ticket < ApplicationRecord
   belongs_to :area
 
   has_many_attached :file_ticket
-  validates :status, inclusion: { in: %w(assigned closed created overdue), allow_nil: true, message: "%{value} bukan status yang benar" }
+  validates :status, inclusion: { in: %w(inprogress closed created overdue), allow_nil: true, message: "%{value} bukan status yang benar" }
 end

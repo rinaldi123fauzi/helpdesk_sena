@@ -257,12 +257,12 @@
                 <td>
                   <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>">Detail</button>
 
-                  <% unless ticket.status == "assigned" || ticket.status == "closed" %>
+                  <% unless ticket.status == "inprogress" || ticket.status == "closed" %>
                     <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>">Edit</button>
                     <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>">Hapus</button>
                   <% end %>
                   <% if current_user.roles.any? {|r| r.name == "admin"} %>
-                    <% if ticket.status == "assigned" %>
+                    <% if ticket.status == "inprogress" %>
                       <button class="btn btn-info btn-sm done" data-id="<%= ticket.id %>">Close</button>
                     <% end %>
                   <% end %>
