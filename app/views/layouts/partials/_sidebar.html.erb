@@ -10,7 +10,7 @@
       <a href="<%= root_path %>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
     </li>
     <% if current_user.roles.any? { |r| r.name == 'superadmin' || r.name == 'admin'} %>
-      <li class="<%= params[:controller] == "master" ? " active" : ""%>"><a class="nav-link" href="<%= master_index_path %>"><i data-feather="file"></i><span>Master Data</span></a></li>
+      <li class="<%= params[:controller] == "master" ? " active" : ""%>"><a class="nav-link" href="<%= master_index_path %>"><i data-feather="database"></i><span>Master Data</span></a></li>
     <% end %>
     <li class="<%= params[:controller] == "tickets" ? " active" : ""%>">
       <% 
@@ -18,7 +18,7 @@
           @countTicket = Ticket.where(status: 'open').count
         end 
       %>
-      <a class="nav-link" href="<%= tickets_path %>"><i data-feather="file"></i><span>Tiket</span><p class="mb-0"><span class="col-green"><%= @countTicket %></span></p></a>
+      <a class="nav-link" href="<%= tickets_path %>"><i data-feather="file-plus"></i><span>Tiket</span><p class="mb-0 bell"><span class="badge badge-danger"><%= @countTicket %></span></p></a>
     </li>
   </ul>
 </aside>
