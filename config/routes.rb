@@ -124,6 +124,7 @@ Rails.application.routes.draw do
       get 'detail-tiket' => 'tickets#detailTicket'
       get 'list-form' => 'tickets#listForm'
       get 'list-sub-category' => 'tickets#listSubCategory'
+      get 'get-approval-berjenjang' => 'tickets#getApprovalBerjenjang'
       post 'create' => 'tickets#create'
       put 'update' => 'tickets#update'
       put 'ticket-assign' => 'tickets#assignTicket'

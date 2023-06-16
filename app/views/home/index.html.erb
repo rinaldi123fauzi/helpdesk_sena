@@ -29,7 +29,7 @@
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                 <div class="card-content">
                   <h5 class="font-15">Under Approval</h5>
-                  <h2 class="mb-3 font-24">0</h2>
+                  <h2 class="mb-3 font-24"><%= @status_approval %></h2>
                 </div>
               </div>
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
@@ -50,7 +50,7 @@
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                 <div class="card-content">
                   <h5 class="font-15">Open</h5>
-                  <h2 class="mb-3 font-24">0</h2>
+                  <h2 class="mb-3 font-24"><%= @status_open %></h2>
                 </div>
               </div>
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
@@ -289,7 +289,42 @@
                 data['created']['bulan11']['jumlah'],
                 data['created']['bulan12']['jumlah']
               ]
-          }, {
+          }, 
+          {
+              name: 'Under Approval',
+              data: [
+                data['approval']['bulan1']['jumlah'], 
+                data['approval']['bulan2']['jumlah'], 
+                data['approval']['bulan3']['jumlah'], 
+                data['approval']['bulan4']['jumlah'], 
+                data['approval']['bulan5']['jumlah'], 
+                data['approval']['bulan6']['jumlah'], 
+                data['approval']['bulan7']['jumlah'], 
+                data['approval']['bulan8']['jumlah'], 
+                data['approval']['bulan9']['jumlah'],
+                data['approval']['bulan10']['jumlah'],
+                data['approval']['bulan11']['jumlah'],
+                data['approval']['bulan12']['jumlah']
+              ]
+          },
+          {
+              name: 'Open',
+              data: [
+                data['open']['bulan1']['jumlah'], 
+                data['open']['bulan2']['jumlah'], 
+                data['open']['bulan3']['jumlah'], 
+                data['open']['bulan4']['jumlah'], 
+                data['open']['bulan5']['jumlah'], 
+                data['open']['bulan6']['jumlah'], 
+                data['open']['bulan7']['jumlah'], 
+                data['open']['bulan8']['jumlah'], 
+                data['open']['bulan9']['jumlah'],
+                data['open']['bulan10']['jumlah'],
+                data['open']['bulan11']['jumlah'],
+                data['open']['bulan12']['jumlah']
+              ]
+          },
+          {
               name: 'In Progress',
               data: [
                 data['inprogress']['bulan1']['jumlah'], 

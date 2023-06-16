@@ -6,7 +6,7 @@ class TicketsController < ApplicationController
     if current_user.roles.any? {|r| r.name == "user"}
       @tickets = Ticket.where(issued_by: current_user.username).order(:id => :desc)
     elsif current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
-      @tickets = Ticket.where(follow_up: current_user.username).order(:id => :desc)
+      @tickets = Ticket.where(approval_by: current_user.username, status: 'created').order(:id => :desc)
     else
       @tickets = Ticket.order(:id => :desc)
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_15_055355) do
+ActiveRecord::Schema.define(version: 2023_06_16_150926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,7 +155,7 @@ ActiveRecord::Schema.define(version: 2023_06_15_055355) do
     t.string "nama_sub_kategori"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "priority"
+    t.boolean "approval_berjenjang"
     t.index ["category_id"], name: "index_sub_categories_on_category_id"
   end
 
@@ -186,6 +186,7 @@ ActiveRecord::Schema.define(version: 2023_06_15_055355) do
     t.string "status"
     t.string "assigned_by"
     t.string "no_ticket"
+    t.string "approval_by"
     t.index ["area_id"], name: "index_tickets_on_area_id"
     t.index ["category_id"], name: "index_tickets_on_category_id"
     t.index ["sub_category_id"], name: "index_tickets_on_sub_category_id"

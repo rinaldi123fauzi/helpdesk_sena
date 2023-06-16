@@ -1,7 +1,7 @@
 <script>
   $(document).on('click','#simpanSubKategori',function(e){
     e.preventDefault();
-    var priority = $('#priority').val();
+    var approval_berjenjang = $('#approval-berjenjang').val();
     var namaSubKategori = $('#nama_subkategori').val();
     var id_subkategori = $('#id_subkategori').val();
     var category_id = $('#kategori').val();
@@ -14,7 +14,7 @@
           authenticity_token: '<%= form_authenticity_token %>',
           namaSubKategori:namaSubKategori,
           category_id:category_id,
-          priority:priority
+          approval_berjenjang:approval_berjenjang
         },
         success: function(data)
         {
@@ -32,7 +32,7 @@
           namaSubKategori:namaSubKategori,
           id_subkategori:id_subkategori,
           category_id:category_id,
-          priority:priority
+          approval_berjenjang:approval_berjenjang
         },
         success: function(data)
         {
@@ -50,7 +50,7 @@
     $('#id_subkategori').empty();
     $('#nama_subkategori').empty();
     $('#kategori').empty();
-    $('#priority').empty();
+    $('#approval-berjenjang').empty();
     $('.modal-title').text('Ubah Data');
     $.ajax({
       url: "/master_data/sub_categories/detail",
@@ -60,26 +60,16 @@
       },
       success: function(data)
       {
-        select_priority = "";
-        if (data[0]['priority'] == "normal") {
-          select_priority += '<option value="normal" selected>Normal</option>';
-          select_priority += '<option value="medium">Medium</option>';
-          select_priority += '<option value="high">High</option>';
-        }else if(data[0]['priority'] == "medium"){
-          select_priority += '<option value="normal">Normal</option>';
-          select_priority += '<option value="medium" selected>Medium</option>';
-          select_priority += '<option value="high">High</option>';
-        }else if(data[0]['priority'] == "high"){
-          select_priority += '<option value="normal">Normal</option>';
-          select_priority += '<option value="medium">Medium</option>';
-          select_priority += '<option value="high" selected>High</option>';
+        status = "";
+        if (data[0]['approval_berjenjang'] == 1) {
+          status += `<option value="1" selected>Enable</option>`;
+          status += `<option value="0">Disable</option>`;
         }else{
-          select_priority += '<option value="normal">Normal</option>';
-          select_priority += '<option value="medium">Medium</option>';
-          select_priority += '<option value="high">High</option>';
+          status += `<option value="1">Enable</option>`;
+          status += `<option value="0" selected>Disable</option>`; 
         }
 
-        $('#priority').append(select_priority);
+        $('#approval-berjenjang').append(status);
         $('#id_subkategori').val(id);
         for (let i = 0; i < data[0]['categories'].length; i++) {
             const element = data[0]['categories'][i];
@@ -104,10 +94,9 @@
         url: "/master_data/categories/getAll",
         method: 'GET',
         success: function(data){
-            $('#priority').append(`
-              <option value="normal">Normal</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
+            $('#status').append(`
+                <option value="1">Enable</option>
+                <option value="0">Disable</option>
             `);
             for (let i = 0; i < data[0]['data_categories'].length; i++) {
                 const element = data[0]['data_categories'][i];

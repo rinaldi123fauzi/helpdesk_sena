@@ -45,7 +45,17 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div id="kucing-garong" hidden>
+                <div class="form-group">
+                  <label>Atasan Langsung</label>
+                  <div class="input-group">
+                    <select class="form-control select2" id="approval-by" name="approval_by" style="width: 100%;">
+                      <option value="">--Pilih--</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div id="ubah-approval1" class="col-md-6">
                 <div class="form-group">
                   <label>Satuan Kerja</label>
                   <div class="input-group">
@@ -55,7 +65,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div id="ubah-approval2" class="col-md-6">
                 <div class="form-group">
                   <label>Area</label>
                   <div class="input-group">
@@ -169,10 +179,17 @@
             </div>
           </div>
 
-           <div class="col-md-9">
+          <div class="col-md-7">
             <div class="form-group">
               <label>Attachment</label>
               <div class="file-button"></div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group">
+              <label style="color: transparent;">approval</label>
+              <div class="approval-button"></div>
             </div>
           </div>
 
@@ -240,7 +257,6 @@
               <th>Nomor Tiket</th>
               <th>Satuan Kerja</th>
               <th>Dibuat Oleh</th>
-              <th>Prioritas</th>
               <th>Status Tiket</th>
               <th class="text-center" style="width: 100px;">Action</th>
             </tr>
@@ -252,7 +268,6 @@
                 <td><%= ticket.no_ticket %></td>
                 <td><%= ticket.work_unit.nama %></td>
                 <td><%= ticket.issued_by %></td>
-                <td><%= ticket.sub_category.priority %></td>
                 <td><%= ticket.status %></td>
                 <td>
                   <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>">Detail</button>
@@ -297,7 +312,8 @@
         $('#detail-deskripsi').val(data['data_ticket']['deskripsi']);
         $('#detail-teknisi').val(data['data_ticket']['teknisi']);
         $('.assign-button').empty();
-        if (data['data_ticket']['status'] == "created" && data['data_ticket']['current_user'] == "admin" || data['data_ticket']['current_user'] == "teknisi") {
+        $('.approval-button').empty();
+        if (data['data_ticket']['status'] == "open" && data['data_ticket']['current_user'] == "admin" || data['data_ticket']['current_user'] == "teknisi") {
           $('.assign-button').append(`
             <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
           `);
@@ -305,6 +321,12 @@
           $('.assign-button').append(`
             <label>Teknisi</label>
             <input type="text" class="form-control" value="${data['data_ticket']['teknisi']}" disabled>
+          `);
+        }
+
+        if (data['data_ticket']['status'] == "created" && data['data_ticket']['current_user'] == "kepala divisi" || data['data_ticket']['current_user'] == "projek manajer") {
+           $('.approval-button').append(`
+            <button class="btn btn-info btn-sm approve" data-id="${id}">Approve</button>
           `);
         }
 
@@ -335,6 +357,7 @@
         $('#dibuat-oleh').val(data[0]['data_ticket']['issued_by']);
         $('#deskripsi').val(data[0]['data_ticket']['description']);
         var sub_category_id = data[0]['data_ticket']['sub_category_id'];
+        var follow_by = data[0]['data_ticket']['approval_by'];
         for (let i = 0; i < data[0]['categories'].length; i++) {
           const element = data[0]['categories'][i];
           if (data[0]['data_ticket']['category_id'] == element['id']) {
@@ -399,6 +422,43 @@
                 `);
               }
             }
+
+            var sub_kategori = $('#sub-layanan option:selected').val();
+            $.ajax({
+              url: "/transaksi/tickets/get-approval-berjenjang",
+              method: 'GET',
+              data: {
+                id:sub_kategori
+              },
+              success: function(data)
+              {
+                $('#approval-by').empty();
+                if (data['status_approval'] == 1) {
+                  for (let i = 0; i < data['user'].length; i++) {
+                    const element = data['user'][i];
+                    if (follow_by == element['username']) {
+                      $('#approval-by').append(`<option value="${element['username']}" selected>${element['username']}</option>`);
+                    }else{
+                      $('#approval-by').append(`<option value="${element['username']}">${element['username']}</option>`);
+                    }
+                  }
+                  $('#kucing-garong').prop('hidden', false);
+                  $('#ubah-approval1').removeClass();
+                  $('#ubah-approval2').removeClass();
+                  $('#ubah-approval1').addClass('col-md-4');
+                  $('#ubah-approval2').addClass('col-md-4');
+                  $('#kucing-garong').addClass('col-md-4');
+                  console.log(data['user']);
+                }else{
+                  $('#kucing-garong').prop('hidden', true);
+                  $('#kucing-garong').removeClass();
+                  $('#ubah-approval1').removeClass();
+                  $('#ubah-approval2').removeClass();
+                  $('#ubah-approval1').addClass('col-md-6');
+                  $('#ubah-approval2').addClass('col-md-6');
+                }
+              }
+            });
           }
         });
 
@@ -422,6 +482,41 @@
                   <option value="${element['id']}">${element['nama_sub_kategori']}</option>
                 `);
               }
+            }
+          });
+        });
+
+        $(document).on('change', '#sub-layanan', function(){
+          var id = $(this).val();
+          $.ajax({
+            url: "/transaksi/tickets/get-approval-berjenjang",
+            method: 'GET',
+            data: {
+              id:id
+            },
+            success: function(data)
+            {
+              $('#approval-by').empty();
+             if (data['status_approval'] == 1) {
+              for (let i = 0; i < data['user'].length; i++) {
+                const element = data['user'][i];
+                $('#approval-by').append(`<option value="${element['username']}">${element['username']}</option>`);
+              }
+              $('#kucing-garong').prop('hidden', false);
+              $('#ubah-approval1').removeClass();
+              $('#ubah-approval2').removeClass();
+              $('#ubah-approval1').addClass('col-md-4');
+              $('#ubah-approval2').addClass('col-md-4');
+              $('#kucing-garong').addClass('col-md-4');
+              console.log(data['user']);
+             }else{
+              $('#kucing-garong').prop('hidden', true);
+              $('#kucing-garong').removeClass();
+              $('#ubah-approval1').removeClass();
+              $('#ubah-approval2').removeClass();
+              $('#ubah-approval1').addClass('col-md-6');
+              $('#ubah-approval2').addClass('col-md-6');
+             }
             }
           });
         });
@@ -466,6 +561,45 @@
       }
     });    
   });
+
+  $(document).on('click','.approve',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, approve it!'
+      }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "",
+          method: 'DELETE',
+          data : {
+            authenticity_token: '<%= form_authenticity_token %>',
+            id:id
+          },
+          success: function(data)
+          {
+            if (data['status'] == 200) {
+              window.location.href = "/tickets";
+            }else if (data['status'] == 500) {
+              window.location.href = "/tickets";
+            }
+          }
+        });
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      }
+    });    
+  });
+
   $(document).on('click', '.assign', function(){
     var id = $(this).data('id');
     $('#id_tiket_assign').val(id);
@@ -535,6 +669,13 @@
     $('#sub-layanan').find('option:not(:first)').remove();
     $('#area').find('option:not(:first)').remove();
     $('#satuan-kerja').find('option:not(:first)').remove();
+
+    $('#kucing-garong').prop('hidden', true);
+    $('#kucing-garong').removeClass();
+    $('#ubah-approval1').removeClass();
+    $('#ubah-approval2').removeClass();
+    $('#ubah-approval1').addClass('col-md-6');
+    $('#ubah-approval2').addClass('col-md-6');
     $.ajax({
       url: "/transaksi/tickets/list-form",
       method: 'GET',
@@ -583,6 +724,41 @@
                   <option value="${element['id']}">${element['nama_sub_kategori']}</option>
                 `);
               }
+            }
+          });
+        });
+
+        $(document).on('change', '#sub-layanan', function(){
+          var id = $(this).val();
+          $.ajax({
+            url: "/transaksi/tickets/get-approval-berjenjang",
+            method: 'GET',
+            data: {
+              id:id
+            },
+            success: function(data)
+            {
+              $('#approval-by').empty();
+             if (data['status_approval'] == 1) {
+              for (let i = 0; i < data['user'].length; i++) {
+                const element = data['user'][i];
+                $('#approval-by').append(`<option value="${element['username']}">${element['username']}</option>`);
+              }
+              $('#kucing-garong').prop('hidden', false);
+              $('#ubah-approval1').removeClass();
+              $('#ubah-approval2').removeClass();
+              $('#ubah-approval1').addClass('col-md-4');
+              $('#ubah-approval2').addClass('col-md-4');
+              $('#kucing-garong').addClass('col-md-4');
+              console.log(data['user']);
+             }else{
+              $('#kucing-garong').prop('hidden', true);
+              $('#kucing-garong').removeClass();
+              $('#ubah-approval1').removeClass();
+              $('#ubah-approval2').removeClass();
+              $('#ubah-approval1').addClass('col-md-6');
+              $('#ubah-approval2').addClass('col-md-6');
+             }
             }
           });
         });

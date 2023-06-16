@@ -14,6 +14,7 @@
 #  status          :string
 #  assigned_by     :string
 #  no_ticket       :string
+#  approval_by     :string
 #
 
 one:

@@ -15,7 +15,7 @@
     <li class="<%= params[:controller] == "tickets" ? " active" : ""%>">
       <% 
         if current_user.roles.any? { |r| r.name == 'admin' || r.name == 'superadmin' || r.name == 'teknisi'}
-          @countTicket = Ticket.where(status: 'created').count
+          @countTicket = Ticket.where(status: 'open').count
         end 
       %>
       <a class="nav-link" href="<%= tickets_path %>"><i data-feather="file"></i><span>Tiket</span><p class="mb-0"><span class="col-green"><%= @countTicket %></span></p></a>

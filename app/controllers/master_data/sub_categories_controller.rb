@@ -3,7 +3,7 @@ class MasterData::SubCategoriesController < ApplicationController
     SubCategory.create!(
       'nama_sub_kategori' => params[:namaSubKategori],
       'category_id' => params[:category_id],
-      'priority' => params[:priority]
+      'approval_berjenjang' => params[:approval_berjenjang]
     )
     render json: [  
       "status" => "tersimpan"
@@ -15,7 +15,7 @@ class MasterData::SubCategoriesController < ApplicationController
       {
         :nama_sub_kategori => params[:namaSubKategori],
         :category_id => params[:category_id],
-        :priority => params[:priority]
+        :approval_berjenjang => params[:approval_berjenjang]
       }
     )
     if (@data)
@@ -32,7 +32,7 @@ class MasterData::SubCategoriesController < ApplicationController
     render json:[
       "nama" => @data.nama_sub_kategori,
       "category_id" => @data.category_id,
-      "priority" => @data.priority,
+      "approval_berjenjang" => @data.approval_berjenjang,
       "categories" => @categories
     ]
   end

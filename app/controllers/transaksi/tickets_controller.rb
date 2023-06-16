@@ -23,6 +23,12 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def create
+    @check_approval = SubCategory.where(id: params[:sub_layanan], approval_berjenjang: true)
+    if @check_approval.count == 1
+      @status = "created"
+    else
+      @status = "open"
+    end
     ActiveRecord::Base.transaction do
       ticket = Ticket.new
       ticket.no_ticket = params[:nomor_tiket]
@@ -30,7 +36,8 @@ class Transaksi::TicketsController < ApplicationController
       ticket.sub_category_id = params[:sub_layanan]
       ticket.issued_by = params[:dibuat_oleh]
       ticket.description = params[:deskripsi]
-      ticket.status = "created"
+      ticket.status = @status
+      ticket.approval_by = params[:approval_by]
       ticket.work_unit_id = params[:satuan_kerja]
       ticket.area_id = params[:area]
       if params[:file_tiket].present?
@@ -47,13 +54,21 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def update
+    @check_approval = SubCategory.where(id: params[:sub_layanan], approval_berjenjang: true)
+    if @check_approval.count == 1
+      @status = "created"
+    else
+      @status = "open"
+    end
     ActiveRecord::Base.transaction do
       ticket = Ticket.find_by_id(params[:id_tiket])
       ticket.no_ticket = params[:nomor_tiket]
       ticket.category_id = params[:layanan]
       ticket.sub_category_id = params[:sub_layanan]
       ticket.issued_by = params[:dibuat_oleh]
+      ticket.status = @status
       ticket.description = params[:deskripsi]
+      ticket.approval_by = params[:approval_by]
       ticket.work_unit_id = params[:satuan_kerja]
       ticket.area_id = params[:area]
       if params[:file_tiket].present?
@@ -153,6 +168,22 @@ class Transaksi::TicketsController < ApplicationController
         current_user: getRole,
         file: @data_attach
       }
+    }
+  end
+
+  def getApprovalBerjenjang
+    data_user = []
+    data_sub_category = SubCategory.find_by_id(params[:id])
+    role_assignments = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ? or roles.name = ?', 'kepala divisi', 'projek manajer').select('users.username')
+    role_assignments.each do |user|
+      data_user.push(
+        "username" => user.username
+      )
+    end
+
+    render json:{
+      status_approval: data_sub_category.approval_berjenjang,
+      user: data_user
     }
   end
 
