@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_16_150926) do
+ActiveRecord::Schema.define(version: 2023_06_16_152704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,11 +39,13 @@ ActiveRecord::Schema.define(version: 2023_06_16_150926) do
   create_table "approvals", force: :cascade do |t|
     t.bigint "loan_id"
     t.string "approve_by"
-    t.integer "approve_level"
+    t.string "approve_level"
     t.datetime "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "ticket_id"
     t.index ["loan_id"], name: "index_approvals_on_loan_id"
+    t.index ["ticket_id"], name: "index_approvals_on_ticket_id"
   end
 
   create_table "areas", force: :cascade do |t|
@@ -217,6 +219,7 @@ ActiveRecord::Schema.define(version: 2023_06_16_150926) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "approvals", "loans"
+  add_foreign_key "approvals", "tickets"
   add_foreign_key "employees", "work_units"
   add_foreign_key "inventories", "items"
   add_foreign_key "inventories", "users"
