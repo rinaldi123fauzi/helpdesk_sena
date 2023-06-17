@@ -13,7 +13,7 @@ module NewCRM
 
     config.assets.paths << Rails.root.join("vendor")
 
-    config.time_zone = "Jakarta"
+    config.time_zone = "Asia/Jakarta"
     config.active_record.default_timezone = :utc
 
     # Settings in config/environments/* take precedence over those specified here.

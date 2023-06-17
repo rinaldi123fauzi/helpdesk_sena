@@ -3,7 +3,6 @@
 # Table name: approvals
 #
 #  id            :bigint           not null, primary key
-#  loan_id       :bigint
 #  approve_by    :string
 #  approve_level :string
 #  date          :datetime
@@ -12,5 +11,5 @@
 #  ticket_id     :bigint
 #
 class Approval < ApplicationRecord
-  belongs_to :loan
+  belongs_to :ticket
 end

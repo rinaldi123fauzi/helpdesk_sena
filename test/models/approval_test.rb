@@ -3,7 +3,6 @@
 # Table name: approvals
 #
 #  id            :bigint           not null, primary key
-#  loan_id       :bigint
 #  approve_by    :string
 #  approve_level :string
 #  date          :datetime

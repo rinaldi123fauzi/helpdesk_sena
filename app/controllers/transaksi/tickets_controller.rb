@@ -187,6 +187,46 @@ class Transaksi::TicketsController < ApplicationController
     }
   end
 
+  def approval
+    check_ticket = Ticket.find_by_id(params[:id])
+
+    if check_ticket.status == "created"
+      check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+      Approval.create!(
+        :approve_by => current_user.username,
+        :approve_level => 'approval1',
+        :ticket_id => params[:id],
+      )
+      data = Ticket.find_by_id(params[:id])
+      data.status = 'approval1'
+      data.approval_by =  check_manajer_it.username
+      data.save
+  
+      if data.save
+        render json:{
+          status: 200
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      end
+    elsif check_ticket.status == "approval1"
+      Approval.create!(
+        :approve_by => current_user.username,
+        :approve_level => 'approval2',
+        :ticket_id => params[:id],
+      )
+      data = Ticket.find_by_id(params[:id])
+      data.status = 'open'
+      data.save
+  
+      if data.save
+        render json:{
+          status: 200
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      end
+    end
+  end
+
   def getRole
     @roleAssign = RoleAssignment.left_outer_joins(:role).where(user_id: current_user.id).select('roles.name AS nameroles, role_assignments.role_id')
     @value = @roleAssign.each_with_index.map { |role| "#{role.try(:nameroles)}" }.join(", ").gsub(",","")

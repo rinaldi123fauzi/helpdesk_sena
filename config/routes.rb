@@ -130,6 +130,7 @@ Rails.application.routes.draw do
       put 'ticket-assign' => 'tickets#assignTicket'
       put 'ticket-close' => 'tickets#ticketClose'
       delete 'delete-ticket' => 'tickets#deleteTicket'
+      put 'ticket-approval' => 'tickets#approval'
     end
 
     scope :dashboard do

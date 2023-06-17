@@ -258,6 +258,7 @@
               <th>Satuan Kerja</th>
               <th>Dibuat Oleh</th>
               <th>Status Tiket</th>
+              <th>Tanggal Dibuat</th>
               <th class="text-center" style="width: 100px;">Action</th>
             </tr>
           </thead>
@@ -269,11 +270,12 @@
                 <td><%= ticket.work_unit.nama %></td>
                 <td><%= ticket.issued_by %></td>
                 <td><%= ticket.status %></td>
+                <td><%= ticket.created_at.strftime("%d %b %Y %H:%I:%S") %></td>
                 <td>
                   <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>">Detail</button>
 
                   <% unless ticket.status == "inprogress" || ticket.status == "closed" %>
-                    <% unless current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"} %>
+                    <% unless current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer" || r.name == "manajer it"} %>
                       <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>">Edit</button>
                       <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>">Hapus</button>
                     <% end %>
@@ -327,6 +329,12 @@
         }
 
         if (data['data_ticket']['status'] == "created" && data['data_ticket']['current_user'] == "kepala divisi" || data['data_ticket']['current_user'] == "projek manajer") {
+           $('.approval-button').append(`
+            <button class="btn btn-info btn-sm approve" data-id="${id}">Approve</button>
+          `);
+        }
+
+        if (data['data_ticket']['status'] == "approval1" && data['data_ticket']['current_user'] == "manajer it") {
            $('.approval-button').append(`
             <button class="btn btn-info btn-sm approve" data-id="${id}">Approve</button>
           `);
@@ -578,8 +586,8 @@
       }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: "",
-          method: 'DELETE',
+          url: "/transaksi/tickets/ticket-approval",
+          method: 'PUT',
           data : {
             authenticity_token: '<%= form_authenticity_token %>',
             id:id
