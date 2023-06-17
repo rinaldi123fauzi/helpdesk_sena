@@ -87,6 +87,7 @@ class Transaksi::TicketsController < ApplicationController
   def assignTicket
     ticket = Ticket.find_by_id(params[:id])
     ticket.assigned_by = params[:teknisi]
+    ticket.created_respon = Time.current
     ticket.status = "inprogress"
     ticket.save
 

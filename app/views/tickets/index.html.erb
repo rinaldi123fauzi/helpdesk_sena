@@ -175,7 +175,7 @@
 
           <div class="col-md-3">
             <div class="form-group">
-              <div class="assign-button"></div>
+              <div class="assign-teknisi"></div>
             </div>
           </div>
 
@@ -259,6 +259,8 @@
               <th>Dibuat Oleh</th>
               <th>Status Tiket</th>
               <th>Tanggal Dibuat</th>
+              <th>Respon Tiket</th>
+              <th>Lama Respon</th>
               <th class="text-center" style="width: 100px;">Action</th>
             </tr>
           </thead>
@@ -270,7 +272,26 @@
                 <td><%= ticket.work_unit.nama %></td>
                 <td><%= ticket.issued_by %></td>
                 <td><%= ticket.status %></td>
-                <td><%= ticket.created_at.strftime("%d %b %Y %H:%I:%S") %></td>
+                <td><%= ticket.created_at.strftime("%d %b %Y %H:%M:%S") %></td>
+                <td><%= ticket.created_respon.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
+                <td>
+                  <%
+                    begin
+                      result = (ticket.created_respon - ticket.created_at) / 1.minute
+                    rescue
+                     result = 0
+                    end
+
+                    if result >= 60
+                      hasil = result / 60
+                      ket = " Jam"
+                    else
+                      hasil = result
+                      ket = " Menit"
+                    end
+                  %>
+                  <%= number_with_precision(hasil, precision:2) + ket %>
+                </td>
                 <td>
                   <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>">Detail</button>
 
@@ -315,23 +336,26 @@
         $('#detail-satuan-kerja').val(data['data_ticket']['satuan_kerja']);
         $('#detail-deskripsi').val(data['data_ticket']['deskripsi']);
         $('#detail-teknisi').val(data['data_ticket']['teknisi']);
-        $('.assign-button').empty();
+        $('.assign-teknisi').empty();
         $('.approval-button').empty();
-        if (data['data_ticket']['status'] == "open" && data['data_ticket']['current_user'] == "admin" || data['data_ticket']['current_user'] == "teknisi") {
-          $('.assign-button').append(`
-            <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
-          `);
-        }else{
-          $('.assign-button').append(`
-            <label>Teknisi</label>
-            <input type="text" class="form-control" value="${data['data_ticket']['teknisi']}" disabled>
-          `);
+        if (data['data_ticket']['current_user'] == "admin" || data['data_ticket']['current_user'] == "teknisi") {
+          if (data['data_ticket']['status'] == "open") {
+            $('.approval-button').append(`
+              <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
+            `);
+          }
         }
+        $('.assign-teknisi').append(`
+          <label>Teknisi</label>
+          <input type="text" class="form-control" value="${data['data_ticket']['teknisi']}" disabled>
+        `);
 
-        if (data['data_ticket']['status'] == "created" && data['data_ticket']['current_user'] == "kepala divisi" || data['data_ticket']['current_user'] == "projek manajer") {
-           $('.approval-button').append(`
-            <button class="btn btn-info btn-sm approve" data-id="${id}">Approve</button>
-          `);
+        if (data['data_ticket']['current_user'] == "kepala divisi" || data['data_ticket']['current_user'] == "projek manajer") {
+          if (data['data_ticket']['status'] == "created") {
+             $('.approval-button').append(`
+              <button class="btn btn-info btn-sm approve" data-id="${id}">Approve</button>
+            `);
+          }
         }
 
         if (data['data_ticket']['status'] == "approval1" && data['data_ticket']['current_user'] == "manajer it") {

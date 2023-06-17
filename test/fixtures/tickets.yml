@@ -15,6 +15,7 @@
 #  assigned_by     :string
 #  no_ticket       :string
 #  approval_by     :string
+#  created_respon  :datetime
 #
 
 one:

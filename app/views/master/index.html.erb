@@ -699,6 +699,7 @@
               <tr>
                 <th style="width: 50px;" class="text-center">No</th>
                 <th>Nama Area</th>
+                <th>Tanggal Dibuat</th>
                 <th style="width: 150px;" class="text-center">Aksi</th>
               </tr>
             </thead>
@@ -707,6 +708,7 @@
               <tr>
                 <td style="width: 50px;" class="text-center"><%= index+1 %></td>
                 <td><%= work_unit.nama %></td>
+                <td><%= work_unit.created_at.strftime('%d %b %Y %H:%M:%S') %></td>
                 <td style="width: 150px;" class="text-center">
                   <%# if current_user.can? { |permissions| permissions.category.update? } %>
                   <a href="#" class="btn btn-warning btn-circle btn-sm" id="ubahArea" data-toggle="modal" data-target="#area" data-id="<%= work_unit.id %>">
