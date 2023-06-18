@@ -79,3 +79,4 @@ gem 'toastr-rails'
 gem 'rails_performance' #monitoring
 gem "annotate"
 gem 'active_model_serializers'
+gem 'whenever'

@@ -16,3 +16,5 @@ RUN bundle config set force_ruby_platform true
 RUN apt-get update
 
 RUN apt-get install -y nodejs
+
+RUN apt-get update && apt-get -y install cron
