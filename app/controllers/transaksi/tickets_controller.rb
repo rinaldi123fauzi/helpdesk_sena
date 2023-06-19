@@ -48,6 +48,14 @@ class Transaksi::TicketsController < ApplicationController
       ticket.save!
     end
 
+    ticket = Ticket.last
+    Approval.create!(
+      :issued_by => current_user.username,
+      :approve_level => @status,
+      :description => 'create ticket',
+      :ticket_id => ticket.id
+    )
+
     render json: { 
       "status" => "tersimpan"
     }
@@ -92,6 +100,14 @@ class Transaksi::TicketsController < ApplicationController
     ticket.status = "inprogress"
     ticket.save
 
+    ticket = Ticket.find_by_id(params[:id])
+    Approval.create!(
+      :issued_by => current_user.username,
+      :approve_level => ticket.status,
+      :description => 'tiket sedang diproses',
+      :ticket_id => ticket.id
+    )
+
     render json:{
       status: "tersimpan"
     }
@@ -103,6 +119,14 @@ class Transaksi::TicketsController < ApplicationController
     ticket.status = "closed"
     ticket.closed_respon = Time.current
     ticket.save
+
+    ticket = Ticket.find_by_id(params[:id])
+    Approval.create!(
+      :issued_by => current_user.username,
+      :approve_level => ticket.status,
+      :description => 'tiket sudah selesai',
+      :ticket_id => ticket.id
+    )
 
     render json:{
       status: "tersimpan"
@@ -147,13 +171,23 @@ class Transaksi::TicketsController < ApplicationController
 
   def detail
     @data = Ticket.find(params[:id])
-
+    @history = Approval.where(ticket_id: params[:id])
+    @data_history = []
     @data_attach = []
 
     @data.file_ticket.order(:created_at => :desc).each do |data|
       @data_attach.push(
         "link" => url_for(data),
         "nama_file" => data.filename
+      )
+    end
+
+    @history.each do |data|
+      @data_history.push(
+        "created_at" => data.created_at.strftime('%d %b %Y %H:%M:%S'),
+        "issued_by" => data.issued_by,
+        "approve_level" => data.approve_level,
+        "description" => data.description
       )
     end
     
@@ -171,7 +205,8 @@ class Transaksi::TicketsController < ApplicationController
         pause_respon: @data.pause_respon,
         current_user: getRole,
         user: current_user.username,
-        file: @data_attach
+        file: @data_attach,
+        history: @data_history
       }
     }
   end
@@ -198,8 +233,9 @@ class Transaksi::TicketsController < ApplicationController
     if check_ticket.status == "created"
       check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
       Approval.create!(
-        :approve_by => current_user.username,
+        :issued_by => current_user.username,
         :approve_level => 'approval1',
+        :description => 'tiket disetujui',
         :ticket_id => params[:id],
       )
       data = Ticket.find_by_id(params[:id])
@@ -215,8 +251,9 @@ class Transaksi::TicketsController < ApplicationController
       end
     elsif check_ticket.status == "approval1"
       Approval.create!(
-        :approve_by => current_user.username,
+        :issued_by => current_user.username,
         :approve_level => 'approval2',
+        :description => 'tiket disetujui oleh IT',
         :ticket_id => params[:id],
       )
       data = Ticket.find_by_id(params[:id])
@@ -236,7 +273,7 @@ class Transaksi::TicketsController < ApplicationController
     check_ticket = Ticket.find_by_id(params[:id])
     if check_ticket.status == "created" || check_ticket.status == "approval1"
       Approval.create!(
-        :approve_by => current_user.username,
+        :issued_by => current_user.username,
         :approve_level => 'rejected',
         :ticket_id => params[:id],
         :description => params[:deskripsi]
@@ -258,7 +295,7 @@ class Transaksi::TicketsController < ApplicationController
     check_ticket = Ticket.where(id: params[:id], status: 'inprogress')
     if check_ticket.count == 1
       Approval.create!(
-        :approve_by => current_user.username,
+        :issued_by => current_user.username,
         :approve_level => 'open',
         :ticket_id => params[:id],
         :description => params[:deskripsi]
@@ -282,6 +319,15 @@ class Transaksi::TicketsController < ApplicationController
       ticket = check_ticket.first
       ticket.status = 'inprogress'
       ticket.pause_respon = 0
+      ticket.save
+
+      ticket = Ticket.find_by_id(params[:id])
+      Approval.create!(
+        :issued_by => current_user.username,
+        :approve_level => ticket.status,
+        :ticket_id => ticket.id,
+        :description => "tiket diproses kembali"
+      )
       
       if ticket.save
         render json:{

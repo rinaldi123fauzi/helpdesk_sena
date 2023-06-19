@@ -3,7 +3,7 @@
 # Table name: approvals
 #
 #  id            :bigint           not null, primary key
-#  approve_by    :string
+#  issued_by     :string
 #  approve_level :string
 #  date          :datetime
 #  created_at    :datetime         not null

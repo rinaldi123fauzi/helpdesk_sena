@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_19_075339) do
+ActiveRecord::Schema.define(version: 2023_06_19_150155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2023_06_19_075339) do
   end
 
   create_table "approvals", force: :cascade do |t|
-    t.string "approve_by"
+    t.string "issued_by"
     t.string "approve_level"
     t.datetime "date"
     t.datetime "created_at", null: false
