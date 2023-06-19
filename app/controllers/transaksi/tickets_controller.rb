@@ -168,7 +168,9 @@ class Transaksi::TicketsController < ApplicationController
         deskripsi: @data.description,
         teknisi: @data.assigned_by,
         status: @data.status,
+        pause_respon: @data.pause_respon,
         current_user: getRole,
+        user: current_user.username,
         file: @data_attach
       }
     }
@@ -244,6 +246,44 @@ class Transaksi::TicketsController < ApplicationController
       data.approval_by = current_user.username
   
       if data.save
+        render json:{
+          status: 200
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      end
+    end
+  end
+
+  def eskalasi
+    check_ticket = Ticket.where(id: params[:id], status: 'inprogress')
+    if check_ticket.count == 1
+      Approval.create!(
+        :approve_by => current_user.username,
+        :approve_level => 'open',
+        :ticket_id => params[:id],
+        :description => params[:deskripsi]
+      )
+      data = Ticket.find_by_id(params[:id])
+      data.status = 'open'
+      data.pause_respon = 1
+  
+      if data.save
+        render json:{
+          status: 200
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      end
+    end
+  end
+
+  def proccessTicket
+    check_ticket = Ticket.where(id: params[:id], status: 'open', pause_respon: 1)
+    if check_ticket.count == 1
+      ticket = check_ticket.first
+      ticket.status = 'inprogress'
+      ticket.pause_respon = 0
+      
+      if ticket.save
         render json:{
           status: 200
         }
