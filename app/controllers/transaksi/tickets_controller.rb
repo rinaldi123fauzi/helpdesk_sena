@@ -88,6 +88,7 @@ class Transaksi::TicketsController < ApplicationController
     ticket = Ticket.find_by_id(params[:id])
     ticket.assigned_by = params[:teknisi]
     ticket.created_respon = Time.current
+    ticket.inprogress_respon = Time.current
     ticket.status = "inprogress"
     ticket.save
 
@@ -100,6 +101,7 @@ class Transaksi::TicketsController < ApplicationController
   def ticketClose
     ticket = Ticket.find_by_id(params[:id])
     ticket.status = "closed"
+    ticket.closed_respon = Time.current
     ticket.save
 
     render json:{
