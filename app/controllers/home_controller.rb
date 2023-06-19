@@ -7,6 +7,7 @@ class HomeController < ApplicationController
       @status_inprogress = Ticket.where(status: 'inprogress', issued_by: current_user.username).count
       @status_overdue = Ticket.where(status: 'overdue', issued_by: current_user.username).count
       @status_closed = Ticket.where(status: 'closed', issued_by: current_user.username).count
+      @status_rejected = Ticket.where(status: 'rejected', issued_by: current_user.username).count
       @all = Ticket.where(issued_by: current_user.username).count
     else
       @status_created = Ticket.where(status: 'created').count
@@ -15,6 +16,7 @@ class HomeController < ApplicationController
       @status_inprogress = Ticket.where(status: 'inprogress').count
       @status_overdue = Ticket.where(status: 'overdue').count
       @status_closed = Ticket.where(status: 'closed').count
+      @status_rejected = Ticket.where(status: 'rejected').count
       @all = Ticket.count
     end
   end

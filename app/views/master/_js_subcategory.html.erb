@@ -89,12 +89,13 @@
       $('#id_subkategori').val('');
       $('#kategori').empty();
       $('.modal-title').text('Tambah Data');
+      $('#approval-berjenjang').empty();
       
       $.ajax({
         url: "/master_data/categories/getAll",
         method: 'GET',
         success: function(data){
-            $('#status').append(`
+            $('#approval-berjenjang').append(`
                 <option value="1">Enable</option>
                 <option value="0">Disable</option>
             `);

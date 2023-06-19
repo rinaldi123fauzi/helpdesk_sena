@@ -9,6 +9,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  ticket_id     :bigint
+#  description   :string
 #
 class Approval < ApplicationRecord
   belongs_to :ticket

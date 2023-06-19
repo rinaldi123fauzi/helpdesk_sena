@@ -91,6 +91,20 @@ class Transaksi::DashboardController < ApplicationController
     @closed11 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'closed', @tahun, '11')
     @closed12 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'closed', @tahun, '12')
 
+    # rejected
+    @rejected1 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '01')
+    @rejected2 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '02')
+    @rejected3 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '03')
+    @rejected4 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '04')
+    @rejected5 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '05')
+    @rejected6 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '06') 
+    @rejected7 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '07')
+    @rejected8 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '08')
+    @rejected9 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '09')
+    @rejected10 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '10')
+    @rejected11 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '11')
+    @rejected12 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, '12')
+
     render json: {
       data_dashboard:{
         closed:{
@@ -319,6 +333,44 @@ class Transaksi::DashboardController < ApplicationController
           },
           bulan12:{
             jumlah: @open12.count,
+          },
+        },
+        rejected:{
+          bulan1:{
+            jumlah: @rejected1.count,
+          },
+          bulan2:{
+            jumlah: @rejected2.count,
+          },
+          bulan3:{
+            jumlah: @rejected3.count,
+          },
+          bulan4:{
+            jumlah: @rejected4.count,
+          },
+          bulan5:{
+            jumlah: @rejected5.count,
+          },
+          bulan6:{
+            jumlah: @rejected6.count,
+          },
+          bulan7:{
+            jumlah: @rejected7.count,
+          },
+          bulan8:{
+            jumlah: @rejected8.count,
+          },
+          bulan9:{
+            jumlah: @rejected9.count,
+          },
+          bulan10:{
+            jumlah: @rejected10.count,
+          },
+          bulan11:{
+            jumlah: @rejected11.count,
+          },
+          bulan12:{
+            jumlah: @rejected12.count,
           },
         },
       }

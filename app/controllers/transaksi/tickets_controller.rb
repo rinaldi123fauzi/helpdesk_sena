@@ -228,6 +228,28 @@ class Transaksi::TicketsController < ApplicationController
     end
   end
 
+  def reject
+    check_ticket = Ticket.find_by_id(params[:id])
+    if check_ticket.status == "created" || check_ticket.status == "approval1"
+      Approval.create!(
+        :approve_by => current_user.username,
+        :approve_level => 'rejected',
+        :ticket_id => params[:id],
+        :description => params[:deskripsi]
+      )
+      data = Ticket.find_by_id(params[:id])
+      data.status = 'rejected'
+      data.approval_by = current_user.username
+  
+      if data.save
+        render json:{
+          status: 200
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      end
+    end
+  end
+
   def getRole
     @roleAssign = RoleAssignment.left_outer_joins(:role).where(user_id: current_user.id).select('roles.name AS nameroles, role_assignments.role_id')
     @value = @roleAssign.each_with_index.map { |role| "#{role.try(:nameroles)}" }.join(", ").gsub(",","")

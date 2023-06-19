@@ -9,6 +9,7 @@
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  ticket_id     :bigint
+#  description   :string
 #
 require 'test_helper'
 

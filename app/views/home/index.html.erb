@@ -1,6 +1,6 @@
 <section class="section">
   <div class="row ">
-    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
       <div class="card">
         <div class="card-statistic-4">
           <div class="align-items-center justify-content-between">
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
       <div class="card">
         <div class="card-statistic-4">
           <div class="align-items-center justify-content-between">
@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
       <div class="card">
         <div class="card-statistic-4">
           <div class="align-items-center justify-content-between">
@@ -119,6 +119,27 @@
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
                 <div class="banner-img">
                   <img src="assets/img/closed.png" alt="" width="100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+      <div class="card">
+        <div class="card-statistic-4">
+          <div class="align-items-center justify-content-between">
+            <div class="row ">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                <div class="card-content">
+                  <h5 class="font-15">Rejected</h5>
+                  <h2 class="mb-3 font-24"><%= @status_rejected %></h2>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                <div class="banner-img">
+                  <img src="assets/img/reject.png" alt="" width="100">
                 </div>
               </div>
             </div>
@@ -371,6 +392,22 @@
                 data['closed']['bulan10']['jumlah'],
                 data['closed']['bulan11']['jumlah'],
                 data['closed']['bulan12']['jumlah']
+              ]
+          },{
+              name: 'Rejected',
+              data: [
+                data['rejected']['bulan1']['jumlah'], 
+                data['rejected']['bulan2']['jumlah'], 
+                data['rejected']['bulan3']['jumlah'], 
+                data['rejected']['bulan4']['jumlah'], 
+                data['rejected']['bulan5']['jumlah'], 
+                data['rejected']['bulan6']['jumlah'], 
+                data['rejected']['bulan7']['jumlah'], 
+                data['rejected']['bulan8']['jumlah'], 
+                data['rejected']['bulan9']['jumlah'],
+                data['rejected']['bulan10']['jumlah'],
+                data['rejected']['bulan11']['jumlah'],
+                data['rejected']['bulan12']['jumlah']
               ]
           }
           ],

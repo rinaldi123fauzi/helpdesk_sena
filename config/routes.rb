@@ -131,6 +131,7 @@ Rails.application.routes.draw do
       put 'ticket-close' => 'tickets#ticketClose'
       delete 'delete-ticket' => 'tickets#deleteTicket'
       put 'ticket-approval' => 'tickets#approval'
+      post 'ticket-reject' => 'tickets#reject'
     end
 
     scope :dashboard do
