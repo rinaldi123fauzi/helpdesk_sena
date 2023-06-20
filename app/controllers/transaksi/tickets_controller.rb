@@ -59,6 +59,7 @@ class Transaksi::TicketsController < ApplicationController
     render json: { 
       "status" => "tersimpan"
     }
+    flash[:alert] = "Data berhasil disimpan"
   end
 
   def update
