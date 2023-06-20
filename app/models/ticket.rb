@@ -29,4 +29,17 @@ class Ticket < ApplicationRecord
 
   has_many_attached :file_ticket
   validates :status, inclusion: { in: %w(inprogress approval1 open closed created overdue rejected), allow_nil: true, message: "%{value} bukan status yang benar" }
+
+  def set_overdue
+    ticket = Ticket.where(status: 'inprogress', pause_respon: 0)
+    ticket.each do |data|
+      sla = Sla.find_by_category_id_and_status(data.category_id, true)
+      time_left = (Time.current - data.inprogress_respon) / 1.hours
+      if time_left > sla.period
+        update_ticket = Ticket.find_by_id(data.id)
+        update_ticket.status = 'overdue'
+        update_ticket.save
+      end
+    end
+  end
 end

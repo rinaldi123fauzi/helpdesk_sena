@@ -9,13 +9,4 @@
 #
 class Area < ApplicationRecord
     has_many :ticket
-
-    def set_data
-      data = Area.where(nama: 'Fauzi')
-      if data.count == 0
-        Area.create!(
-          'nama' => "Fauzi"
-        )
-      end
-    end
 end

@@ -1,6 +1,6 @@
 namespace :respon_ticket do
-    desc 'Migrasi Data'
+    desc 'Respon Tiket'
     task :set_respon => [:environment] do
-      Area.new.set_data
+      Ticket.new.set_overdue
     end
 end
