@@ -21,7 +21,11 @@ class Users::SessionsController < Devise::SessionsController
     
     if @user && @user.valid_password?(@password)
       sign_in(@user)
-      super
+      if current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
+        redirect_to "/tickets"
+      else
+        redirect_to root_path
+      end
     else
       reset_session
       flash[:alert] = "Username atau Password anda salah"

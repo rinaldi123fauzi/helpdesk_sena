@@ -171,7 +171,7 @@ class Transaksi::TicketsController < ApplicationController
 
   def detail
     @data = Ticket.find(params[:id])
-    @history = Approval.where(ticket_id: params[:id])
+    @history = Approval.where(ticket_id: params[:id]).order(:created_at => :desc)
     @data_history = []
     @data_attach = []
 

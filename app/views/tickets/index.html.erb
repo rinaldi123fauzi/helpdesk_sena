@@ -95,7 +95,7 @@
               </div>
 
               <div class="col-md-4">
-                <button class="form-control btn btn-md btn-info" id="simpan">Simpan</button>
+                <button class="btn btn-sm btn-info" id="simpan">Simpan</button>
               </div>
             </div>
           </form>
@@ -255,7 +255,7 @@
                   </div>
                 </div>
                 <div class="col-md-4">
-                  <button class="form-control btn btn-md btn-info" id="kirimTiket">Simpan</button>
+                  <button class="btn btn-sm btn-info" id="kirimTiket">Simpan</button>
                 </div>
               </div>
             </form>
@@ -285,7 +285,7 @@
                   </div>
                 </div>
                 <div class="col-md-4">
-                  <button class="form-control btn btn-md btn-info" id="kirimReject">Simpan</button>
+                  <button class="btn btn-sm btn-info" id="kirimReject">Simpan</button>
                 </div>
               </div>
             </form>
@@ -315,7 +315,7 @@
                   </div>
                 </div>
                 <div class="col-md-4">
-                  <button class="form-control btn btn-md btn-info" id="kirimEskalasi">Simpan</button>
+                  <button class="btn btn-sm btn-info" id="kirimEskalasi">Simpan</button>
                 </div>
               </div>
             </form>
@@ -345,16 +345,35 @@
                 <td><%= ticket.no_ticket %></td>
                 <td><%= ticket.work_unit.nama %></td>
                 <td><%= ticket.issued_by %></td>
-                <td><%= ticket.status %></td>
+                <td>
+                  <% 
+                    case ticket.status 
+                    when "open"
+                      concat "<span class='badge badge-light'>#{ticket.status}</span>".html_safe
+                    when "created"
+                      concat "<span class='badge badge-transparent'>#{ticket.status}</span>".html_safe
+                    when "approval1"
+                      concat "<span class='badge badge-info'>#{ticket.status}</span>".html_safe
+                    when "overdue"
+                      concat "<span class='badge badge-warning'>#{ticket.status}</span>".html_safe
+                    when "rejected"
+                      concat "<span class='badge badge-danger'>#{ticket.status}</span>".html_safe
+                    when "inprogress"
+                      concat "<span class='badge badge-success'>#{ticket.status}</span>".html_safe
+                    else
+                      concat "<span class='badge badge-primary'>#{ticket.status}</span>".html_safe
+                    end
+                  %>
+                </td>
                 <td><%= ticket.created_at.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
                 <td>
-                  <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>">Detail</button>
+                  <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>" title="Detail"><i class="fa fa-eye"></i></button>
 
                   <% unless ticket.status == "inprogress" || ticket.status == "closed" || ticket.status == "overdue" || ticket.status == "rejected" %>
                     <% unless current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer" || r.name == "manajer it"} %>
                       <% if ticket.pause_respon == false %>
-                        <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>">Edit</button>
-                        <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>">Hapus</button>
+                        <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
+                        <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>" title="Hapus"><i class="fa fa-trash"></i></button>
                       <% end %>
                     <% end %>
                   <% end %>
