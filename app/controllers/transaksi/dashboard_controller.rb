@@ -21,19 +21,19 @@ class Transaksi::DashboardController < ApplicationController
     @open11 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'open', @tahun, '11')
     @open12 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'open', @tahun, '12')
 
-    # approval1
-    @approval1 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '01')
-    @approval2 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '02')
-    @approval3 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '03')
-    @approval4 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '04')
-    @approval5 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '05')
-    @approval6 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '06') 
-    @approval7 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '07')
-    @approval8 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '08')
-    @approval9 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '09')
-    @approval10 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '10')
-    @approval11 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '11')
-    @approval12 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'approval1', @tahun, '12')
+    # approval
+    @approval1 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '01')
+    @approval2 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '02')
+    @approval3 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '03')
+    @approval4 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '04')
+    @approval5 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '05')
+    @approval6 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '06') 
+    @approval7 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '07')
+    @approval8 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '08')
+    @approval9 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '09')
+    @approval10 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '10')
+    @approval11 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '11')
+    @approval12 = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2'], @tahun, '12')
 
     # overdue
     @overdue1 = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'overdue', @tahun, '01')
