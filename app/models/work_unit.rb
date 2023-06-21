@@ -9,4 +9,5 @@
 #
 class WorkUnit < ApplicationRecord
     has_many :ticket
+    belongs_to :position
 end

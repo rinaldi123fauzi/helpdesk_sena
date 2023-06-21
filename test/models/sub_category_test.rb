@@ -7,7 +7,7 @@
 #  nama_sub_kategori   :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
-#  approval_berjenjang :boolean
+#  approval_berjenjang :string
 #
 require 'test_helper'
 

@@ -443,7 +443,7 @@
         `);
 
         if (data['data_ticket']['current_user'] == "kepala divisi" || data['data_ticket']['current_user'] == "projek manajer") {
-          if (data['data_ticket']['status'] == "created") {
+          if (data['data_ticket']['status'] == "created" && data['data_ticket']['satuan_kerja'] != "Engineering") {
              $('.approval-button').append(`
               <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
             `);
@@ -453,7 +453,18 @@
           }
         }
 
-        if (data['data_ticket']['status'] == "approval1" && data['data_ticket']['current_user'] == "manajer it") {
+        if (data['data_ticket']['current_user'] == "manajer it") {
+          if (data['data_ticket']['status'] == "approval1" || data['data_ticket']['status'] == "approval2") {
+            $('.approval-button').append(`
+             <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
+           `);
+           $('.approval-button').append(`
+             <button class="btn btn-danger btn-sm col-md-5 ml-2 reject" data-backdrop="true" data-toggle="modal" data-target="#reject" data-id="${id}">Reject</button>
+           `);
+          }
+        }
+
+        if (data['data_ticket']['status'] == "approval1" && data['data_ticket']['current_user'] == "kepala divisi" && data['data_ticket']['satuan_kerja'] == "Engineering") {
            $('.approval-button').append(`
             <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
           `);
@@ -639,7 +650,7 @@
               success: function(data)
               {
                 $('#approval-by').empty();
-                if (data['status_approval'] == 1) {
+                if (data['status_approval'] != "none") {
                   for (let i = 0; i < data['user'].length; i++) {
                     const element = data['user'][i];
                     if (follow_by == element['username']) {
@@ -984,7 +995,7 @@
             success: function(data)
             {
               $('#approval-by').empty();
-             if (data['status_approval'] == 1) {
+             if (data['status_approval'] != "none") {
               for (let i = 0; i < data['user'].length; i++) {
                 const element = data['user'][i];
                 $('#approval-by').append(`<option value="${element['username']}">${element['username']}</option>`);

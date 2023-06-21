@@ -3,7 +3,7 @@ class HomeController < ApplicationController
     if current_user.roles.any? {|r| r.name == "user"}
       @status_created = Ticket.where(status: 'created', issued_by: current_user.username).count
       @status_open = Ticket.where(status: 'open', issued_by: current_user.username).count
-      @status_approval = Ticket.where(status: 'approval1', issued_by: current_user.username).count
+      @status_approval = Ticket.where('status IN (?) and issued_by = ?', ['approval1','approval2'], current_user.username).count
       @status_inprogress = Ticket.where(status: 'inprogress', issued_by: current_user.username).count
       @status_overdue = Ticket.where(status: 'overdue', issued_by: current_user.username).count
       @status_closed = Ticket.where(status: 'closed', issued_by: current_user.username).count
@@ -12,7 +12,7 @@ class HomeController < ApplicationController
     else
       @status_created = Ticket.where(status: 'created').count
       @status_open = Ticket.where(status: 'open').count
-      @status_approval = Ticket.where(status: 'approval1').count
+      @status_approval = Ticket.where('status IN (?)', ['approval1','approval2']).count
       @status_inprogress = Ticket.where(status: 'inprogress').count
       @status_overdue = Ticket.where(status: 'overdue').count
       @status_closed = Ticket.where(status: 'closed').count

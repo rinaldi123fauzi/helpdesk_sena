@@ -61,12 +61,22 @@
       success: function(data)
       {
         status = "";
-        if (data[0]['approval_berjenjang'] == 1) {
-          status += `<option value="1" selected>Enable</option>`;
-          status += `<option value="0">Disable</option>`;
+        if (data[0]['approval_berjenjang'] == "none") {
+          status += `<option value="none" selected>None</option>`;
+          status += `<option value="low">Low</option>`;
+          status += `<option value="medium">Medium</option>`;
+        }else if(data[0]['approval_berjenjang'] == "low"){
+          status += `<option value="none">None</option>`;
+          status += `<option value="low" selected>Low</option>`;
+          status += `<option value="medium">Medium</option>`;
+        }else if(data[0]['approval_berjenjang'] == "medium"){
+          status += `<option value="none">None</option>`;
+          status += `<option value="low">Low</option>`;
+          status += `<option value="medium" selected>Medium</option>`;
         }else{
-          status += `<option value="1">Enable</option>`;
-          status += `<option value="0" selected>Disable</option>`; 
+          status += `<option value="none">None</option>`;
+          status += `<option value="low">Low</option>`;
+          status += `<option value="medium">Medium</option>`;
         }
 
         $('#approval-berjenjang').append(status);
@@ -96,8 +106,9 @@
         method: 'GET',
         success: function(data){
             $('#approval-berjenjang').append(`
-                <option value="1">Enable</option>
-                <option value="0">Disable</option>
+                <option value="none">None</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
             `);
             for (let i = 0; i < data[0]['data_categories'].length; i++) {
                 const element = data[0]['data_categories'][i];
