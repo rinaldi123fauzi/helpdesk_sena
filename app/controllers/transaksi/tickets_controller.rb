@@ -173,7 +173,6 @@ class Transaksi::TicketsController < ApplicationController
   def detail
     @data = Ticket.find(params[:id])
     @history = Approval.where(ticket_id: params[:id]).order(:created_at => :desc)
-    @satuan_kerja = Position.find_by_user_id(current_user.id)
     @data_history = []
     @data_attach = []
 
@@ -204,27 +203,19 @@ class Transaksi::TicketsController < ApplicationController
         deskripsi: @data.description,
         teknisi: @data.assigned_by,
         status: @data.status,
+        approval_by: @data.approval_by,
         pause_respon: @data.pause_respon,
         current_user: getRole,
         user: current_user.username,
         file: @data_attach,
-        history: @data_history,
-        satuan_kerja1: @satuan_kerja ? @satuan_kerja.work_unit.nama : ""
+        history: @data_history
       }
     }
   end
 
   def getApprovalBerjenjang
-    # data_user = []
     data_sub_category = SubCategory.find_by_id(params[:id])
-    # role_assignments = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ? or roles.name = ?', 'kepala divisi', 'projek manajer').select('users.username')
-    # role_assignments.each do |user|
-    #   data_user.push(
-    #     "username" => user.username
-    #   )
-    # end
-
-    data = Position.left_outer_joins(:work_unit,:user,:role).where.not('work_units.nama = ? and roles.name = ?', 'Engineering', 'kepala divisi').select('users.username')
+    data = RoleAssignment.left_outer_joins(:role,:user).where('roles.name = :value', :value => "user").select('users.username')
 
     render json:{
       status_approval: data_sub_category.approval_berjenjang,
@@ -238,11 +229,11 @@ class Transaksi::TicketsController < ApplicationController
     if check_ticket.status == "created"
       
       if check_ticket.sub_category.approval_berjenjang == "low"
-        check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
-        approval_by = check_manajer_it.username
+        checkRole = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+        approval_by = checkRole.username
       elsif check_ticket.sub_category.approval_berjenjang == "medium"
-        check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
-        approval_by = check_kadiv.username
+        checkRole = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'kepala divisi').select('users.username').first
+        approval_by = checkRole.username
       end
       Approval.create!(
         :issued_by => current_user.username,

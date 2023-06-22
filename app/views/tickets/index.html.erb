@@ -370,7 +370,7 @@
                   <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>" title="Detail"><i class="fa fa-eye"></i></button>
 
                   <% if ticket.status == "created" || (ticket.status == "open" && ticket.sub_category.approval_berjenjang == "none") %>
-                    <% unless current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer" || r.name == "manajer it"} %>
+                    <% if ticket.issued_by == current_user.username %>
                       <% if ticket.pause_respon == false %>
                         <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
                         <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>" title="Hapus"><i class="fa fa-trash"></i></button>
@@ -450,29 +450,7 @@
           <input type="text" class="form-control" value="${data['data_ticket']['teknisi']}" disabled>
         `);
 
-        if (data['data_ticket']['current_user'] == "kepala divisi" || data['data_ticket']['current_user'] == "projek manajer") {
-          if (data['data_ticket']['status'] == "created" && data['data_ticket']['satuan_kerja1'] != "Engineering") {
-             $('.approval-button').append(`
-              <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
-            `);
-            $('.approval-button').append(`
-              <button class="btn btn-danger btn-sm col-md-5 ml-2 reject" data-backdrop="true" data-toggle="modal" data-target="#reject" data-id="${id}">Reject</button>
-            `);
-          }
-        }
-
-        if (data['data_ticket']['current_user'] == "manajer it") {
-          if (data['data_ticket']['status'] == "approval1" || data['data_ticket']['status'] == "approval2") {
-            $('.approval-button').append(`
-             <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
-           `);
-           $('.approval-button').append(`
-             <button class="btn btn-danger btn-sm col-md-5 ml-2 reject" data-backdrop="true" data-toggle="modal" data-target="#reject" data-id="${id}">Reject</button>
-           `);
-          }
-        }
-
-        if (data['data_ticket']['status'] == "approval1" && data['data_ticket']['current_user'] == "kepala divisi" && data['data_ticket']['satuan_kerja1'] == "Engineering") {
+        if (data['data_ticket']['approval_by'] == data['data_ticket']['user'] ) {
            $('.approval-button').append(`
             <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
           `);

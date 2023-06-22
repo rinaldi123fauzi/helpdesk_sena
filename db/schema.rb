@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_22_021512) do
+ActiveRecord::Schema.define(version: 2023_06_22_103438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,17 +114,6 @@ ActiveRecord::Schema.define(version: 2023_06_22_021512) do
     t.index ["user_id"], name: "index_loans_on_user_id"
   end
 
-  create_table "positions", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "role_id"
-    t.bigint "work_unit_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["role_id"], name: "index_positions_on_role_id"
-    t.index ["user_id"], name: "index_positions_on_user_id"
-    t.index ["work_unit_id"], name: "index_positions_on_work_unit_id"
-  end
-
   create_table "role_assignments", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "role_id"
@@ -220,9 +209,6 @@ ActiveRecord::Schema.define(version: 2023_06_22_021512) do
   add_foreign_key "inventories", "users"
   add_foreign_key "loans", "inventories"
   add_foreign_key "loans", "users"
-  add_foreign_key "positions", "roles"
-  add_foreign_key "positions", "users"
-  add_foreign_key "positions", "work_units"
   add_foreign_key "role_assignments", "roles"
   add_foreign_key "role_assignments", "users"
   add_foreign_key "slas", "categories"

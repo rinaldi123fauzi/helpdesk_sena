@@ -41,7 +41,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Role</label>
-                  <%= f.collection_select :role_ids, Role.all(), :id, :name, {}, class: 'form-control', multiple: true, id: "select_role" %>
+                  <%= f.collection_select :role_ids, Role.all(), :id, :name, {}, class: 'form-control select2', multiple: true %>
                 </div>
               </div>
               <div class="col-md-6">
@@ -80,6 +80,5 @@
   });
 
   $('#user_ldap').select2();
-  $('#select_role').select2();
 
 </script>
