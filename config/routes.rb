@@ -134,6 +134,7 @@ Rails.application.routes.draw do
       post 'ticket-reject' => 'tickets#reject'
       post 'ticket-eskalasi' => 'tickets#eskalasi'
       put 'proccess-ticket' => 'tickets#proccessTicket'
+      put 'take-ticket' => 'tickets#takeTicket'
     end
 
     scope :dashboard do

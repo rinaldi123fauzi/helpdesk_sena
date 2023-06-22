@@ -103,7 +103,7 @@ class Transaksi::TicketsController < ApplicationController
 
     ticket = Ticket.find_by_id(params[:id])
     Approval.create!(
-      :issued_by => current_user.username,
+      :issued_by => params[:teknisi],
       :approve_level => ticket.status,
       :description => 'tiket sedang diproses',
       :ticket_id => ticket.id
@@ -209,7 +209,7 @@ class Transaksi::TicketsController < ApplicationController
         user: current_user.username,
         file: @data_attach,
         history: @data_history,
-        satuan_kerja: @satuan_kerja ? @satuan_kerja.work_unit.nama : ""
+        satuan_kerja1: @satuan_kerja ? @satuan_kerja.work_unit.nama : ""
       }
     }
   end
@@ -236,45 +236,32 @@ class Transaksi::TicketsController < ApplicationController
     check_ticket = Ticket.find_by_id(params[:id])
 
     if check_ticket.status == "created"
+      
       if check_ticket.sub_category.approval_berjenjang == "low"
         check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
-        Approval.create!(
-          :issued_by => current_user.username,
-          :approve_level => 'approval1',
-          :description => 'tiket disetujui',
-          :ticket_id => params[:id],
-        )
-        data = Ticket.find_by_id(params[:id])
-        data.status = 'approval1'
-        data.approval_by =  check_manajer_it.username
-        data.save
-    
-        if data.save
-          render json:{
-            status: 200
-          }
-          flash[:notice] = "Data berhasil disimpan"
-        end
+        approval_by = check_manajer_it.username
       elsif check_ticket.sub_category.approval_berjenjang == "medium"
         check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
-        Approval.create!(
-          :issued_by => current_user.username,
-          :approve_level => 'approval1',
-          :description => 'tiket disetujui',
-          :ticket_id => params[:id],
-        )
-        data = Ticket.find_by_id(params[:id])
-        data.status = 'approval1'
-        data.approval_by =  check_kadiv.username
-        data.save
-    
-        if data.save
-          render json:{
-            status: 200
-          }
-          flash[:notice] = "Data berhasil disimpan"
-        end
+        approval_by = check_kadiv.username
       end
+      Approval.create!(
+        :issued_by => current_user.username,
+        :approve_level => 'approval1',
+        :description => 'tiket disetujui',
+        :ticket_id => params[:id],
+      )
+      data = Ticket.find_by_id(params[:id])
+      data.status = 'approval1'
+      data.approval_by =  approval_by
+      data.save
+  
+      if data.save
+        render json:{
+          status: 200
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      end
+
     elsif check_ticket.status == "approval1"
       check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
       if check_ticket.sub_category.approval_berjenjang == "low"
@@ -321,6 +308,39 @@ class Transaksi::TicketsController < ApplicationController
         }
         flash[:notice] = "Data berhasil disimpan"
       end
+    end
+  end
+
+  def takeTicket
+    tickets = Ticket.where(status: 'open')
+    if tickets.count == 1
+      ticket = tickets.first
+      Approval.create!(
+        :issued_by => current_user.username,
+        :approve_level => 'inprogress',
+        :ticket_id => ticket.id,
+        :description => 'tiket sedang diproses'
+      )
+      ticket.status = 'inprogress'
+      ticket.assigned_by = current_user.username
+      if ticket.save
+        render json:{
+          status: 200,
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      else
+        render json:{
+          status: 500,
+          msg: ticket.errors
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      end   
+    else
+      render json:{
+        status: 404,
+        msg: ticket.errors
+      }
+      flash[:notice] = "Data berhasil disimpan"
     end
   end
 

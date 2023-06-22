@@ -247,8 +247,8 @@
                     <label>Teknisi</label>
                     <div class="input-group">
                       <select class="form-control select2" id="assign_teknisi" style="width: 100%;">
-                        <% Technician.all.each do |data| %>
-                          <option value="<%= data.user.username %>"><%= data.user.username %></option>
+                        <% RoleAssignment.left_outer_joins(:role,:user).where('roles.name = ?', 'teknisi').select('users.username').each do |data| %>
+                          <option value="<%= data.username %>"><%= data.username %></option>
                         <% end %>
                       </select>
                     </div>
@@ -369,7 +369,7 @@
                 <td>
                   <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>" title="Detail"><i class="fa fa-eye"></i></button>
 
-                  <% unless ticket.status == "inprogress" || ticket.status == "closed" || ticket.status == "overdue" || ticket.status == "rejected" %>
+                  <% if ticket.status == "created" || (ticket.status == "open" && ticket.sub_category.approval_berjenjang == "none") %>
                     <% unless current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer" || r.name == "manajer it"} %>
                       <% if ticket.pause_respon == false %>
                         <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
@@ -417,10 +417,18 @@
         $('.assign-teknisi').empty();
         $('.approval-button').empty();
         $('.history').empty();
-        if (data['data_ticket']['current_user'] == "admin" || data['data_ticket']['current_user'] == "teknisi") {
+        if (data['data_ticket']['current_user'] == "admin") {
           if (data['data_ticket']['status'] == "open" && data['data_ticket']['pause_respon'] == 0) {
             $('.approval-button').append(`
               <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
+            `);
+          }
+        }
+
+        if (data['data_ticket']['current_user'] == "teknisi") {
+          if (data['data_ticket']['status'] == "open" && data['data_ticket']['pause_respon'] == 0) {
+            $('.approval-button').append(`
+              <button class="btn btn-info btn-sm take-ticket" data-id="${id}">Take a ticket</button>
             `);
           }
         }
@@ -443,7 +451,7 @@
         `);
 
         if (data['data_ticket']['current_user'] == "kepala divisi" || data['data_ticket']['current_user'] == "projek manajer") {
-          if (data['data_ticket']['status'] == "created" && data['data_ticket']['satuan_kerja'] != "Engineering") {
+          if (data['data_ticket']['status'] == "created" && data['data_ticket']['satuan_kerja1'] != "Engineering") {
              $('.approval-button').append(`
               <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
             `);
@@ -464,7 +472,7 @@
           }
         }
 
-        if (data['data_ticket']['status'] == "approval1" && data['data_ticket']['current_user'] == "kepala divisi" && data['data_ticket']['satuan_kerja'] == "Engineering") {
+        if (data['data_ticket']['status'] == "approval1" && data['data_ticket']['current_user'] == "kepala divisi" && data['data_ticket']['satuan_kerja1'] == "Engineering") {
            $('.approval-button').append(`
             <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
           `);
@@ -772,6 +780,42 @@
         });
         Swal.fire(
           'Processed!',
+          'Data has been save.',
+          'success'
+        )
+      }
+    });    
+  });
+
+  $(document).on('click','.take-ticket',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, take it!'
+      }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "/transaksi/tickets/take-ticket",
+          method: 'PUT',
+          data : {
+            authenticity_token: '<%= form_authenticity_token %>',
+            id:id
+          },
+          success: function(data)
+          {
+            if (data['status'] == 200) {
+              window.location.href = "/tickets";
+            }
+          }
+        });
+        Swal.fire(
+          'Taked!',
           'Data has been save.',
           'success'
         )

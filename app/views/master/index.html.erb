@@ -9,7 +9,7 @@
         <div class="col-sm-4">
           <%= form_tag master_index_path, method: "GET" %>
           <% if current_user.roles.any? { |r| r.name == 'superadmin'} %>
-            <%= select_tag :pilihan, options_for_select(["Jabatan","Teknisi","SLA Layanan","Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
+            <%= select_tag :pilihan, options_for_select(["Jabatan","SLA Layanan","Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
           <% else %>
             <%= select_tag :pilihan, options_for_select(["Data Inventory","Data Item"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control" %>
           <% end %>
@@ -480,79 +480,6 @@
                   <%# end %>
                   <%# if current_user.can? { |permissions| permissions.category.destroy? } %>
                   <a href="#" class="btn btn-danger btn-circle btn-sm" id="hapusJabatan" data-id="<%= work_unit.id %>" data-confirm="Are you sure?">
-                      <i class="fas fa-trash-alt"></i>
-                  </a>
-                  <%# end %>
-                </td>
-              </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    <% end %>
-
-    <% if params[:pilihan] == "Teknisi" %>
-      <div class="modal fade" id="teknisi" role="dialog" aria-labelledby="formModal"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="formModal"></h5>
-              <button type="button" class="close" id="close-modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <input type="hidden" id="id_teknisi">
-                <div class="form-group">
-                  <label>Nama</label>
-                  <div class="input-group">
-                    <select class="form-control select2" id="nama_teknisi" style="width: 100%;"></select>
-                  </div>
-                </div>
-                <button type="submit" class="btn btn-primary m-t-15 waves-effect" id="simpanTeknisi">Simpan</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-header mt-2">
-        <h4>Data Teknisi</h4>
-        <div class="card-header-form">
-              <%# if current_user.can? { |permissions| permissions.category.create? } %>
-            <div class="align-items-center">
-              <%# <%= link_to "+ Data Kategori", new_employee_path, class: "btn btn-primary btn-sm" %>
-              <button type="button" class="btn btn-primary btn-sm tambah-teknisi" data-backdrop="true" data-toggle="modal" data-target="#teknisi">+Tambah</button>
-            </div>
-          <%# end %>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable_kategori" width="100%" cellspacing="0" id="table-1">
-            <thead>
-              <tr>
-                <th style="width: 50px;" class="text-center">No</th>
-                <th>Nama Teknisi</th>
-                <th style="width: 150px;" class="text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @technicians.each_with_index do |work_unit, index| %>
-              <tr>
-                <td style="width: 50px;" class="text-center"><%= index+1 %></td>
-                <td><%= work_unit.user.username %></td>
-                <td style="width: 150px;" class="text-center">
-                  <%# if current_user.can? { |permissions| permissions.category.update? } %>
-                  <a href="#" class="btn btn-warning btn-circle btn-sm" id="ubahTeknisi" data-toggle="modal" data-target="#teknisi" data-id="<%= work_unit.id %>">
-                      <i class="fas fa-pencil-alt"></i>
-                  </a>
-                  <%# end %>
-                  <%# if current_user.can? { |permissions| permissions.category.destroy? } %>
-                  <a href="#" class="btn btn-danger btn-circle btn-sm" id="hapusTeknisi" data-id="<%= work_unit.id %>" data-confirm="Are you sure?">
                       <i class="fas fa-trash-alt"></i>
                   </a>
                   <%# end %>
@@ -1233,5 +1160,4 @@
 <%= render "js_category" %>
 <%= render "js_subcategory" %>
 <%= render "js_sla" %>
-<%= render "js_technician" %>
 <%= render "js_position" %>

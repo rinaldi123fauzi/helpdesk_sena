@@ -214,8 +214,8 @@
           <label>Teknisi</label>
           <select class="form-control select2" id="teknisi">
             <option value="">--Pilih--</option>
-            <% Technician.all.each do |data| %>
-              <option value="<%= data.id %>"><%= data.user.username %></option>
+            <% RoleAssignment.left_outer_joins(:role,:user).where('roles.name = ?', 'teknisi').select('users.username').each do |data| %>
+              <option value="<%= data.username %>"><%= data.username %></option>
             <% end %>
           </select>
         </div>

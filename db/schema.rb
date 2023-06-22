@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_21_041144) do
+ActiveRecord::Schema.define(version: 2023_06_22_021512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -160,13 +160,6 @@ ActiveRecord::Schema.define(version: 2023_06_21_041144) do
     t.index ["category_id"], name: "index_sub_categories_on_category_id"
   end
 
-  create_table "technicians", force: :cascade do |t|
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_technicians_on_user_id"
-  end
-
   create_table "ticket_chats", force: :cascade do |t|
     t.string "sender"
     t.string "receiver"
@@ -234,7 +227,6 @@ ActiveRecord::Schema.define(version: 2023_06_21_041144) do
   add_foreign_key "role_assignments", "users"
   add_foreign_key "slas", "categories"
   add_foreign_key "sub_categories", "categories"
-  add_foreign_key "technicians", "users"
   add_foreign_key "tickets", "areas"
   add_foreign_key "tickets", "categories"
   add_foreign_key "tickets", "sub_categories"
