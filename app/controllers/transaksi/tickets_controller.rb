@@ -303,7 +303,7 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def takeTicket
-    tickets = Ticket.where(status: 'open')
+    tickets = Ticket.where(id: params[:id], status: 'open')
     if tickets.count == 1
       ticket = tickets.first
       Approval.create!(
