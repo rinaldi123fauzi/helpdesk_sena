@@ -45,25 +45,30 @@ class Transaksi::TicketsController < ApplicationController
           ticket.file_ticket = data
         end
       end
-      ticket.save!
+
+      if ticket.save
+        ticket = Ticket.last
+        Approval.create!(
+          :issued_by => current_user.username,
+          :approve_level => @status,
+          :description => 'create ticket',
+          :ticket_id => ticket.id
+        )
+        render json:{
+          status: 200
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      else
+        render json:{
+          status: 500,
+          msg: ticket.errors
+        }
+      end
     end
-
-    ticket = Ticket.last
-    Approval.create!(
-      :issued_by => current_user.username,
-      :approve_level => @status,
-      :description => 'create ticket',
-      :ticket_id => ticket.id
-    )
-
-    render json: { 
-      "status" => "tersimpan"
-    }
-    flash[:notice] = "Data berhasil disimpan"
   end
 
   def update
-    @check_approval = SubCategory.where(id: params[:sub_layanan], approval_berjenjang: true)
+    @check_approval = SubCategory.where(['id = ? and approval_berjenjang != ? ', params[:sub_layanan], 'none'])
     if @check_approval.count == 1
       @status = "created"
     else
@@ -85,12 +90,18 @@ class Transaksi::TicketsController < ApplicationController
           ticket.file_ticket = data
         end
       end
-      ticket.save
+      if ticket.save
+        render json: { 
+          status: 200
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      else
+        render json: { 
+          status: 500,
+          msg: ticket.errors
+        }
+      end
     end
-
-    render json: { 
-      "status" => "tersimpan"
-    }
   end
 
   def assignTicket
@@ -359,23 +370,37 @@ class Transaksi::TicketsController < ApplicationController
 
   def eskalasi
     check_ticket = Ticket.where(id: params[:id], status: 'inprogress')
-    if check_ticket.count == 1
-      Approval.create!(
-        :issued_by => current_user.username,
-        :approve_level => 'open',
-        :ticket_id => params[:id],
-        :description => params[:deskripsi]
-      )
-      data = Ticket.find_by_id(params[:id])
-      data.status = 'open'
-      data.pause_respon = 1
-  
-      if data.save
+    if params[:deskripsi].length >= 1
+      if params[:deskripsi].length <= 100
+        if check_ticket.count == 1
+          Approval.create!(
+            :issued_by => current_user.username,
+            :approve_level => 'open',
+            :ticket_id => params[:id],
+            :description => params[:deskripsi]
+          )
+          data = Ticket.find_by_id(params[:id])
+          data.status = 'open'
+          data.pause_respon = 1
+      
+          if data.save
+            render json:{
+              status: 200
+            }
+            flash[:notice] = "Data berhasil disimpan"
+          end
+        end
+      else
         render json:{
-          status: 200
+          status: 500,
+          msg: "panjang karakter maksimal 100"
         }
-        flash[:notice] = "Data berhasil disimpan"
       end
+    else
+      render json:{
+        status: 500,
+        msg: "deskripsi tidak boleh kosong"
+      }
     end
   end
 

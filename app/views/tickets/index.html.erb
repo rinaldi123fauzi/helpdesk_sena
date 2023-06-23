@@ -62,6 +62,7 @@
                     <select class="form-control select2" id="satuan-kerja" name="satuan_kerja" style="width: 100%;">
                       <option value="">--Pilih--</option>
                     </select>
+                    <div class="message-satker text-danger"></div>
                   </div>
                 </div>
               </div>
@@ -72,6 +73,7 @@
                     <select class="form-control select2" id="area" name="area" style="width: 100%;">
                       <option value="">--Pilih--</option>
                     </select>
+                    <div class="message-area text-danger"></div>
                   </div>
                 </div>
               </div>
@@ -281,7 +283,8 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Deskripsi</label>
-                    <textarea class="form-control deskripsi" size="100"></textarea>
+                    <textarea class="form-control deskripsi-reject" maxlength="100"></textarea>
+                    <div class="count-character-reject"></div>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -311,7 +314,8 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Deskripsi</label>
-                    <textarea class="form-control deskripsi-eskalasi" size="100"></textarea>
+                    <textarea class="form-control deskripsi-eskalasi" maxlength="100"></textarea>
+                    <div class="count-character"></div>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -395,6 +399,17 @@
 </div>
 
 <script>
+  $(document).on('keyup', '.deskripsi-eskalasi', function(){
+    var value = $(this).val();
+    $(".count-character").text("Characters left: " + (100 - value.length));
+  });
+
+  $(document).on('keyup', '.deskripsi-reject', function(){
+    var value = $(this).val();
+    console.log(value);
+    $(".count-character-reject").text("Characters left: " + (100 - value.length));
+  });
+
   $(document).on('click', '.detailTiket', function(){
     var id = $(this).data('id');
     $('.file-button').empty()
@@ -497,7 +512,7 @@
   $(document).on('click', '#kirimReject', function(e){
     e.preventDefault();
     var id = $('#id_reject').val();
-    var deskripsi = $('.deskripsi').val();
+    var deskripsi = $('.deskripsi-reject').val();
     $.ajax({
       url: "/transaksi/tickets/ticket-reject",
       method: 'POST',
@@ -1063,8 +1078,14 @@
 
     xhr.addEventListener("load", function(e){
       let result = JSON.parse(xhr.response);
-      if (result.status == "tersimpan") {
+      if (result.status == 200) {
         window.location.href = "/tickets";
+      }else if(result.status == 500){
+        $('#simpan').text('Simpan');
+        $('.message-satker').empty();
+        $('.message-area').empty();
+        $('.message-satker').text(result.msg.work_unit);
+        $('.message-area').text(result.msg.area);
       }
     });
   });
