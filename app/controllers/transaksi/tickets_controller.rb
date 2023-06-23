@@ -325,6 +325,7 @@ class Transaksi::TicketsController < ApplicationController
       )
       ticket.status = 'inprogress'
       ticket.assigned_by = current_user.username
+      ticket.inprogress_respon = Time.current
       if ticket.save
         render json:{
           status: 200,

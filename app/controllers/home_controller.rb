@@ -18,6 +18,7 @@ class HomeController < ApplicationController
       @status_closed = Ticket.where(status: 'closed').count
       @status_rejected = Ticket.where(status: 'rejected').count
       @all = Ticket.count
+      @tickets = Ticket.where.not('assigned_by IS ?', nil).where(status: 'closed', pause_respon: 0)
     end
   end
 end

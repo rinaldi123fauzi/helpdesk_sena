@@ -6,11 +6,9 @@
   </div>
   <ul class="sidebar-menu">
     <li class="menu-header">Main</li>
-    <% unless current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"} %>
-      <li class="dropdown <%= params[:controller] == "home" ? " active" : ""%>">
-        <a href="<%= root_path %>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
-      </li>
-    <% end %>
+    <li class="dropdown <%= params[:controller] == "home" ? " active" : ""%>">
+      <a href="<%= root_path %>" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+    </li>
     <% if current_user.roles.any? { |r| r.name == 'superadmin' || r.name == 'admin'} %>
       <li class="<%= params[:controller] == "master" ? " active" : ""%>"><a class="nav-link" href="<%= master_index_path %>"><i data-feather="database"></i><span>Master Data</span></a></li>
     <% end %>

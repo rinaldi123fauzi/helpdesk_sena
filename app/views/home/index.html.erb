@@ -1,3 +1,95 @@
+<!-- Modal Detail Durasi Teknisi-->
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="formModal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Detail</h5>
+        <button type="button" class="close" id="close-modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Nomor Tiket</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-nomor-tiket" disabled>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Layanan</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-layanan" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Dibuat Oleh</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-dibuat-oleh" disabled>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Sub Layanan</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-sub-layanan" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Satuan Kerja</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-satuan-kerja" disabled>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Area</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="detail-area" disabled>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Deskripsi</label>
+              <div class="input-group">
+                <textarea class="form-control" id="detail-deskripsi" disabled></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <div class="assign-teknisi"></div>
+            </div>
+          </div>
+
+          <div class="col-md-7">
+            <div class="form-group">
+              <label>Attachment</label>
+              <div class="file-button"></div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="form-group">
+              <label style="color: transparent;">approval</label>
+              <div class="approval-button row"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <section class="section">
   <div class="row ">
     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -209,7 +301,9 @@
       </div> 
 <%
 =end%>
-      <div class="col-md-3">
+      <%
+=begin%>
+ <div class="col-md-3">
         <div class="form-group">
           <label>Teknisi</label>
           <select class="form-control select2" id="teknisi">
@@ -219,7 +313,9 @@
             <% end %>
           </select>
         </div>
-      </div>
+      </div> 
+<%
+=end%>
       <div class="col-md-3">
         <label style="color: transparent;">Nilai Material</label><br>
         <button type="submit" class="btn btn-primary searching"><i class="fa fa-search"></i> Search</button>
@@ -238,11 +334,119 @@
       </div>
     </div>
   </div>
+  <% if current_user.roles.any? { |r| r.name == 'manajer it'} %>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card shadow mb-4">
+          <div class="card-header mt-2">
+            <h4>Durasi Teknisi</h4>
+          </div>
+
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="dataTable_user" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th class="text-center" style="width: 20px;">No</th>
+                    <th>Nomor Tiket</th>
+                    <th>Satuan Kerja</th>
+                    <th>Dibuat Oleh</th>
+                    <th>Status Tiket</th>
+                    <th>Waktu Pengerjaan</th>
+                    <th>Waktu Selesai</th>
+                    <th>Teknisi</th>
+                    <th>Durasi Pengerjaan <br> <small>hh:mm:ss</small></th>
+                    <th class="text-center" style="width: 100px;">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% @tickets.each_with_index do |ticket, index| %>
+                    <tr>
+                      <td><%= index+1 %></td>
+                      <td><%= ticket.no_ticket %></td>
+                      <td><%= ticket.work_unit.nama %></td>
+                      <td><%= ticket.issued_by %></td>
+                      <td>
+                        <% 
+                          case ticket.status 
+                          when "open"
+                            concat "<span class='badge badge-light'>#{ticket.status}</span>".html_safe
+                          when "created"
+                            concat "<span class='badge badge-transparent'>#{ticket.status}</span>".html_safe
+                          when "approval1"
+                            concat "<span class='badge badge-info'>#{ticket.status}</span>".html_safe
+                          when "overdue"
+                            concat "<span class='badge badge-warning'>#{ticket.status}</span>".html_safe
+                          when "rejected"
+                            concat "<span class='badge badge-danger'>#{ticket.status}</span>".html_safe
+                          when "inprogress"
+                            concat "<span class='badge badge-success'>#{ticket.status}</span>".html_safe
+                          else
+                            concat "<span class='badge badge-primary'>#{ticket.status}</span>".html_safe
+                          end
+                        %>
+                      </td>
+                      <td><%= ticket.inprogress_respon.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
+                      <td><%= ticket.closed_respon.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
+                      <td><%= ticket.try(:assigned_by) %></td>
+                      <td>
+                        <% result = (ticket.closed_respon - ticket.inprogress_respon) %>
+                        <%= Time.at(result.to_f).strftime("%H:%M:%S") %> 
+                      </td>
+                      <td>
+                        <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>" title="Detail"><i class="fa fa-eye"></i></button>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </section>
 
 
 <%= javascript_include_tag 'charts' %>
   <script>
+
+    $(document).on('click', '.detailTiket', function(){
+      var id = $(this).data('id');
+      $('.file-button').empty()
+      $.ajax({
+        url: "/transaksi/tickets/detail",
+        method: 'GET',
+        data : {
+          id:id
+        },
+        success: function(data)
+        {
+          $('#detail-nomor-tiket').val(data['data_ticket']['nomor_tiket']);
+          $('#detail-dibuat-oleh').val(data['data_ticket']['dibuat_oleh']);
+          $('#detail-layanan').val(data['data_ticket']['layanan']);
+          $('#detail-sub-layanan').val(data['data_ticket']['sub_layanan']);
+          $('#detail-area').val(data['data_ticket']['area']);
+          $('#detail-satuan-kerja').val(data['data_ticket']['satuan_kerja']);
+          $('#detail-deskripsi').val(data['data_ticket']['deskripsi']);
+          $('#detail-teknisi').val(data['data_ticket']['teknisi']);
+          $('.assign-teknisi').empty();
+          
+          $('.assign-teknisi').append(`
+            <label>Teknisi</label>
+            <input type="text" class="form-control" value="${data['data_ticket']['teknisi']}" disabled>
+          `);
+
+          for (let i = 0; i < data['data_ticket']['file'].length; i++) {
+            const element = data['data_ticket']['file'][i];
+            $('.file-button').append(`
+              <a href="${element['link']}" target="_blank">${element['nama_file']}</a><br>
+            `);          
+          }
+        }
+      });
+    });
     'use strict';
     $(document).ready(function(){
       $.ajax({
