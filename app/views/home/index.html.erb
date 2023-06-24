@@ -454,7 +454,7 @@
         method: 'GET',
         success: function(data)
         {
-          chart1(data['data_dashboard']);
+          chart1(data['grafik_dashboard']);
         }
       });
     });
@@ -472,12 +472,53 @@
         },
         success: function(data)
         {
-          chart1(data['data_dashboard']);
+          chart1(data['grafik_dashboard']);
         }
       });
     });
 
     function chart1(data) {
+      let array_created = [];
+      for (let i = 0; i < data['created'].length; i++) {
+        const element = data['created'][i];
+        array_created.push(element['amount']);
+      }
+
+      let array_approval = [];
+      for (let i = 0; i < data['approval'].length; i++) {
+        const element = data['approval'][i];
+        array_approval.push(element['amount']);
+      }
+
+      let array_open = [];
+      for (let i = 0; i < data['open'].length; i++) {
+        const element = data['open'][i];
+        array_open.push(element['amount']);
+      }
+
+      let array_progress = [];
+      for (let i = 0; i < data['inprogress'].length; i++) {
+        const element = data['inprogress'][i];
+        array_progress.push(element['amount']);
+      }
+
+      let array_overdue = [];
+      for (let i = 0; i < data['overdue'].length; i++) {
+        const element = data['overdue'][i];
+        array_overdue.push(element['amount']);
+      }
+
+      let array_closed = [];
+      for (let i = 0; i < data['closed'].length; i++) {
+        const element = data['closed'][i];
+        array_closed.push(element['amount']);
+      }
+
+      let array_rejected = [];
+      for (let i = 0; i < data['rejected'].length; i++) {
+        const element = data['rejected'][i];
+        array_rejected.push(element['amount']);
+      }
       var options = {
           chart: {
               height: 350,
@@ -500,119 +541,28 @@
           },
           series: [{
               name: 'Created',
-              data: [
-                data['created']['bulan1']['jumlah'], 
-                data['created']['bulan2']['jumlah'], 
-                data['created']['bulan3']['jumlah'], 
-                data['created']['bulan4']['jumlah'], 
-                data['created']['bulan5']['jumlah'], 
-                data['created']['bulan6']['jumlah'], 
-                data['created']['bulan7']['jumlah'], 
-                data['created']['bulan8']['jumlah'], 
-                data['created']['bulan9']['jumlah'],
-                data['created']['bulan10']['jumlah'],
-                data['created']['bulan11']['jumlah'],
-                data['created']['bulan12']['jumlah']
-              ]
+              data: array_created
           }, 
           {
               name: 'Under Approval',
-              data: [
-                data['approval']['bulan1']['jumlah'], 
-                data['approval']['bulan2']['jumlah'], 
-                data['approval']['bulan3']['jumlah'], 
-                data['approval']['bulan4']['jumlah'], 
-                data['approval']['bulan5']['jumlah'], 
-                data['approval']['bulan6']['jumlah'], 
-                data['approval']['bulan7']['jumlah'], 
-                data['approval']['bulan8']['jumlah'], 
-                data['approval']['bulan9']['jumlah'],
-                data['approval']['bulan10']['jumlah'],
-                data['approval']['bulan11']['jumlah'],
-                data['approval']['bulan12']['jumlah']
-              ]
+              data: array_approval
           },
           {
               name: 'Open',
-              data: [
-                data['open']['bulan1']['jumlah'], 
-                data['open']['bulan2']['jumlah'], 
-                data['open']['bulan3']['jumlah'], 
-                data['open']['bulan4']['jumlah'], 
-                data['open']['bulan5']['jumlah'], 
-                data['open']['bulan6']['jumlah'], 
-                data['open']['bulan7']['jumlah'], 
-                data['open']['bulan8']['jumlah'], 
-                data['open']['bulan9']['jumlah'],
-                data['open']['bulan10']['jumlah'],
-                data['open']['bulan11']['jumlah'],
-                data['open']['bulan12']['jumlah']
-              ]
+              data: array_open
           },
           {
               name: 'In Progress',
-              data: [
-                data['inprogress']['bulan1']['jumlah'], 
-                data['inprogress']['bulan2']['jumlah'], 
-                data['inprogress']['bulan3']['jumlah'], 
-                data['inprogress']['bulan4']['jumlah'], 
-                data['inprogress']['bulan5']['jumlah'], 
-                data['inprogress']['bulan6']['jumlah'], 
-                data['inprogress']['bulan7']['jumlah'], 
-                data['inprogress']['bulan8']['jumlah'], 
-                data['inprogress']['bulan9']['jumlah'],
-                data['inprogress']['bulan10']['jumlah'],
-                data['inprogress']['bulan11']['jumlah'],
-                data['inprogress']['bulan12']['jumlah']
-              ]
+              data: array_progress
           }, {
               name: 'Overdue',
-              data: [
-                data['overdue']['bulan1']['jumlah'], 
-                data['overdue']['bulan2']['jumlah'], 
-                data['overdue']['bulan3']['jumlah'], 
-                data['overdue']['bulan4']['jumlah'], 
-                data['overdue']['bulan5']['jumlah'], 
-                data['overdue']['bulan6']['jumlah'], 
-                data['overdue']['bulan7']['jumlah'], 
-                data['overdue']['bulan8']['jumlah'], 
-                data['overdue']['bulan9']['jumlah'],
-                data['overdue']['bulan10']['jumlah'],
-                data['overdue']['bulan11']['jumlah'],
-                data['overdue']['bulan12']['jumlah']
-              ]
+              data: array_overdue
           },{
               name: 'Closed',
-              data: [
-                data['closed']['bulan1']['jumlah'], 
-                data['closed']['bulan2']['jumlah'], 
-                data['closed']['bulan3']['jumlah'], 
-                data['closed']['bulan4']['jumlah'], 
-                data['closed']['bulan5']['jumlah'], 
-                data['closed']['bulan6']['jumlah'], 
-                data['closed']['bulan7']['jumlah'], 
-                data['closed']['bulan8']['jumlah'], 
-                data['closed']['bulan9']['jumlah'],
-                data['closed']['bulan10']['jumlah'],
-                data['closed']['bulan11']['jumlah'],
-                data['closed']['bulan12']['jumlah']
-              ]
+              data: array_closed
           },{
               name: 'Rejected',
-              data: [
-                data['rejected']['bulan1']['jumlah'], 
-                data['rejected']['bulan2']['jumlah'], 
-                data['rejected']['bulan3']['jumlah'], 
-                data['rejected']['bulan4']['jumlah'], 
-                data['rejected']['bulan5']['jumlah'], 
-                data['rejected']['bulan6']['jumlah'], 
-                data['rejected']['bulan7']['jumlah'], 
-                data['rejected']['bulan8']['jumlah'], 
-                data['rejected']['bulan9']['jumlah'],
-                data['rejected']['bulan10']['jumlah'],
-                data['rejected']['bulan11']['jumlah'],
-                data['rejected']['bulan12']['jumlah']
-              ]
+              data: array_rejected
           }
           ],
           xaxis: {
