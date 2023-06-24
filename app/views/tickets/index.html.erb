@@ -45,16 +45,6 @@
                   </div>
                 </div>
               </div>
-              <div id="kucing-garong" hidden>
-                <div class="form-group">
-                  <label>Atasan Langsung</label>
-                  <div class="input-group">
-                    <select class="form-control select2" id="approval-by" name="approval_by" style="width: 100%;">
-                      <option value="">--Pilih--</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
               <div id="ubah-approval1" class="col-md-6">
                 <div class="form-group">
                   <label>Satuan Kerja</label>
@@ -74,6 +64,16 @@
                       <option value="">--Pilih--</option>
                     </select>
                     <div class="message-area text-danger"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="kucing-garong" hidden>
+                <div class="form-group">
+                  <label>Atasan Langsung</label>
+                  <div class="input-group">
+                    <select class="form-control select2" id="approval-by" name="approval_by" style="width: 100%;">
+                      <option value="">--Pilih--</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -680,6 +680,36 @@
           }
         });
 
+        $(document).on('change', '#satuan-kerja', function(){
+          var id = $(this).val();
+          $.ajax({
+            url: "/transaksi/tickets/satuan-kerja",
+            method: 'GET',
+            data :{
+              id:id
+            },
+            success: function(data)
+            {
+              $('#approval-by').empty();
+              $('#approval-by').append(`
+                    <option value="">--Pilih--</option>
+              `);
+              if (data['status']['punya_pm'] == true) {
+                for (let i = 0; i < data['user_biasa'].length; i++) {
+                  const element = data['user_biasa'][i];
+                  $('#approval-by').append(`
+                    <option value="${element['username']}">${element['username']}</option>
+                  `);
+                }
+              }else if(data['status']['punya_pm'] == false){
+                 $('#approval-by').append(`
+                  <option value="${data['username']}">${data['username']}</option>
+                `);
+              }
+            }
+          });
+        });
+
         $(document).on('change', '#layanan', function(){
           var id = $(this).val();
           $.ajax({
@@ -1015,6 +1045,36 @@
                 const element = data[0]['sub_category'][i];
                 $('#sub-layanan').append(`
                   <option value="${element['id']}">${element['nama_sub_kategori']}</option>
+                `);
+              }
+            }
+          });
+        });
+
+        $(document).on('change', '#satuan-kerja', function(){
+          var id = $(this).val();
+          $.ajax({
+            url: "/transaksi/tickets/satuan-kerja",
+            method: 'GET',
+            data :{
+              id:id
+            },
+            success: function(data)
+            {
+              $('#approval-by').empty();
+              $('#approval-by').append(`
+                    <option value="">--Pilih--</option>
+              `);
+              if (data['status']['punya_pm'] == true) {
+                for (let i = 0; i < data['user_biasa'].length; i++) {
+                  const element = data['user_biasa'][i];
+                  $('#approval-by').append(`
+                    <option value="${element['username']}">${element['username']}</option>
+                  `);
+                }
+              }else if(data['status']['punya_pm'] == false){
+                 $('#approval-by').append(`
+                  <option value="${data['username']}">${data['username']}</option>
                 `);
               }
             }

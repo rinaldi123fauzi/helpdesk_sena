@@ -28,7 +28,7 @@ class Ticket < ApplicationRecord
   has_many :approval, dependent: :destroy
 
   has_many_attached :file_ticket
-  validates :status, inclusion: { in: %w(inprogress approval1 approval2 open closed created overdue rejected), allow_nil: true, message: "%{value} bukan status yang benar" }
+  validates :status, inclusion: { in: %w(inprogress approval1 approval2 approval3 open closed created overdue rejected), allow_nil: true, message: "%{value} bukan status yang benar" }
 
   def set_overdue
     ticket = Ticket.where(status: 'inprogress', pause_respon: 0)
