@@ -1,11 +1,11 @@
 class Transaksi::DashboardController < ApplicationController 
   def getAll
 
-    if params[:tahun].present?
+    # if params[:tahun].present?
       @tahun = params[:tahun]
-    else
-      @tahun = Time.now.strftime('%Y')
-    end
+    # else
+    #   @tahun = Time.now.strftime('%Y')
+    # end
 
     # open
     array_open = []

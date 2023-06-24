@@ -147,7 +147,6 @@ Rails.application.routes.draw do
     end
 
     scope :dashboard do
-      get 'get-all' => 'dashboard#getAll'
       post 'get-all' => 'dashboard#getAll'
     end
   end
