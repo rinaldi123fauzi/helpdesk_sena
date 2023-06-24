@@ -1,0 +1,186 @@
+<script>
+  $(document).on('click','#simpanKepalaDivisi',function(e){
+    e.preventDefault();
+    var id_kepala_divisi = $('.id-kepala-divisi').val();
+    var user = $('.user option:selected').val();
+    var role = $('.role option:selected').val();
+    var satuan_kerja = $('.satuan-kerja option:selected').val();
+    var punya_pm = $('.punya-pm option:selected').val();
+    $('#simpanKepalaDivisi').text('Loading...');
+    if (id_kepala_divisi == "") {
+      $.ajax({
+        url: "/master_data/position/create",
+        method: 'POST',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          user:user,
+          role:role,
+          satuan_kerja:satuan_kerja,
+          punya_pm:punya_pm,
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Kepala Divisi";
+          }
+        }
+      });
+    }else{
+      $.ajax({
+        url: "/master_data/position/update",
+        method: 'PUT',
+        data : {
+          authenticity_token: '<%= form_authenticity_token %>',
+          id_area:id_area,
+          user:user,
+          role:role,
+          satuan_kerja:satuan_kerja,
+          punya_pm:punya_pm
+        },
+        success: function(data)
+        {
+          if (data[0]['status'] == "tersimpan") {
+            window.location = "/master/index?pilihan=Kepala Divisi";
+          }
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '#ubahKepalaDivisi', function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    $('.user').empty();
+    $('.role').empty();
+    $('.satuan-kerja').empty();
+    $('.punya-pm').empty();
+
+    $('.modal-title').text('Ubah Data');
+    $.ajax({
+      url: "/master_data/position/detail",
+      method: 'GET',
+      data : {
+        id:id
+      },
+      success: function(data)
+      {
+        $('.id-kepala-divisi').val(id);
+        
+        $('.user').append(`<option value="">--Pilih--</option>`);
+        for (let i = 0; i < data[0]['users'].length; i++) {
+          const element = data[0]['users'][i];
+          if (data[0]['positions']['user_id'] == element['id']) {
+            $('.user').append(`<option value="${element['id']}" selected>${element['username']}</option>`);
+          }else{
+            $('.user').append(`<option value="${element['id']}">${element['username']}</option>`);
+          }
+        }
+
+        $('.role').append(`<option value="">--Pilih--</option>`);
+        for (let i = 0; i < data[0]['roles'].length; i++) {
+          const element = data[0]['roles'][i];
+          if (data[0]['positions']['role_id'] == element['id']) {
+            $('.role').append(`<option value="${element['id']}" selected>${element['name']}</option>`);
+          }else{
+            $('.role').append(`<option value="${element['id']}">${element['name']}</option>`);
+          }
+        }
+
+        $('.satuan-kerja').append(`<option value="">--Pilih--</option>`);
+        for (let i = 0; i < data[0]['work_units'].length; i++) {
+          const element = data[0]['work_units'][i];
+          if (data[0]['positions']['work_unit_id'] == element['id']) {
+            $('.satuan-kerja').append(`<option value="${element['id']}" selected>${element['nama']}</option>`);
+          }else{
+            $('.satuan-kerja').append(`<option value="${element['id']}">${element['nama']}</option>`);
+          }
+        }
+
+        $('.punya-pm').append(`<option value="">--Pilih--</option>`);
+        if (data[0]['positions']['punya_pm'] == true) {
+          $('.punya-pm').append(`<option value="1" selected>Punya</option>`);
+          $('.punya-pm').append(`<option value="0">Tidak Punya</option>`);
+        }else{
+          $('.punya-pm').append(`<option value="1">Punya</option>`);
+          $('.punya-pm').append(`<option value="0" selected>Tidak Punya</option>`);
+        }
+      }
+    });
+  });
+
+  $(document).on('click', '.tambah-kepala-divisi', function(){
+      $('.user').empty();
+      $('.role').empty();
+      $('.satuan-kerja').empty();
+      $('.punya-pm').empty();
+      $('.modal-title').text('Tambah Data');
+
+      $.ajax({
+        url: "/master_data/position/get-all-data",
+        method: 'GET',
+        success: function(data)
+        {
+          $('.user').append(`<option value="">--Pilih--</option>`);
+          for (let i = 0; i < data['users'].length; i++) {
+            const element = data['users'][i];
+            $('.user').append(`<option value="${element['id']}">${element['username']}</option>`);
+          }
+          
+          $('.role').append(`<option value="">--Pilih--</option>`);
+          for (let i = 0; i < data['roles'].length; i++) {
+            const element = data['roles'][i];
+            $('.role').append(`<option value="${element['id']}">${element['name']}</option>`);
+          }
+
+          $('.satuan-kerja').append(`<option value="">--Pilih--</option>`);
+          for (let i = 0; i < data['work_units'].length; i++) {
+            const element = data['work_units'][i];
+            $('.satuan-kerja').append(`<option value="${element['id']}">${element['nama']}</option>`);
+          }
+        }
+      });
+      $('.punya-pm').append(`
+        <option value="">--Pilih--</option>
+        <option value="1">Punya</option>
+        <option value="0">Tidak Punya</option>
+      `);
+  });
+
+  $(document).on('click','#hapusKepalaDivisi',function(e){
+    e.preventDefault();
+    var id = $(this).data('id');
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: "/master_data/position/delete",
+          method: 'DELETE',
+          data : {
+            authenticity_token: '<%= form_authenticity_token %>',
+            id:id
+          },
+          success: function(data)
+          {
+            if (data.status == 200) {
+              window.location = "/master/index?pilihan=Kepala Divisi";
+            }else {
+              console.log(data);
+            }
+          }
+        });
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+      }
+    });    
+  });
+</script>

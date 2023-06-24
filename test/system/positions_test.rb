@@ -14,6 +14,7 @@ class PositionsTest < ApplicationSystemTestCase
     visit positions_url
     click_on "New Position"
 
+    check "Punya pm" if @position.punya_pm
     fill_in "Role", with: @position.role_id
     fill_in "User", with: @position.user_id
     fill_in "Work unit", with: @position.work_unit_id
@@ -27,6 +28,7 @@ class PositionsTest < ApplicationSystemTestCase
     visit positions_url
     click_on "Edit", match: :first
 
+    check "Punya pm" if @position.punya_pm
     fill_in "Role", with: @position.role_id
     fill_in "User", with: @position.user_id
     fill_in "Work unit", with: @position.work_unit_id

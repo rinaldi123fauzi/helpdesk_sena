@@ -87,6 +87,14 @@ Rails.application.routes.draw do
       delete 'delete' => 'areas#delete'
     end
 
+    scope :position do
+      post 'create' => 'position#create'
+      put 'update' => 'position#update'
+      get 'detail' => 'position#detail'
+      delete 'delete' => 'position#delete'
+      get 'get-all-data' => 'position#getAllData'
+    end
+
     scope :sub_categories do
       post 'create' => 'sub_categories#create'
       post 'update' => 'sub_categories#update'

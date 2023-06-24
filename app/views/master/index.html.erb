@@ -9,7 +9,7 @@
         <div class="col-sm-4">
           <%= form_tag master_index_path, method: "GET" %>
           <% if current_user.roles.any? { |r| r.name == 'superadmin'} %>
-            <%= select_tag :pilihan, options_for_select(["SLA Layanan","Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
+            <%= select_tag :pilihan, options_for_select(["Kepala Divisi","SLA Layanan","Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
           <% else %>
             <%= select_tag :pilihan, options_for_select(["Data Inventory","Data Item"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control" %>
           <% end %>
@@ -567,6 +567,115 @@
       </div>
     <% end %>
 
+    <% if params[:pilihan] == "Kepala Divisi" %>
+      <div class="modal fade" id="kepala-divisi" role="dialog" aria-labelledby="formModal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="formModal"></h5>
+              <button type="button" class="close" id="close-modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <input type="hidden" class="id-kepala-divisi">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>User</label>
+                      <div class="input-group">
+                        <select class="form-control select2 user" style="width: 100%;"></select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Role</label>
+                      <div class="input-group">
+                        <select class="form-control select2 role" style="width: 100%;"></select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Satuan Kerja</label>
+                      <div class="input-group">
+                        <select class="form-control select2 satuan-kerja" style="width: 100%;"></select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Punya PM ?</label>
+                      <div class="input-group">
+                        <select class="form-control select2 punya-pm" style="width: 100%;"></select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary m-t-15 waves-effect" id="simpanKepalaDivisi">Simpan</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-header mt-2">
+        <h4>Data Kepala Divisi</h4>
+        <div class="card-header-form">
+              <%# if current_user.can? { |permissions| permissions.category.create? } %>
+            <div class="align-items-center">
+              <%# <%= link_to "+ Data Kategori", new_employee_path, class: "btn btn-primary btn-sm" %>
+              <button type="button" class="btn btn-primary btn-sm tambah-kepala-divisi" data-backdrop="true" data-toggle="modal" data-target="#kepala-divisi">+Tambah</button>
+            </div>
+          <%# end %>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable_kategori" width="100%" cellspacing="0" id="table-1">
+            <thead>
+              <tr>
+                <th style="width: 50px;" class="text-center">No</th>
+                <th>User</th>
+                <th>Role</th>
+                <th>Satuan Kerja</th>
+                <th>Punya PM ?</th>
+                <th>Updated</th>
+                <th style="width: 150px;" class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @positions.each_with_index do |work_unit, index| %>
+              <tr>
+                <td style="width: 50px;" class="text-center"><%= index+1 %></td>
+                <td><%= work_unit.user.username %></td>
+                <td><%= work_unit.role.name %></td>
+                <td><%= work_unit.work_unit.nama %></td>
+                <td><%= work_unit.punya_pm %></td>
+                <td><%= work_unit.updated_at.strftime('%d %b %Y %H:%M:%S') %></td>
+                <td style="width: 150px;" class="text-center">
+                  <%# if current_user.can? { |permissions| permissions.category.update? } %>
+                  <a href="#" class="btn btn-warning btn-circle btn-sm" id="ubahKepalaDivisi" data-toggle="modal" data-target="#kepala-divisi" data-id="<%= work_unit.id %>">
+                      <i class="fas fa-pencil-alt"></i>
+                  </a>
+                  <%# end %>
+                  <%# if current_user.can? { |permissions| permissions.category.destroy? } %>
+                  <a href="#" class="btn btn-danger btn-circle btn-sm" id="hapusKepalaDivisi" data-id="<%= work_unit.id %>">
+                      <i class="fas fa-trash-alt"></i>
+                  </a>
+                  <%# end %>
+                </td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+
     <% if params[:pilihan] == "Data Kategori" %>
       <div class="modal fade" id="kategori" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
@@ -1071,3 +1180,4 @@
 <%= render "js_category" %>
 <%= render "js_subcategory" %>
 <%= render "js_sla" %>
+<%= render "js_position" %>

@@ -336,14 +336,14 @@ class Transaksi::TicketsController < ApplicationController
           status: 500,
           msg: ticket.errors
         }
-        flash[:notice] = "Data berhasil disimpan"
+        flash[:notice] = "Data tidak berhasil disimpan"
       end   
     else
       render json:{
         status: 404,
         msg: ticket.errors
       }
-      flash[:notice] = "Data berhasil disimpan"
+      flash[:notice] = "Data tidak tersedia"
     end
   end
 

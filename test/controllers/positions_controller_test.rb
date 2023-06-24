@@ -17,7 +17,7 @@ class PositionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create position" do
     assert_difference('Position.count') do
-      post positions_url, params: { position: { role_id: @position.role_id, user_id: @position.user_id, work_unit_id: @position.work_unit_id } }
+      post positions_url, params: { position: { punya_pm: @position.punya_pm, role_id: @position.role_id, user_id: @position.user_id, work_unit_id: @position.work_unit_id } }
     end
 
     assert_redirected_to position_url(Position.last)
@@ -34,7 +34,7 @@ class PositionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update position" do
-    patch position_url(@position), params: { position: { role_id: @position.role_id, user_id: @position.user_id, work_unit_id: @position.work_unit_id } }
+    patch position_url(@position), params: { position: { punya_pm: @position.punya_pm, role_id: @position.role_id, user_id: @position.user_id, work_unit_id: @position.work_unit_id } }
     assert_redirected_to position_url(@position)
   end
 

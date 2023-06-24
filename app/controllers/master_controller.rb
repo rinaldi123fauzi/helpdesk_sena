@@ -10,5 +10,6 @@ class MasterController < ApplicationController
     @categories = Category.all.order("CREATED_AT DESC")
     @sub_categories = SubCategory.all.order("CREATED_AT DESC")
     @sla = Sla.all.order("CREATED_AT DESC")
+    @positions = Position.all.order("CREATED_AT DESC")
   end
 end

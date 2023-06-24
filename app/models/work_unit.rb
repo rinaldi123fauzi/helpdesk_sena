@@ -9,5 +9,5 @@
 #
 class WorkUnit < ApplicationRecord
     has_many :ticket
-    belongs_to :position
+    has_many :position, dependent: :destroy
 end
