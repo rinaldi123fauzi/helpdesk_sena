@@ -1,4 +1,6 @@
 class MasterData::CategoriesController < ApplicationController 
+  before_action :checkRole
+  
   def create
     Category.create!(
       'nama_kategori' => params[:namaKategori]
@@ -43,5 +45,15 @@ class MasterData::CategoriesController < ApplicationController
     render json: [
       "data_categories" => @data
     ]
+  end
+
+  private
+  def checkRole
+    unless getRole == "superadmin"
+      render json:{
+        status: 401,
+        msg: "Unauthorized"
+      }
+    end
   end
 end

@@ -1,4 +1,6 @@
 class MasterData::AreasController < ApplicationController 
+  before_action :checkRole
+  
   def create
     Area.create!(
       'nama' => params[:namaArea]
@@ -35,6 +37,16 @@ class MasterData::AreasController < ApplicationController
       render json: [  
           "status" => "terhapus",
       ]
+    end
+  end
+
+  private
+  def checkRole
+    unless getRole == "superadmin"
+      render json:{
+        status: 401,
+        msg: "Unauthorized"
+      }
     end
   end
 end

@@ -1,4 +1,6 @@
 class MasterData::PositionController < ApplicationController 
+  before_action :checkRole
+  
   def create
     Position.create!(
       'user_id' => params[:user],
@@ -59,5 +61,15 @@ class MasterData::PositionController < ApplicationController
       roles: @roles,
       work_units: @work_units
     }
+  end
+
+  private
+  def checkRole
+    unless getRole == "superadmin"
+      render json:{
+        status: 401,
+        msg: "Unauthorized"
+      }
+    end
   end
 end

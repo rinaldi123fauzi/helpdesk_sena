@@ -1,4 +1,6 @@
 class MasterData::SlasController < ApplicationController 
+    before_action :checkRole
+
     def create
       Sla.create!(
         'category_id' => params[:layanan],
@@ -42,6 +44,16 @@ class MasterData::SlasController < ApplicationController
         render json: [  
             "status" => "terhapus",
         ]
+      end
+    end
+
+    private
+    def checkRole
+      unless getRole == "superadmin"
+        render json:{
+          status: 401,
+          msg: "Unauthorized"
+        }
       end
     end
   end
