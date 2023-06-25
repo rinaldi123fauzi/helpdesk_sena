@@ -514,7 +514,7 @@
     var id = $('#id_reject').val();
     var deskripsi = $('.deskripsi-reject').val();
     $.ajax({
-      url: "/transaksi/tickets/ticket-reject",
+      url: "/transaksi/approval/ticket-reject",
       method: 'POST',
       data : {
         authenticity_token: '<%= form_authenticity_token %>',
@@ -541,7 +541,7 @@
     var id = $('#id-eskalasi').val();
     var deskripsi = $('.deskripsi-eskalasi').val();
     $.ajax({
-      url: "/transaksi/tickets/ticket-eskalasi",
+      url: "/transaksi/teknisi/ticket-eskalasi",
       method: 'POST',
       data : {
         authenticity_token: '<%= form_authenticity_token %>',
@@ -786,7 +786,7 @@
       }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: "/transaksi/tickets/proccess-ticket",
+          url: "/transaksi/teknisi/proccess-ticket",
           method: 'PUT',
           data : {
             authenticity_token: '<%= form_authenticity_token %>',
@@ -824,7 +824,7 @@
       }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: "/transaksi/tickets/take-ticket",
+          url: "/transaksi/teknisi/take-ticket",
           method: 'PUT',
           data : {
             authenticity_token: '<%= form_authenticity_token %>',
@@ -899,7 +899,7 @@
       }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: "/transaksi/tickets/ticket-approval",
+          url: "/transaksi/approval/ticket-approval",
           method: 'PUT',
           data : {
             authenticity_token: '<%= form_authenticity_token %>',
@@ -933,7 +933,7 @@
     var teknisi = $('#assign_teknisi').val();
     $('#kirimTiket').text('Loading...');
     $.ajax({
-      url: "/transaksi/tickets/ticket-assign",
+      url: "/transaksi/admin/ticket-assign",
       method: 'PUT',
       data:{
         authenticity_token: '<%= form_authenticity_token %>',
@@ -962,7 +962,7 @@
       }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: "/transaksi/tickets/ticket-close",
+          url: "/transaksi/teknisi/ticket-close",
           method: 'PUT',
           data:{
             authenticity_token: '<%= form_authenticity_token %>',

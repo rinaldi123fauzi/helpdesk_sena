@@ -135,15 +135,24 @@ Rails.application.routes.draw do
       get 'get-approval-berjenjang' => 'tickets#getApprovalBerjenjang'
       post 'create' => 'tickets#create'
       put 'update' => 'tickets#update'
-      put 'ticket-assign' => 'tickets#assignTicket'
-      put 'ticket-close' => 'tickets#ticketClose'
       delete 'delete-ticket' => 'tickets#deleteTicket'
-      put 'ticket-approval' => 'tickets#approval'
-      post 'ticket-reject' => 'tickets#reject'
-      post 'ticket-eskalasi' => 'tickets#eskalasi'
-      put 'proccess-ticket' => 'tickets#proccessTicket'
-      put 'take-ticket' => 'tickets#takeTicket'
       get 'satuan-kerja' => 'tickets#getSatuanKerja'
+    end
+
+    scope :admin do
+      put 'ticket-assign' => 'admin#assignTicket'
+    end
+
+    scope :approval do 
+      put 'ticket-approval' => 'approval#approval'
+      post 'ticket-reject' => 'approval#reject'
+    end
+
+    scope :teknisi do
+      put 'ticket-close' => 'teknisi#ticketClose'
+      put 'take-ticket' => 'teknisi#takeTicket'
+      post 'ticket-eskalasi' => 'teknisi#eskalasi'
+      put 'proccess-ticket' => 'teknisi#proccessTicket'
     end
 
     scope :dashboard do
