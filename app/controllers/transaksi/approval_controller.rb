@@ -109,8 +109,9 @@ class Transaksi::ApprovalController < ApplicationController
       check_ticket = Ticket.find_by_id(params[:id])
       positions = Position.where(work_unit_id: check_ticket.work_unit_id)
       position = positions.first
-
-      if position.punya_pm == true
+      
+      check_kadiv = Position.left_outer_joins(:user,:role).where('users.username = ? and roles.name = ?', check_ticket.issued_by, 'kepala divisi')
+      if check_kadiv.count == 1
         check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
         Approval.create!(
           :issued_by => current_user.username,
@@ -128,26 +129,45 @@ class Transaksi::ApprovalController < ApplicationController
           flash[:notice] = "Data berhasil disimpan"
         end
       else
-        if check_ticket.sub_category.approval_berjenjang == "low"
-          @status = "approval2"
-        elsif check_ticket.sub_category.approval_berjenjang == "medium"
-          @status = "approval3"
-        end
-        Approval.create!(
-          :issued_by => current_user.username,
-          :approve_level => @status,
-          :description => 'tiket disetujui',
-          :ticket_id => params[:id],
-        )
-        data = Ticket.find_by_id(params[:id])
-        data.status = 'open'
-        data.save
-    
-        if data.save
-          render json:{
-            status: 200
-          }
-          flash[:notice] = "Data berhasil disimpan"
+        if position.punya_pm == true
+          check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+          Approval.create!(
+            :issued_by => current_user.username,
+            :approve_level => 'approval3',
+            :description => 'tiket disetujui',
+            :ticket_id => params[:id],
+          )
+          data = Ticket.find_by_id(params[:id])
+          data.status = 'approval3'
+          data.approval_by = check_manajer_it.username
+          if data.save!
+            render json:{
+              status: 200
+            }
+            flash[:notice] = "Data berhasil disimpan"
+          end
+        else
+          if check_ticket.sub_category.approval_berjenjang == "low"
+            @status = "approval2"
+          elsif check_ticket.sub_category.approval_berjenjang == "medium"
+            @status = "approval3"
+          end
+          Approval.create!(
+            :issued_by => current_user.username,
+            :approve_level => @status,
+            :description => 'tiket disetujui',
+            :ticket_id => params[:id],
+          )
+          data = Ticket.find_by_id(params[:id])
+          data.status = 'open'
+          data.save
+      
+          if data.save
+            render json:{
+              status: 200
+            }
+            flash[:notice] = "Data berhasil disimpan"
+          end
         end
       end
     elsif check_ticket.status == "approval3"
@@ -200,7 +220,7 @@ class Transaksi::ApprovalController < ApplicationController
   private
 
   def checkRole
-    unless getRole == "manajer it" || getRole == "kepala divisi"
+    unless getRole == "manajer it" || getRole == "kepala divisi" || getRole == "user"
       render json:{
         status: 401,
         msg: "Unauthorized"

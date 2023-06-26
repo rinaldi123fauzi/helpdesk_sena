@@ -222,7 +222,7 @@
  <% if current_user.can? { |permissions| permissions.ticket.create? } %> 
 <%
 =end%>
-        <% if current_user.roles.any? {|r| r.name == "user"} %>
+        <% if current_user.roles.any? {|r| r.name != "superadmin" || r.name != "admin"} %>
           <div class="align-items-center">
             <button class="form-control tambah-ticket btn btn-info btn-md" data-backdrop="true" data-toggle="modal" data-target="#form-ticket">+ Tiket</button>
           </div>

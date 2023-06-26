@@ -25,46 +25,100 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def create
-    @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', params[:sub_layanan], 'none')
-    if @check_approval.count == 1
-      @status = "created"
-    else
-      @status = "open"
-    end
-    ActiveRecord::Base.transaction do
-      ticket = Ticket.new
-      ticket.no_ticket = params[:nomor_tiket]
-      ticket.category_id = params[:layanan]
-      ticket.sub_category_id = params[:sub_layanan]
-      ticket.issued_by = params[:dibuat_oleh]
-      ticket.description = params[:deskripsi]
-      ticket.status = @status
-      ticket.approval_by = params[:approval_by]
-      ticket.work_unit_id = params[:satuan_kerja]
-      ticket.area_id = params[:area]
-      if params[:file_tiket].present?
-        params[:file_tiket].each do |data|
-          ticket.file_ticket = data
+    if getRole == "kepala divisi"
+      @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', params[:sub_layanan], 'none')
+      if @check_approval.count == 1
+        if @check_approval.first.approval_berjenjang == "low"
+          check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+          @status = "approval3"
+          @approval_by = check_manajer_it.username
+        elsif @check_approval.first.approval_berjenjang == "medium"
+          check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
+          @status = "approval2"
+          @approval_by = check_kadiv.username
+        end
+      else
+        @status = "open"
+      end
+      ActiveRecord::Base.transaction do
+        ticket = Ticket.new
+        ticket.no_ticket = params[:nomor_tiket]
+        ticket.category_id = params[:layanan]
+        ticket.sub_category_id = params[:sub_layanan]
+        ticket.issued_by = params[:dibuat_oleh]
+        ticket.description = params[:deskripsi]
+        ticket.status = @status
+        ticket.approval_by = @approval_by
+        ticket.work_unit_id = params[:satuan_kerja]
+        ticket.area_id = params[:area]
+        if params[:file_tiket].present?
+          params[:file_tiket].each do |data|
+            ticket.file_ticket = data
+          end
+        end
+  
+        if ticket.save
+          ticket = Ticket.last
+          Approval.create!(
+            :issued_by => current_user.username,
+            :approve_level => @status,
+            :description => 'create ticket',
+            :ticket_id => ticket.id
+          )
+          render json:{
+            status: 200
+          }
+          flash[:notice] = "Data berhasil disimpan"
+        else
+          render json:{
+            status: 500,
+            msg: ticket.errors
+          }
         end
       end
 
-      if ticket.save
-        ticket = Ticket.last
-        Approval.create!(
-          :issued_by => current_user.username,
-          :approve_level => @status,
-          :description => 'create ticket',
-          :ticket_id => ticket.id
-        )
-        render json:{
-          status: 200
-        }
-        flash[:notice] = "Data berhasil disimpan"
+    else
+      @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', params[:sub_layanan], 'none')
+      if @check_approval.count == 1
+        @status = "created"
       else
-        render json:{
-          status: 500,
-          msg: ticket.errors
-        }
+        @status = "open"
+      end
+      ActiveRecord::Base.transaction do
+        ticket = Ticket.new
+        ticket.no_ticket = params[:nomor_tiket]
+        ticket.category_id = params[:layanan]
+        ticket.sub_category_id = params[:sub_layanan]
+        ticket.issued_by = params[:dibuat_oleh]
+        ticket.description = params[:deskripsi]
+        ticket.status = @status
+        ticket.approval_by = params[:approval_by]
+        ticket.work_unit_id = params[:satuan_kerja]
+        ticket.area_id = params[:area]
+        if params[:file_tiket].present?
+          params[:file_tiket].each do |data|
+            ticket.file_ticket = data
+          end
+        end
+  
+        if ticket.save
+          ticket = Ticket.last
+          Approval.create!(
+            :issued_by => current_user.username,
+            :approve_level => @status,
+            :description => 'create ticket',
+            :ticket_id => ticket.id
+          )
+          render json:{
+            status: 200
+          }
+          flash[:notice] = "Data berhasil disimpan"
+        else
+          render json:{
+            status: 500,
+            msg: ticket.errors
+          }
+        end
       end
     end
   end
@@ -185,13 +239,19 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def getApprovalBerjenjang
-    data_sub_category = SubCategory.find_by_id(params[:id])
-    data = RoleAssignment.left_outer_joins(:role,:user).where('roles.name = :value', :value => "user").select('users.username')
-
-    render json:{
-      status_approval: data_sub_category.approval_berjenjang,
-      user: data
-    }
+    if getRole == "kepala divisi"
+      render json:{
+        status_approval: "none"
+      }
+    else
+      data_sub_category = SubCategory.find_by_id(params[:id])
+      data = RoleAssignment.left_outer_joins(:role,:user).where('roles.name = :value', :value => "user").select('users.username')
+  
+      render json:{
+        status_approval: data_sub_category.approval_berjenjang,
+        user: data
+      }
+    end
   end
 
   def getSatuanKerja
@@ -207,7 +267,7 @@ class Transaksi::TicketsController < ApplicationController
 
   private
   def checkRole
-    unless getRole == "user" || getRole == "superadmin"
+    unless getRole == "user" || getRole == "kepala divisi"
       render json:{
         status: 401,
         msg: "Unauthorized"
