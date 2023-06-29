@@ -197,7 +197,7 @@ class Transaksi::TicketsController < ApplicationController
 
   def detail
     @id = params[:id]
-    @getStatus = Ticket.where('id = ? and status != ?', @id, "open")
+    @getStatus = Ticket.where('id = ?', @id).where.not('status IN (?)', ['open','inprogress','closed','overdue'])
     @data = Ticket.find(@id)
     @history = Approval.where(ticket_id: @id).order(:created_at => :desc)
     @data_history = []
