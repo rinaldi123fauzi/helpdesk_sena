@@ -143,9 +143,9 @@ Rails.application.routes.draw do
       put 'ticket-assign' => 'admin#assignTicket'
     end
 
-    scope :approval do 
-      put 'ticket-approval' => 'approval#approval'
-      post 'ticket-reject' => 'approval#reject'
+    scope :approve do 
+      put 'ticket-approval' => 'approve#approval'
+      post 'ticket-reject' => 'approve#reject'
     end
 
     scope :teknisi do

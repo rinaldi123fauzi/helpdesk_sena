@@ -178,6 +178,7 @@
           <div class="col-md-3">
             <div class="form-group">
               <div class="assign-teknisi"></div>
+              <div class="mt-4 pending-approval"></div>
             </div>
           </div>
 
@@ -413,6 +414,7 @@
   $(document).on('click', '.detailTiket', function(){
     var id = $(this).data('id');
     $('.file-button').empty()
+    $('.pending-approval').empty()
     $.ajax({
       url: "/transaksi/tickets/detail",
       method: 'GET',
@@ -500,6 +502,12 @@
             </div>
           `);
         }
+
+        if (data['data_ticket']['pending_approval'] != null) {
+          $('.pending-approval').append(`
+            <span class="badge badge-danger">Pending Approval : ${data['data_ticket']['pending_approval']}</span>
+          `);
+        }
       }
     });
   });
@@ -514,7 +522,7 @@
     var id = $('#id_reject').val();
     var deskripsi = $('.deskripsi-reject').val();
     $.ajax({
-      url: "/transaksi/approval/ticket-reject",
+      url: "/transaksi/approve/ticket-reject",
       method: 'POST',
       data : {
         authenticity_token: '<%= form_authenticity_token %>',
@@ -899,7 +907,7 @@
       }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
-          url: "/transaksi/approval/ticket-approval",
+          url: "/transaksi/approve/ticket-approval",
           method: 'PUT',
           data : {
             authenticity_token: '<%= form_authenticity_token %>',

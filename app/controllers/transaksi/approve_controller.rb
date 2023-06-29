@@ -1,4 +1,4 @@
-class Transaksi::ApprovalController < ApplicationController 
+class Transaksi::ApproveController < ApplicationController 
   before_action :checkRole
 
   def approval

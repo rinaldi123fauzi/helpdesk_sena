@@ -51,7 +51,7 @@ RoleCore.permission_set_class.draw do
     permission :manage
   end
 
-  group :approval, model_name: "Transaksi::Approval" do
+  group :approval, model_name: "Transaksi::Approve" do
     permission :manage
   end
 

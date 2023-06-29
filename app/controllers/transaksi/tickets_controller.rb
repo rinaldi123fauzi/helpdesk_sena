@@ -58,7 +58,7 @@ class Transaksi::TicketsController < ApplicationController
         end
   
         if ticket.save
-          ticket = Ticket.last
+          ticket = Ticket.find_by_no_ticket(params[:nomor_tiket])
           Approval.create!(
             :issued_by => current_user.username,
             :approve_level => @status,
@@ -102,7 +102,7 @@ class Transaksi::TicketsController < ApplicationController
         end
   
         if ticket.save
-          ticket = Ticket.last
+          ticket = Ticket.find_by_no_ticket(params[:nomor_tiket])
           Approval.create!(
             :issued_by => current_user.username,
             :approve_level => @status,
@@ -196,8 +196,10 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def detail
-    @data = Ticket.find(params[:id])
-    @history = Approval.where(ticket_id: params[:id]).order(:created_at => :desc)
+    @id = params[:id]
+    @getStatus = Ticket.where('id = ? and status != ?', @id, "open")
+    @data = Ticket.find(@id)
+    @history = Approval.where(ticket_id: @id).order(:created_at => :desc)
     @data_history = []
     @data_attach = []
 
@@ -233,7 +235,8 @@ class Transaksi::TicketsController < ApplicationController
         current_user: getRole,
         user: current_user.username,
         file: @data_attach,
-        history: @data_history
+        history: @data_history,
+        pending_approval: @getStatus.count == 1 ? @getStatus.first.approval_by : nil
       }
     }
   end
