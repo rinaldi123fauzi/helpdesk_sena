@@ -220,7 +220,7 @@ class Transaksi::ApprovalController < ApplicationController
   private
 
   def checkRole
-    unless getRole == "manajer it" || getRole == "kepala divisi" || getRole == "user"
+    unless current_user.can? { |permissions| permissions.approval.manage? } 
       render json:{
         status: 401,
         msg: "Unauthorized"

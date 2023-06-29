@@ -222,9 +222,9 @@
  <% if current_user.can? { |permissions| permissions.ticket.create? } %> 
 <%
 =end%>
-        <% if current_user.roles.any? {|r| r.name != "superadmin" || r.name != "admin"} %>
+        <% if current_user.can? { |permissions| permissions.tiketnich.manage? }  %>
           <div class="align-items-center">
-            <button class="form-control tambah-ticket btn btn-info btn-md" data-backdrop="true" data-toggle="modal" data-target="#form-ticket">+ Tiket</button>
+            <button class="tambah-ticket btn btn-info btn-md" data-backdrop="true" data-toggle="modal" data-target="#form-ticket">+ Tiket</button>
           </div>
         <% end %>
         </div>
@@ -381,7 +381,7 @@
                       <% end %>
                     <% end %>
                   <% end %>
-                  <% if current_user.roles.any? {|r| r.name == "admin" || r.name == "teknisi"} %>
+                  <% if current_user.can? { |permissions| permissions.teknisi.manage? } %>
                     <% if ticket.status == "inprogress" || ticket.status == "overdue" %>
                       <% if ticket.pause_respon == false %>
                         <button class="btn btn-info btn-sm done" data-id="<%= ticket.id %>">Close</button>

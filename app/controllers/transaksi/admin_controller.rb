@@ -25,7 +25,7 @@ class Transaksi::TicketsController < ApplicationController
   private
   
   def checkRole
-    unless getRole == "admin" || unless getRole == "superadmin"
+    unless current_user.can? { |permissions| permissions.admin.manage? } 
       render json:{
         status: 401,
         msg: "Unauthorized"

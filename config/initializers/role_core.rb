@@ -34,7 +34,7 @@ RoleCore.permission_set_class.draw do
   #     end
   #   end
   #
-  %w(role user category contact data_company work_unit ticket).each do |item|
+  %w(role user).each do |item|
     group item.to_sym, model_name: "#{item.camelcase}" do
       permission :index
       permission :create
@@ -42,6 +42,21 @@ RoleCore.permission_set_class.draw do
       permission :update
       permission :read
     end
+  end
+  group :tiketnich, model_name: "Transaksi::Ticket" do
+    permission :manage
+  end
+
+  group :teknisi, model_name: "Transaksi::Teknisi" do
+    permission :manage
+  end
+
+  group :approval, model_name: "Transaksi::Approval" do
+    permission :manage
+  end
+
+  group :admin, model_name: "Transaksi::Admin" do
+    permission :manage
   end
   # For CanCanCan integration, you can pass `model_name` for `group` or `permission`. For example:
   #

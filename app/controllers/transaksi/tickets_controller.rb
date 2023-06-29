@@ -267,7 +267,7 @@ class Transaksi::TicketsController < ApplicationController
 
   private
   def checkRole
-    unless getRole == "user" || getRole == "kepala divisi"
+    unless current_user.can? { |permissions| permissions.tiketnich.manage? } 
       render json:{
         status: 401,
         msg: "Unauthorized"

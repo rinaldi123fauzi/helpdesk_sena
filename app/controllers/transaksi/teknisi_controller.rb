@@ -118,7 +118,7 @@ class Transaksi::TeknisiController < ApplicationController
 
   private
   def checkRole
-    unless getRole == "teknisi" || getRole == "superadmin"
+    unless current_user.can? { |permissions| permissions.teknisi.manage? } 
       render json:{
         status: 401,
         msg: "Unauthorized"

@@ -22,13 +22,13 @@ class RolesController < ApplicationController
     end
   end
 
-  # def update
-  #   if @role.update(role_params)
-  #     redirect_to "/master/index?utf8=✓&pilihan=Data Role", notice: "Role was successfully updated."
-  #   else
-  #     render :edit
-  #   end
-  # end
+  def update
+    if @role.update(role_params)
+      redirect_to "/master/index?utf8=✓&pilihan=Data Role", notice: "Role was successfully updated."
+    else
+      render :edit
+    end
+  end
 
   # def destroy
   #   @role.destroy
