@@ -14,8 +14,14 @@
     <% end %>
     <li class="<%= params[:controller] == "tickets" ? " active" : ""%>">
       <% 
-        if current_user.roles.any? { |r| r.name == 'admin' || r.name == 'superadmin' || r.name == 'teknisi'}
+        if current_user.roles.any? { |r| r.name == 'teknisi'}
           @countTicket = Ticket.where('status = ? and assigned_by IS ?', 'open', nil).count
+        elsif current_user.roles.any? { |r| r.name == 'user'}
+          @countTicket = Ticket.where('status = ? and approval_by = ?', 'created', current_user.username).count
+        elsif current_user.roles.any? { |r| r.name == 'kepala divisi'}
+          @countTicket = Ticket.where('approval_by = ?', current_user.username).count
+        elsif current_user.roles.any? { |r| r.name == 'manajer it'}
+          @countTicket = Ticket.where('status IN (?) and approval_by = ?', ['approval1','approval2','approval3'], current_user.username).count
         end 
       %>
       <a class="nav-link" href="<%= tickets_path %>"><i data-feather="file-plus"></i><span>Tiket</span><p class="mb-0 bell"><span class="badge badge-danger"><%= @countTicket %></span></p></a>
