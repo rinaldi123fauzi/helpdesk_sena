@@ -286,6 +286,7 @@
                     <label>Deskripsi</label>
                     <textarea class="form-control deskripsi-reject" maxlength="100"></textarea>
                     <div class="count-character-reject"></div>
+                    <div class="notice-reject"></div>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -317,6 +318,7 @@
                     <label>Deskripsi</label>
                     <textarea class="form-control deskripsi-eskalasi" maxlength="100"></textarea>
                     <div class="count-character"></div>
+                    <div class="notice-eskalasi"></div>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -536,8 +538,8 @@
       success: function(data){
         if (data['status'] == 200) {
           window.location.href = "/tickets";
-        }else if (data['status'] == 500) {
-          window.location.href = "/tickets";
+        }else if (data['status'] == 204) {
+          $('.notice-reject').html(`<span class="text-danger">Deskripsi wajib diisi</span>`);
         }
       }
     });
@@ -563,8 +565,8 @@
       success: function(data){
         if (data['status'] == 200) {
           window.location.href = "/tickets";
-        }else if (data['status'] == 500) {
-          window.location.href = "/tickets";
+        }else if (data['status'] == 204) {
+          $('.notice-eskalasi').html(`<span class="text-danger">${data['msg']}</span>`);
         }
       }
     });

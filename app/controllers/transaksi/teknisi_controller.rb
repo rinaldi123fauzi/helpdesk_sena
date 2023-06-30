@@ -79,13 +79,13 @@ class Transaksi::TeknisiController < ApplicationController
         end
       else
         render json:{
-          status: 500,
+          status: 203,
           msg: "panjang karakter maksimal 100"
         }
       end
     else
       render json:{
-        status: 500,
+        status: 204,
         msg: "deskripsi tidak boleh kosong"
       }
     end

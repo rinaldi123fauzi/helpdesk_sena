@@ -30,6 +30,8 @@ class Ticket < ApplicationRecord
   has_many_attached :file_ticket
   validates :status, inclusion: { in: %w(inprogress approval1 approval2 approval3 open closed created overdue rejected), allow_nil: true, message: "%{value} bukan status yang benar" }
 
+  after_create :input_approval
+
   def set_overdue
     ticket = Ticket.where(status: 'inprogress', pause_respon: 0)
     ticket.each do |data|
@@ -41,5 +43,16 @@ class Ticket < ApplicationRecord
         update_ticket.save
       end
     end
+  end
+
+  private
+  
+  def input_approval
+    Approval.create!(
+      :issued_by => self.issued_by,
+      :approve_level => self.status,
+      :description => 'create ticket',
+      :ticket_id => self.id
+    )
   end
 end

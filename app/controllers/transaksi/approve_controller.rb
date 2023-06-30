@@ -128,22 +128,26 @@ class Transaksi::ApproveController < ApplicationController
 
   def reject
     check_ticket = Ticket.find_by_id(params[:id])
-    unless check_ticket.status == "open" || check_ticket.status == "created"
-      Approval.create!(
-        :issued_by => current_user.username,
-        :approve_level => 'rejected',
-        :ticket_id => params[:id],
-        :description => params[:deskripsi]
-      )
-      data = Ticket.find_by_id(params[:id])
-      data.status = 'rejected'
-      data.approval_by = current_user.username
-  
-      if data.save
+    unless check_ticket.status == "open"
+      if params[:deskripsi].length != 0
+        Approval.create!(
+          :issued_by => current_user.username,
+          :approve_level => 'rejected',
+          :ticket_id => params[:id],
+          :description => params[:deskripsi]
+        )
+        data = Ticket.find_by_id(params[:id])
+        data.status = 'rejected'
+        data.approval_by = current_user.username
+        data.save
         render json:{
           status: 200
         }
         flash[:notice] = "Data berhasil disimpan"
+      else
+        render json:{
+          status: 204
+        }
       end
     end
   end

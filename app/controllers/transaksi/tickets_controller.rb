@@ -58,13 +58,6 @@ class Transaksi::TicketsController < ApplicationController
         end
   
         if ticket.save
-          ticket = Ticket.find_by_no_ticket(params[:nomor_tiket])
-          Approval.create!(
-            :issued_by => current_user.username,
-            :approve_level => @status,
-            :description => 'create ticket',
-            :ticket_id => ticket.id
-          )
           render json:{
             status: 200
           }
@@ -102,13 +95,6 @@ class Transaksi::TicketsController < ApplicationController
         end
   
         if ticket.save
-          ticket = Ticket.find_by_no_ticket(params[:nomor_tiket])
-          Approval.create!(
-            :issued_by => current_user.username,
-            :approve_level => @status,
-            :description => 'create ticket',
-            :ticket_id => ticket.id
-          )
           render json:{
             status: 200
           }
