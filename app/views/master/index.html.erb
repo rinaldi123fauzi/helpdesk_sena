@@ -8,10 +8,8 @@
       <div class="row" style="margin-bottom: 0px;">
         <div class="col-sm-4">
           <%= form_tag master_index_path, method: "GET" %>
-          <% if current_user.roles.any? { |r| r.name == 'superadmin'} %>
+          <% if current_user.roles.any? { |r| r.name == 'superadmin' || r.name == 'admin'} %>
             <%= select_tag :pilihan, options_for_select(["Kepala Divisi","SLA Layanan","Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
-          <% else %>
-            <%= select_tag :pilihan, options_for_select(["Data Inventory","Data Item"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control" %>
           <% end %>
         </div>
         <button type="submit" class="btn btn-info">Pilih</button>

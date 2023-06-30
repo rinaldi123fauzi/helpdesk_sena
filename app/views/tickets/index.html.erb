@@ -467,7 +467,7 @@
           <input type="text" class="form-control" value="${data['data_ticket']['teknisi']}" disabled>
         `);
 
-        if (data['data_ticket']['approval_by'] == data['data_ticket']['user'] ) {
+        if (data['data_ticket']['approval_by'] == data['data_ticket']['user'] &&  data['data_ticket']['pending_approval']['status'] != "rejected") {
            $('.approval-button').append(`
             <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
           `);
@@ -503,9 +503,13 @@
           `);
         }
 
-        if (data['data_ticket']['pending_approval'] != null) {
+        if (data['data_ticket']['pending_approval']['status'] != "rejected") {
           $('.pending-approval').append(`
-            <span class="badge badge-danger">Pending Approval : ${data['data_ticket']['pending_approval']}</span>
+            <span class="badge badge-warning">Pending approval by : ${data['data_ticket']['pending_approval']['approval_by']}</span>
+          `);
+        }else{
+          $('.pending-approval').append(`
+            <span class="badge badge-danger">Rejected by : ${data['data_ticket']['pending_approval']['approval_by']}</span>
           `);
         }
       }
@@ -1053,36 +1057,6 @@
                 const element = data[0]['sub_category'][i];
                 $('#sub-layanan').append(`
                   <option value="${element['id']}">${element['nama_sub_kategori']}</option>
-                `);
-              }
-            }
-          });
-        });
-
-        $(document).on('change', '#satuan-kerja', function(){
-          var id = $(this).val();
-          $.ajax({
-            url: "/transaksi/tickets/satuan-kerja",
-            method: 'GET',
-            data :{
-              id:id
-            },
-            success: function(data)
-            {
-              $('#approval-by').empty();
-              $('#approval-by').append(`
-                    <option value="">--Pilih--</option>
-              `);
-              if (data['status']['punya_pm'] == true) {
-                for (let i = 0; i < data['user_biasa'].length; i++) {
-                  const element = data['user_biasa'][i];
-                  $('#approval-by').append(`
-                    <option value="${element['username']}">${element['username']}</option>
-                  `);
-                }
-              }else if(data['status']['punya_pm'] == false){
-                 $('#approval-by').append(`
-                  <option value="${data['username']}">${data['username']}</option>
                 `);
               }
             }
