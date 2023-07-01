@@ -27,6 +27,20 @@ class Ticket < ApplicationRecord
   belongs_to :area
   has_many :approval, dependent: :destroy
 
+  scope :urgency_ordering, -> { 
+    order(<<-SQL)
+      CASE status
+      WHEN 'open' THEN 'a' 
+      WHEN 'inprogress' THEN 'b' 
+      WHEN 'overdue' THEN 'c' 
+      WHEN 'closed' THEN 'd' 
+      WHEN 'rejected' THEN 'e' 
+      ELSE 'z' 
+      END ASC, 
+      id DESC
+    SQL
+  }
+
   has_many_attached :file_ticket
   validates :status, inclusion: { in: %w(inprogress approval1 approval2 approval3 open closed created overdue rejected), allow_nil: true, message: "%{value} bukan status yang benar" }
 
