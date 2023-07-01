@@ -1,25 +1,5 @@
 Rails.application.routes.draw do
-
-
-  resources :ticket_chats
-  resources :positions
-  resources :technicians
-  resources :slas
   resources :tickets
-  resources :sub_categories
-  resources :inventories
-  resources :items
-  resources :approvals
-  resources :loans
-  resources :employees
-  resources :adjustment_jobs
-  resources :additional_jobs
-  resources :areas
-  resources :master_jobs
-  resources :material_types
-  resources :units
-  resources :sub_work_categories
-  resources :work_categories
   devise_for :users, controllers: {
     sessions: 'users/sessions'
   }
@@ -33,10 +13,6 @@ Rails.application.routes.draw do
   end
   resources :roles
   resources :users
-  resources :data_companies
-  resources :categories
-  resources :contacts
-  resources :work_units
 
   resources :helper_json do
     post :getJudulPekerjaan, on: :collection

@@ -761,7 +761,7 @@
             success: function(data)
             {
               $('#approval-by').empty();
-             if (data['status_approval'] == 1) {
+             if (data['status_approval'] != "none") {
               for (let i = 0; i < data['user'].length; i++) {
                 const element = data['user'][i];
                 $('#approval-by').append(`<option value="${element['username']}">${element['username']}</option>`);

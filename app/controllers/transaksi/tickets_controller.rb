@@ -40,36 +40,6 @@ class Transaksi::TicketsController < ApplicationController
       else
         @status = "open"
       end
-      ActiveRecord::Base.transaction do
-        ticket = Ticket.new
-        ticket.no_ticket = params[:nomor_tiket]
-        ticket.category_id = params[:layanan]
-        ticket.sub_category_id = params[:sub_layanan]
-        ticket.issued_by = params[:dibuat_oleh]
-        ticket.description = params[:deskripsi]
-        ticket.status = @status
-        ticket.approval_by = @approval_by
-        ticket.work_unit_id = params[:satuan_kerja]
-        ticket.area_id = params[:area]
-        if params[:file_tiket].present?
-          params[:file_tiket].each do |data|
-            ticket.file_ticket = data
-          end
-        end
-  
-        if ticket.save
-          render json:{
-            status: 200
-          }
-          flash[:notice] = "Data berhasil disimpan"
-        else
-          render json:{
-            status: 500,
-            msg: ticket.errors
-          }
-        end
-      end
-
     else
       @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', params[:sub_layanan], 'none')
       if @check_approval.count == 1
@@ -77,45 +47,66 @@ class Transaksi::TicketsController < ApplicationController
       else
         @status = "open"
       end
-      ActiveRecord::Base.transaction do
-        ticket = Ticket.new
-        ticket.no_ticket = params[:nomor_tiket]
-        ticket.category_id = params[:layanan]
-        ticket.sub_category_id = params[:sub_layanan]
-        ticket.issued_by = params[:dibuat_oleh]
-        ticket.description = params[:deskripsi]
-        ticket.status = @status
-        ticket.approval_by = params[:approval_by]
-        ticket.work_unit_id = params[:satuan_kerja]
-        ticket.area_id = params[:area]
-        if params[:file_tiket].present?
-          params[:file_tiket].each do |data|
-            ticket.file_ticket = data
-          end
+      @approval_by = params[:approval_by]
+    end
+
+    ActiveRecord::Base.transaction do
+      ticket = Ticket.new
+      ticket.no_ticket = params[:nomor_tiket]
+      ticket.category_id = params[:layanan]
+      ticket.sub_category_id = params[:sub_layanan]
+      ticket.issued_by = params[:dibuat_oleh]
+      ticket.description = params[:deskripsi]
+      ticket.status = @status
+      ticket.approval_by = @approval_by
+      ticket.work_unit_id = params[:satuan_kerja]
+      ticket.area_id = params[:area]
+      if params[:file_tiket].present?
+        params[:file_tiket].each do |data|
+          ticket.file_ticket = data
         end
-  
-        if ticket.save
-          render json:{
-            status: 200
-          }
-          flash[:notice] = "Data berhasil disimpan"
-        else
-          render json:{
-            status: 500,
-            msg: ticket.errors
-          }
-        end
+      end
+
+      if ticket.save
+        render json:{
+          status: 200
+        }
+        flash[:notice] = "Data berhasil disimpan"
+      else
+        render json:{
+          status: 500,
+          msg: ticket.errors
+        }
       end
     end
   end
 
   def update
-    @check_approval = SubCategory.where(['id = ? and approval_berjenjang != ? ', params[:sub_layanan], 'none'])
-    if @check_approval.count == 1
-      @status = "created"
+    if getRole == "kepala divisi"
+      @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', params[:sub_layanan], 'none')
+      if @check_approval.count == 1
+        if @check_approval.first.approval_berjenjang == "low"
+          check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+          @status = "approval3"
+          @approval_by = check_manajer_it.username
+        elsif @check_approval.first.approval_berjenjang == "medium"
+          check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
+          @status = "approval2"
+          @approval_by = check_kadiv.username
+        end
+      else
+        @status = "open"
+      end
     else
-      @status = "open"
+      @check_approval = SubCategory.where(['id = ? and approval_berjenjang != ? ', params[:sub_layanan], 'none'])
+      if @check_approval.count == 1
+        @status = "created"
+      else
+        @status = "open"
+      end
+      @approval_by = params[:approval_by]
     end
+
     ActiveRecord::Base.transaction do
       ticket = Ticket.find_by_id(params[:id_tiket])
       ticket.no_ticket = params[:nomor_tiket]
@@ -124,7 +115,7 @@ class Transaksi::TicketsController < ApplicationController
       ticket.issued_by = params[:dibuat_oleh]
       ticket.status = @status
       ticket.description = params[:deskripsi]
-      ticket.approval_by = params[:approval_by]
+      ticket.approval_by = @approval_by
       ticket.work_unit_id = params[:satuan_kerja]
       ticket.area_id = params[:area]
       if params[:file_tiket].present?
