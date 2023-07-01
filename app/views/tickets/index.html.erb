@@ -405,12 +405,14 @@
   $(document).on('keyup', '.deskripsi-eskalasi', function(){
     var value = $(this).val();
     $(".count-character").text("Characters left: " + (100 - value.length));
+    $('.notice-eskalasi').empty();
   });
 
   $(document).on('keyup', '.deskripsi-reject', function(){
     var value = $(this).val();
     console.log(value);
     $(".count-character-reject").text("Characters left: " + (100 - value.length));
+    $('.notice-reject').empty();
   });
 
   $(document).on('click', '.detailTiket', function(){

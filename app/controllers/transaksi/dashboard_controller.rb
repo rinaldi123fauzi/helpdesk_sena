@@ -22,43 +22,43 @@ class Transaksi::DashboardController < ApplicationController
       end
 
       # open
-      @open = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'open', @tahun, bulan).count
+      @open = Ticket.where("status = ? and extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ?", 'open', @tahun, bulan).count
       array_open.push(
         'amount' => @open
       )
 
       # approval
-      @approval = Ticket.where('status IN (?) and extract(year from created_at) = ? and extract(month from created_at) = ?', ['approval1','approval2','approval3'], @tahun, bulan).count
+      @approval = Ticket.where("status IN (?) and extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ?", ['approval1','approval2','approval3'], @tahun, bulan).count
       array_approval.push(
         'amount' => @approval
       )
 
       # overdue
-      @overdue = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'overdue', @tahun, bulan).count
+      @overdue = Ticket.where("status = ? and extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ?", 'overdue', @tahun, bulan).count
       array_overdue.push(
         'amount' => @overdue
       )
 
       # inprogress
-      @inprogress = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'inprogress', @tahun, bulan).count
+      @inprogress = Ticket.where("status = ? and extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ?", 'inprogress', @tahun, bulan).count
       array_inprogress.push(
         'amount' => @inprogress
       )
 
       # created
-      @created = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'created', @tahun, bulan).count
+      @created = Ticket.where("status = ? and extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ?", 'created', @tahun, bulan).count
       array_created.push(
         'amount' => @created
       )
 
       # closed
-      @closed = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'closed', @tahun, bulan).count
+      @closed = Ticket.where("status = ? and extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ?", 'closed', @tahun, bulan).count
       array_closed.push(
         'amount' => @closed
       )
 
       # rejected
-      @rejected = Ticket.where('status = ? and extract(year from created_at) = ? and extract(month from created_at) = ?', 'rejected', @tahun, bulan).count
+      @rejected = Ticket.where("status = ? and extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ?", 'rejected', @tahun, bulan).count
       array_rejected.push(
         'amount' => @rejected
       )
