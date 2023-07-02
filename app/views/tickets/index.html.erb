@@ -529,6 +529,7 @@
     e.preventDefault();
     var id = $('#id_reject').val();
     var deskripsi = $('.deskripsi-reject').val();
+    $('#kirimReject').text('Loading...');
     $.ajax({
       url: "/transaksi/approve/ticket-reject",
       method: 'POST',
@@ -556,6 +557,7 @@
     e.preventDefault();
     var id = $('#id-eskalasi').val();
     var deskripsi = $('.deskripsi-eskalasi').val();
+    $('#kirimEskalasi').text('Loading...');
     $.ajax({
       url: "/transaksi/teknisi/ticket-eskalasi",
       method: 'POST',
