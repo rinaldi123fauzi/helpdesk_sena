@@ -4,7 +4,7 @@ class TicketsController < ApplicationController
   # GET /tickets or /tickets.json
   def index
     if current_user.roles.any? {|r| r.name == "user"}
-      @tickets = Ticket.where('issued_by = :value or approval_by = :value', :value => current_user.username).urgency_ordering
+      @tickets = Ticket.where('issued_by = :value or approval_by = :value', :value => current_user.username).user_ordering
     elsif current_user.roles.any? {|r| r.name == "manajer it"}
       @tickets = Ticket.urgency_ordering
     elsif current_user.roles.any? {|r| r.name == "teknisi"}
@@ -12,7 +12,7 @@ class TicketsController < ApplicationController
     elsif current_user.roles.any? {|r| r.name == "kepala divisi"}
       @tickets = Ticket.where('issued_by = :value or approval_by = :value', :value => current_user.username).urgency_ordering
     else
-      @tickets = Ticket.order(:id => :desc)
+      @tickets = Ticket.urgency_ordering
     end
   end
 end

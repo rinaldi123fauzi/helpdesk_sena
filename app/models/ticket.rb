@@ -27,6 +27,21 @@ class Ticket < ApplicationRecord
   belongs_to :area
   has_many :approval, dependent: :destroy
 
+  scope :user_ordering, -> { 
+    order(<<-SQL)
+      CASE status
+      WHEN 'created' THEN 'a'
+      WHEN 'inprogress' THEN 'b' 
+      WHEN 'open' THEN 'c' 
+      WHEN 'overdue' THEN 'c' 
+      WHEN 'closed' THEN 'd' 
+      WHEN 'rejected' THEN 'e' 
+      ELSE 'z' 
+      END ASC, 
+      id DESC
+    SQL
+  }
+
   scope :urgency_ordering, -> { 
     order(<<-SQL)
       CASE status
