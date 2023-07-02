@@ -109,7 +109,7 @@ class Transaksi::ApproveController < ApplicationController
     elsif check_ticket.status == "approval3"
       Approval.create!(
         :issued_by => current_user.username,
-        :approve_level => "approval3",
+        :approve_level => "open",
         :description => 'tiket disetujui',
         :ticket_id => params[:id],
       )

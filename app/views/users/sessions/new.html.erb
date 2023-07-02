@@ -28,16 +28,19 @@
 <div class="container">
   <!-- Outer Row -->
   <div class="row justify-content-center mt-4">
+    <div class="col-md-7 d-none d-md-block">
+      <%= image_tag "customer-service.png", class: "img-fluid shadow-xs", style:"height: 100%;" %>
+    </div>
     <div class="col-md-5">
-      <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card o-hidden shadow-lg my-5 p-3 card-primary">
         <div class="card-body p-0">
           <!-- Nested Row within Card Body -->
           <div class="row">
             <div class="col-md">
               <div class="p-5">
                 <div class="text-center">
-                  <%= image_tag "sena.png", class: "img-fluid", style:"height: 45px;" %>
-                  <h5 style="color: blue;">Helpdesk</h5>
+                  <%= image_tag "sena.png", class: "img-fluid", style:"height: 80px;" %>
+                  <h5 style="color: blue;" class="mt-2">Helpdesk</h5>
                 </div>
                 <hr>
                 <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: "user"}) do |f| %>
@@ -47,16 +50,20 @@
                   <div class="form-group">
                     <%= f.password_field :password, autocomplete: "current-password", class: "form-control form-control-user", placeholder: "Password" %>
                   </div>
-                  <div class="form-group">
+                  <%
+=begin%>
+ <div class="form-group">
                     <div class="custom-control custom-checkbox small">
                       <input type="checkbox" class="custom-control-input" id="customCheck">
                       <label class="custom-control-label" for="customCheck">Remember Me</label>
                     </div>
-                  </div>
+                  </div> 
+<%
+=end%>
                   <%= f.submit "Login", class: "btn btn-primary btn-user btn-block" %>
                   <hr>
                   <div class="copyright text-center my-auto">
-                       <span>&copy;<%= Date.today.year %> <br>PT. Solusi Energi Nusantara</span>
+                       <span>&copy;<%= Time.current.year %> SENA - PT. Solusi Energi Nusantara</span>
                     </div>
                 <% end %>
               </div>
