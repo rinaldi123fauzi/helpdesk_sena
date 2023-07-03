@@ -26,21 +26,32 @@ class Transaksi::TicketsController < ApplicationController
 
   def create
     if getRole == "kepala divisi"
+      check_user = Position.left_outer_joins(:user,:role).where(['users.username = ? and roles.name = ?', current_user.username, "Engineering"])
       @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', params[:sub_layanan], 'none')
-      if @check_approval.count == 1
-        if @check_approval.first.approval_berjenjang == "low"
+      if check_user.count == 1 # untuk role Engineering
+        if @check_approval.first.approval_berjenjang == "none"
+          @status = "open"
+        else
           check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
           @status = "approval3"
           @approval_by = check_manajer_it.username
-        elsif @check_approval.first.approval_berjenjang == "medium"
-          check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
-          @status = "approval2"
-          @approval_by = check_kadiv.username
         end
-      else
-        @status = "open"
+      else # untuk role selain Engineering
+        if @check_approval.count == 1
+          if @check_approval.first.approval_berjenjang == "low"
+            check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+            @status = "approval3"
+            @approval_by = check_manajer_it.username
+          elsif @check_approval.first.approval_berjenjang == "medium"
+            check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
+            @status = "approval2"
+            @approval_by = check_kadiv.username
+          end
+        else
+          @status = "open"
+        end
       end
-    else
+    else # untuk users
       @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', params[:sub_layanan], 'none')
       if @check_approval.count == 1
         @status = "created"
@@ -83,19 +94,30 @@ class Transaksi::TicketsController < ApplicationController
 
   def update
     if getRole == "kepala divisi"
+      check_user = Position.left_outer_joins(:user,:role).where(['users.username = ? and roles.name = ?', params[:dibuat_oleh], "Engineering"])
       @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', params[:sub_layanan], 'none')
-      if @check_approval.count == 1
-        if @check_approval.first.approval_berjenjang == "low"
+      if check_user.count == 1
+        if @check_approval.first.approval_berjenjang == "none"
+          @status = "open"
+        else
           check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
           @status = "approval3"
           @approval_by = check_manajer_it.username
-        elsif @check_approval.first.approval_berjenjang == "medium"
-          check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
-          @status = "approval2"
-          @approval_by = check_kadiv.username
         end
       else
-        @status = "open"
+        if @check_approval.count == 1
+          if @check_approval.first.approval_berjenjang == "low"
+            check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+            @status = "approval3"
+            @approval_by = check_manajer_it.username
+          elsif @check_approval.first.approval_berjenjang == "medium"
+            check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
+            @status = "approval2"
+            @approval_by = check_kadiv.username
+          end
+        else
+          @status = "open"
+        end
       end
     else
       @check_approval = SubCategory.where(['id = ? and approval_berjenjang != ? ', params[:sub_layanan], 'none'])
@@ -174,7 +196,7 @@ class Transaksi::TicketsController < ApplicationController
 
   def detail
     @id = params[:id]
-    @getStatus = Ticket.where('id = ?', @id).where.not('status IN (?)', ['open','inprogress','closed','overdue'])
+    @getStatus = Ticket.where('id = ?', @id)
     @data = Ticket.find(@id)
     @history = Approval.where(ticket_id: @id).order(:created_at => :desc)
     @data_history = []

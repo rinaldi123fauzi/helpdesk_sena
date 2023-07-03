@@ -376,11 +376,22 @@
                 <td>
                   <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>" title="Detail"><i class="fa fa-eye"></i></button>
 
-                  <% if ticket.status == "created" || (ticket.status == "open" && ticket.sub_category.approval_berjenjang == "none") %>
-                    <% if ticket.issued_by == current_user.username %>
-                      <% if ticket.pause_respon == false %>
-                        <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
-                        <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>" title="Hapus"><i class="fa fa-trash"></i></button>
+                  <% if current_user.roles.any? {|r| r.name == "kepala divisi"} %>
+                    <% unless ticket.status == "open" %>
+                      <% if ticket.issued_by == current_user.username %>
+                        <% if ticket.pause_respon == false %>
+                          <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
+                          <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>" title="Hapus"><i class="fa fa-trash"></i></button>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  <% else %>
+                    <% if ticket.status == "created" || (ticket.status == "open" && ticket.sub_category.approval_berjenjang == "none") %>
+                      <% if ticket.issued_by == current_user.username %>
+                        <% if ticket.pause_respon == false %>
+                          <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
+                          <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>" title="Hapus"><i class="fa fa-trash"></i></button>
+                        <% end %>
                       <% end %>
                     <% end %>
                   <% end %>
@@ -471,13 +482,15 @@
           <input type="text" class="form-control" value="${data['data_ticket']['teknisi']}" disabled>
         `);
 
-        if (data['data_ticket']['approval_by'] == data['data_ticket']['user'] &&  data['data_ticket']['pending_approval']['status'] != "rejected") {
+        if (data['data_ticket']['approval_by'] == data['data_ticket']['user']) {
+          if (data['data_ticket']['pending_approval']['status'] == "created" || data['data_ticket']['pending_approval']['status'] == "approval1" || data['data_ticket']['pending_approval']['status'] == "approval2" || data['data_ticket']['pending_approval']['status'] == "approval3") {
+            $('.approval-button').append(`
+             <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
+           `);
            $('.approval-button').append(`
-            <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
-          `);
-          $('.approval-button').append(`
-            <button class="btn btn-danger btn-sm col-md-5 ml-2 reject" data-backdrop="true" data-toggle="modal" data-target="#reject" data-id="${id}">Reject</button>
-          `);
+             <button class="btn btn-danger btn-sm col-md-5 ml-2 reject" data-backdrop="true" data-toggle="modal" data-target="#reject" data-id="${id}">Reject</button>
+           `);
+          }
         }
 
         for (let i = 0; i < data['data_ticket']['file'].length; i++) {
@@ -507,11 +520,11 @@
           `);
         }
 
-        if (data['data_ticket']['pending_approval']['status'] != "rejected") {
+        if (data['data_ticket']['pending_approval']['status'] == "created" || data['data_ticket']['pending_approval']['status'] == "approval1" || data['data_ticket']['pending_approval']['status'] == "approval2" || data['data_ticket']['pending_approval']['status'] == "approval3") {
           $('.pending-approval').append(`
             <span class="badge badge-warning">Pending approval by : ${data['data_ticket']['pending_approval']['approval_by']}</span>
           `);
-        }else{
+        }else if(data['data_ticket']['pending_approval']['status'] == "rejected"){
           $('.pending-approval').append(`
             <span class="badge badge-danger">Rejected by : ${data['data_ticket']['pending_approval']['approval_by']}</span>
           `);
