@@ -1,6 +1,7 @@
 <script>
   $(document).on('click','#simpanSubKategori',function(e){
     e.preventDefault();
+    var template_ticket = $('#template-ticket').val();
     var approval_berjenjang = $('#approval-berjenjang').val();
     var namaSubKategori = $('#nama_subkategori').val();
     var id_subkategori = $('#id_subkategori').val();
@@ -14,7 +15,8 @@
           authenticity_token: '<%= form_authenticity_token %>',
           namaSubKategori:namaSubKategori,
           category_id:category_id,
-          approval_berjenjang:approval_berjenjang
+          approval_berjenjang:approval_berjenjang,
+          template_ticket:template_ticket
         },
         success: function(data)
         {
@@ -32,7 +34,8 @@
           namaSubKategori:namaSubKategori,
           id_subkategori:id_subkategori,
           category_id:category_id,
-          approval_berjenjang:approval_berjenjang
+          approval_berjenjang:approval_berjenjang,
+          template_ticket:template_ticket
         },
         success: function(data)
         {
@@ -50,6 +53,7 @@
     $('#id_subkategori').empty();
     $('#nama_subkategori').empty();
     $('#kategori').empty();
+    $('#template-ticket').empty();
     $('#approval-berjenjang').empty();
     $('.modal-title').text('Ubah Data');
     $.ajax({
@@ -90,6 +94,7 @@
             }
         }
         $('#nama_subkategori').val(data[0]['nama']);
+        $('#template-ticket').val(data[0]['template_ticket']);
       }
     });
   });
@@ -100,6 +105,7 @@
       $('#kategori').empty();
       $('.modal-title').text('Tambah Data');
       $('#approval-berjenjang').empty();
+      $('#template-ticket').empty();
       
       $.ajax({
         url: "/master_data/categories/getAll",

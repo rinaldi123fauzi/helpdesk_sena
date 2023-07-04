@@ -356,7 +356,11 @@
                   <% 
                     case ticket.status 
                     when "open"
-                      concat "<span class='badge badge-light'>#{ticket.status}</span>".html_safe
+                      if ticket.pause_respon == true
+                        concat "<span class='badge badge-light'>#{ticket.status}</span> <small class='text-warning'>Pending</small>".html_safe
+                      else
+                        concat "<span class='badge badge-light'>#{ticket.status}</span>".html_safe
+                      end
                     when "created"
                       concat "<span class='badge badge-transparent'>#{ticket.status}</span>".html_safe
                     when "approval1"
@@ -1093,6 +1097,8 @@
             success: function(data)
             {
               $('#approval-by').empty();
+              $('#deskripsi').empty();
+              $('#deskripsi').val(data['template_ticket']);
              if (data['status_approval'] != "none") {
               for (let i = 0; i < data['user'].length; i++) {
                 const element = data['user'][i];

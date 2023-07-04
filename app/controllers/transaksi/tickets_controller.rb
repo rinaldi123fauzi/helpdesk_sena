@@ -251,6 +251,7 @@ class Transaksi::TicketsController < ApplicationController
   
       render json:{
         status_approval: data_sub_category.approval_berjenjang,
+        template_ticket: data_sub_category.template_ticket,
         user: data
       }
     end

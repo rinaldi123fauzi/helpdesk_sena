@@ -8,6 +8,7 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  approval_berjenjang :string
+#  template_ticket     :string
 #
 
 one:
