@@ -56,20 +56,6 @@ class Ticket < ApplicationRecord
       WHEN 'rejected' THEN 'e' 
       ELSE 'z' 
       END ASC, 
-      id DESC
-    SQL
-  }
-
-  scope :teknisi_ordering, -> { 
-    order(<<-SQL)
-      CASE status
-      WHEN 'open' THEN 'a' 
-      WHEN 'inprogress' THEN 'b' 
-      WHEN 'overdue' THEN 'c' 
-      WHEN 'closed' THEN 'd' 
-      WHEN 'rejected' THEN 'e' 
-      ELSE 'z' 
-      END ASC,
       CASE pause_respon
       WHEN '1' THEN 'a'
       ELSE 'z'
