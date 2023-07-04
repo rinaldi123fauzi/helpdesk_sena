@@ -24,6 +24,12 @@ $(document).ready(function(){
     //     }
     // });
 });
+$("textarea").each(function () {
+    this.setAttribute("style", "height:" + (this.scrollHeight) + "px;overflow-y:hidden; width: 100%; min-height: 100px;");
+}).on("keyup click", function () {
+    this.style.height = 0;
+    this.style.height = (this.scrollHeight) + "px";
+});
 $(document).on('click','#close-modal',function(){
     $(".modal").hide();
     $(".modal-backdrop").remove();
