@@ -821,7 +821,18 @@
                 <td style="width: 50px;" class="text-center"><%= index+1 %></td>
                 <td><%= work_unit.category.nama_kategori %></td>
                 <td><%= work_unit.nama_sub_kategori %></td>
-                <td><%= work_unit.approval_berjenjang %></td>
+                <td>
+                  <% 
+                    case work_unit.approval_berjenjang
+                    when "low"
+                      concat "<span>HO</span>".html_safe
+                    when "medium"
+                      concat "<span>KADIV</span>".html_safe
+                    else
+                      concat "<span>None</span>".html_safe
+                    end
+                  %>
+                </td>
                 <td style="width: 150px;" class="text-center">
                   <%# if current_user.can? { |permissions| permissions.category.update? } %>
                   <a href="#" class="btn btn-warning btn-circle btn-sm" id="ubahSubKategori" data-toggle="modal" data-target="#subkategori" data-id="<%= work_unit.id %>">

@@ -60,14 +60,20 @@ class Transaksi::ApproveController < ApplicationController
 
     elsif check_ticket.status == "approval1"
       check_ticket = Ticket.find_by_id(params[:id])
-      if check_ticket.sub_category.approval_berjenjang == "low"
+      if check_ticket.work_unit.nama == "Engineering"
         check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
         approval_by = check_manajer_it.username
         status = "approval3"
-      elsif check_ticket.sub_category.approval_berjenjang == "medium"
-        checkRole = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
-        approval_by = checkRole.username
-        status = "approval2"
+      else
+        if check_ticket.sub_category.approval_berjenjang == "low"
+          check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+          approval_by = check_manajer_it.username
+          status = "approval3"
+        elsif check_ticket.sub_category.approval_berjenjang == "medium"
+          checkRole = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
+          approval_by = checkRole.username
+          status = "approval2"
+        end
       end
 
       Approval.create!(

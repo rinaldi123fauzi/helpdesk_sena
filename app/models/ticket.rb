@@ -49,8 +49,8 @@ class Ticket < ApplicationRecord
   scope :urgency_ordering, -> { 
     order(<<-SQL)
       CASE status
-      WHEN 'open' THEN 'a' 
-      WHEN 'inprogress' THEN 'b' 
+      WHEN 'inprogress' THEN 'a' 
+      WHEN 'open' THEN 'b' 
       WHEN 'overdue' THEN 'c' 
       WHEN 'closed' THEN 'd' 
       WHEN 'rejected' THEN 'e' 

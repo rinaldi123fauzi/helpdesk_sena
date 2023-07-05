@@ -67,20 +67,20 @@
         status = "";
         if (data[0]['approval_berjenjang'] == "none") {
           status += `<option value="none" selected>None</option>`;
-          status += `<option value="low">Low</option>`;
-          status += `<option value="medium">Medium</option>`;
+          status += `<option value="low">HO</option>`;
+          status += `<option value="medium">KADIV</option>`;
         }else if(data[0]['approval_berjenjang'] == "low"){
           status += `<option value="none">None</option>`;
-          status += `<option value="low" selected>Low</option>`;
-          status += `<option value="medium">Medium</option>`;
+          status += `<option value="low" selected>HO</option>`;
+          status += `<option value="medium">KADIV</option>`;
         }else if(data[0]['approval_berjenjang'] == "medium"){
           status += `<option value="none">None</option>`;
-          status += `<option value="low">Low</option>`;
-          status += `<option value="medium" selected>Medium</option>`;
+          status += `<option value="low">HO</option>`;
+          status += `<option value="medium" selected>KADIV</option>`;
         }else{
           status += `<option value="none">None</option>`;
-          status += `<option value="low">Low</option>`;
-          status += `<option value="medium">Medium</option>`;
+          status += `<option value="low">HO</option>`;
+          status += `<option value="medium">KADIV</option>`;
         }
 
         $('#approval-berjenjang').append(status);
@@ -113,8 +113,8 @@
         success: function(data){
             $('#approval-berjenjang').append(`
                 <option value="none">None</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
+                <option value="low">HO</option>
+                <option value="medium">KADIV</option>
             `);
             for (let i = 0; i < data[0]['data_categories'].length; i++) {
                 const element = data[0]['data_categories'][i];

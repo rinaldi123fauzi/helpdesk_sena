@@ -22,3 +22,15 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+--TODO---
+
+* Diubah label status approval berjenjang (SOLVED)
+- low diubah ke HO
+- medium diubah ke KADIV
+
+* Diubah sorting tiket (role teknisi)
+- prioritas status inprogress
+
+* Diubah counting ticket open ke blink
+
