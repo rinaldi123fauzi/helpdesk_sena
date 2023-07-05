@@ -25,67 +25,99 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def create
-    @data = check_flow(params[:sub_layanan],params[:approval_by])
-    ActiveRecord::Base.transaction do
-      ticket = Ticket.new
-      ticket.no_ticket = params[:nomor_tiket]
-      ticket.category_id = params[:layanan]
-      ticket.sub_category_id = params[:sub_layanan]
-      ticket.issued_by = params[:dibuat_oleh]
-      ticket.description = params[:deskripsi]
-      ticket.status = @data[0]
-      ticket.approval_by = @data[1]
-      ticket.work_unit_id = params[:satuan_kerja]
-      ticket.area_id = params[:area]
-      if params[:file_tiket].present?
-        params[:file_tiket].each do |data|
-          ticket.file_ticket = data
+    if params[:layanan].length >= 1
+      if params[:sub_layanan].length >= 1
+        @data = check_flow(params[:sub_layanan],params[:approval_by])
+        ActiveRecord::Base.transaction do
+          ticket = Ticket.new
+          ticket.no_ticket = params[:nomor_tiket]
+          ticket.category_id = params[:layanan]
+          ticket.sub_category_id = params[:sub_layanan]
+          ticket.issued_by = params[:dibuat_oleh]
+          ticket.description = params[:deskripsi]
+          ticket.status = @data[0]
+          ticket.approval_by = @data[1]
+          ticket.work_unit_id = params[:satuan_kerja]
+          ticket.area_id = params[:area]
+          if params[:file_tiket].present?
+            params[:file_tiket].each do |data|
+              ticket.file_ticket = data
+            end
+          end
+    
+          if ticket.save
+            render json:{
+              status: 200
+            }
+            flash[:notice] = "Data berhasil disimpan"
+          else
+            render json:{
+              status: 500,
+              msg: ticket.errors
+            }
+          end
         end
-      end
-
-      if ticket.save
-        render json:{
-          status: 200
-        }
-        flash[:notice] = "Data berhasil disimpan"
       else
         render json:{
           status: 500,
-          msg: ticket.errors
+          kategori: "sub layanan",
+          msg: "Sub layanan tidak boleh kosong"
         }
       end
+    else
+      render json:{
+        status: 500,
+        kategori: "layanan",
+        msg: "Layanan tidak boleh kosong"
+      }
     end
   end
 
   def update
-    @data = check_flow(params[:sub_layanan],params[:approval_by])
-    ActiveRecord::Base.transaction do
-      ticket = Ticket.find_by_id(params[:id_tiket])
-      ticket.no_ticket = params[:nomor_tiket]
-      ticket.category_id = params[:layanan]
-      ticket.sub_category_id = params[:sub_layanan]
-      ticket.issued_by = params[:dibuat_oleh]
-      ticket.status = @data[0]
-      ticket.description = params[:deskripsi]
-      ticket.approval_by = @data[1]
-      ticket.work_unit_id = params[:satuan_kerja]
-      ticket.area_id = params[:area]
-      if params[:file_tiket].present?
-        params[:file_tiket].each do |data|
-          ticket.file_ticket = data
+    if params[:layanan].length >= 1
+      if params[:sub_layanan].length >= 1
+        @data = check_flow(params[:sub_layanan],params[:approval_by])
+        ActiveRecord::Base.transaction do
+          ticket = Ticket.find_by_id(params[:id_tiket])
+          ticket.no_ticket = params[:nomor_tiket]
+          ticket.category_id = params[:layanan]
+          ticket.sub_category_id = params[:sub_layanan]
+          ticket.issued_by = params[:dibuat_oleh]
+          ticket.status = @data[0]
+          ticket.description = params[:deskripsi]
+          ticket.approval_by = @data[1]
+          ticket.work_unit_id = params[:satuan_kerja]
+          ticket.area_id = params[:area]
+          if params[:file_tiket].present?
+            params[:file_tiket].each do |data|
+              ticket.file_ticket = data
+            end
+          end
+          if ticket.save
+            render json: { 
+              status: 200
+            }
+            flash[:notice] = "Data berhasil disimpan"
+          else
+            render json: { 
+              status: 500,
+              msg: ticket.errors
+            }
+          end
         end
-      end
-      if ticket.save
-        render json: { 
-          status: 200
-        }
-        flash[:notice] = "Data berhasil disimpan"
       else
-        render json: { 
+        render json:{
           status: 500,
-          msg: ticket.errors
+          kategori: "sub layanan",
+          msg: "Sub layanan tidak boleh kosong"
         }
       end
+    else
+      render json:{
+        status: 500,
+        kategori: "layanan",
+        msg: "Layanan tidak boleh kosong"
+      }
     end
   end
 

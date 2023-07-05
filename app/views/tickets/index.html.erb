@@ -26,6 +26,7 @@
                     <select class="form-control select2" id="layanan" name="layanan" style="width: 100%;">
                       <option value="">--Pilih--</option>
                     </select>
+                    <div class="message-layanan text-danger"></div>
                   </div>
                 </div>
               </div>
@@ -42,6 +43,7 @@
                     <select class="form-control select2" id="sub-layanan" name="sub_layanan" style="width: 100%;">
                       <option value="">--Pilih--</option>
                     </select>
+                    <div class="message-sub-layanan text-danger"></div>
                   </div>
                 </div>
               </div>
@@ -72,7 +74,6 @@
                   <label>Atasan Langsung</label>
                   <div class="input-group">
                     <select class="form-control select2" id="approval-by" name="approval_by" style="width: 100%;">
-                      <option value="">--Pilih--</option>
                     </select>
                   </div>
                 </div>
@@ -1134,6 +1135,10 @@
     const formData = new FormData(form_inventory);
     var id_tiket = $('#id_tiket').val();
     $('#simpan').text('Loading...');
+    $('.message-satker').empty();
+    $('.message-area').empty();
+    $('.message-layanan').empty();
+    $('.message-sub-layanan').empty();
     let xhr = new XMLHttpRequest();  
     if (id_tiket == "") {
       xhr.open("POST", "/transaksi/tickets/create", true);
@@ -1149,10 +1154,14 @@
         window.location.href = "/tickets";
       }else if(result.status == 500){
         $('#simpan').text('Simpan');
-        $('.message-satker').empty();
-        $('.message-area').empty();
         $('.message-satker').text(result.msg.work_unit);
         $('.message-area').text(result.msg.area);
+        if (result.kategori == "layanan") {
+          $('.message-layanan').text(result.msg);
+        }
+        if (result.kategori == "sub layanan") {
+          $('.message-sub-layanan').text(result.msg);
+        }
       }
     });
   });
