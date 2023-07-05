@@ -209,7 +209,7 @@ class Transaksi::TicketsController < ApplicationController
       }
     else
       data_sub_category = SubCategory.find_by_id(params[:id])
-      data = RoleAssignment.left_outer_joins(:role,:user).select('users.username')
+      data = RoleAssignment.left_outer_joins(:role,:user).where('roles.name IN (?)', ['kepala divisi', 'user']).select('users.username')
   
       render json:{
         status_approval: data_sub_category.approval_berjenjang,

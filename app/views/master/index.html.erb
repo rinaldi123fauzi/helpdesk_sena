@@ -9,7 +9,7 @@
         <div class="col-sm-4">
           <%= form_tag master_index_path, method: "GET" %>
           <% if current_user.roles.any? { |r| r.name == 'superadmin' || r.name == 'admin'} %>
-            <%= select_tag :pilihan, options_for_select(["Kepala Divisi","SLA Layanan","Data Sub Kategori","Data Kategori","Data Area","Data Satuan Kerja","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
+            <%= select_tag :pilihan, options_for_select(["Kepala Divisi","SLA Layanan","Data Sub Layanan","Data Layanan","Data Area","Data Satuan Kerja","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
           <% end %>
         </div>
         <button type="submit" class="btn btn-info">Pilih</button>
@@ -674,7 +674,7 @@
       </div>
     <% end %>
 
-    <% if params[:pilihan] == "Data Kategori" %>
+    <% if params[:pilihan] == "Data Layanan" %>
       <div class="modal fade" id="kategori" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -689,7 +689,7 @@
               <form>
                 <input type="hidden" id="id_kategori">
                 <div class="form-group">
-                  <label>Kategori</label>
+                  <label>Layanan</label>
                   <div class="input-group">
                     <input type="text" class="form-control" id="nama_kategori">
                   </div>
@@ -701,7 +701,7 @@
         </div>
       </div>
       <div class="card-header mt-2">
-        <h4>Data Kategori</h4>
+        <h4>Data Layanan</h4>
         <div class="card-header-form">
               <%# if current_user.can? { |permissions| permissions.category.create? } %>
             <div class="align-items-center">
@@ -718,7 +718,7 @@
             <thead>
               <tr>
                 <th style="width: 50px;" class="text-center">No</th>
-                <th>Nama Kategori</th>
+                <th>Nama Layanan</th>
                 <th style="width: 150px;" class="text-center">Aksi</th>
               </tr>
             </thead>
@@ -747,7 +747,7 @@
       </div>
     <% end %>
 
-    <% if params[:pilihan] == "Data Sub Kategori" %>
+    <% if params[:pilihan] == "Data Sub Layanan" %>
       <div class="modal fade" id="subkategori" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -762,13 +762,13 @@
               <form>
                 <input type="hidden" id="id_subkategori">
                 <div class="form-group">
-                  <label>Kategori</label>
+                  <label>Layanan</label>
                   <div class="input-group">
                     <select id="kategori" class="form-control select2" style="width: 100%;"></select>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label>Sub Kategori</label>
+                  <label>Sub Layanan</label>
                   <div class="input-group">
                     <input type="text" class="form-control" id="nama_subkategori">
                   </div>
@@ -792,7 +792,7 @@
         </div>
       </div>
       <div class="card-header mt-2">
-        <h4>Data Sub Kategori</h4>
+        <h4>Data Sub Layanan</h4>
         <div class="card-header-form">
               <%# if current_user.can? { |permissions| permissions.category.create? } %>
             <div class="align-items-center">
@@ -809,8 +809,8 @@
             <thead>
               <tr>
                 <th style="width: 50px;" class="text-center">No</th>
-                <th>Nama Kategori</th>
-                <th>Nama Sub Kategori</th>
+                <th>Nama Layanan</th>
+                <th>Nama Sub Layanan</th>
                 <th>Approval Berjenjang</th>
                 <th style="width: 150px;" class="text-center">Aksi</th>
               </tr>
