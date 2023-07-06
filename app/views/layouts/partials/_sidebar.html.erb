@@ -21,7 +21,7 @@
         elsif current_user.roles.any? { |r| r.name == 'kepala divisi'}
           @countTicket = Ticket.where('status != ? and approval_by = ?', 'rejected', current_user.username).count
         elsif current_user.roles.any? { |r| r.name == 'manajer it'}
-          @countTicket = Ticket.where('status IN (?) and approval_by = ?', ['approval1','approval2','approval3'], current_user.username).count
+          @countTicket = Ticket.where('status IN (?) and approval_by = ?', ['created','approval1','approval2','approval3'], current_user.username).count
         else
           @countTicket = Ticket.where(status: 'open').count
         end 

@@ -9,7 +9,7 @@
         <div class="col-sm-4">
           <%= form_tag master_index_path, method: "GET" %>
           <% if current_user.roles.any? { |r| r.name == 'superadmin' || r.name == 'admin'} %>
-            <%= select_tag :pilihan, options_for_select(["Kepala Divisi","SLA Layanan","Data Sub Layanan","Data Layanan","Data Area","Data Satuan Kerja","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
+            <%= select_tag :pilihan, options_for_select(["Kepala Divisi","SLA Layanan","Data Sub Layanan","Data Layanan","Data Area","Data Divisi","Data Role","Data User"], params[:pilihan]), prompt: "-- Pilih Data --", class: "form-control select2" %>
           <% end %>
         </div>
         <button type="submit" class="btn btn-info">Pilih</button>
@@ -328,7 +328,7 @@
       </div>
     <% end %>
 
-    <% if params[:pilihan] == "Data Satuan Kerja" %>
+    <% if params[:pilihan] == "Data Divisi" %>
       <div class="modal fade" id="satker" tabindex="-1" role="dialog" aria-labelledby="formModal"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -355,7 +355,7 @@
         </div>
       </div>
       <div class="card-header mt-2">
-        <h4>Data Satuan Kerja</h4>
+        <h4>Data Divisi</h4>
         <div class="card-header-form">
               <%# if current_user.can? { |permissions| permissions.category.create? } %>
             <div class="align-items-center">
