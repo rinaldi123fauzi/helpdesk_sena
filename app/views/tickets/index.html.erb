@@ -49,7 +49,7 @@
               </div>
               <div id="ubah-approval1" class="col-md-6">
                 <div class="form-group">
-                  <label>Satuan Kerja</label>
+                  <label>Divisi</label>
                   <div class="input-group">
                     <select class="form-control select2" id="satuan-kerja" name="satuan_kerja" style="width: 100%;">
                       <option value="">--Pilih--</option>
@@ -152,7 +152,7 @@
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label>Satuan Kerja</label>
+              <label>Divisi</label>
               <div class="input-group">
                 <input type="text" class="form-control" id="detail-satuan-kerja" disabled>
               </div>
@@ -339,7 +339,7 @@
             <tr>
               <th class="text-center" style="width: 20px;">No</th>
               <th>Nomor Tiket</th>
-              <th>Satuan Kerja</th>
+              <th>Divisi</th>
               <th>Dibuat Oleh</th>
               <th>Status Tiket</th>
               <th>Tanggal Dibuat</th>
@@ -382,7 +382,7 @@
                   <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>" title="Detail"><i class="fa fa-eye"></i></button>
 
                   <% if current_user.roles.any? {|r| r.name == "kepala divisi"} %>
-                    <% unless ticket.status == "open" %>
+                    <% unless ticket.status == "open" || ticket.status == "closed" %>
                       <% if ticket.issued_by == current_user.username %>
                         <% if ticket.pause_respon == false %>
                           <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>

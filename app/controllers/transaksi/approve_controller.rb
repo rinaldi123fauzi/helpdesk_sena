@@ -10,17 +10,22 @@ class Transaksi::ApproveController < ApplicationController
       positions = Position.left_outer_joins(:user).where('users.username = ?', check_ticket.approval_by)
       position = positions.first
 
-      if positions.count == 0
-        kadiv = Position.find_by_work_unit_id(check_ticket.work_unit_id)
+      # ini untuk pengajuan ticket langsung ke manajer it / kepala divisi engineering
+      positionsIt = RoleAssignment.left_outer_joins(:role, :user).where('users.username = ?', check_ticket.approval_by)
+      positionIt = positionsIt.first
+      positionsKadivEngineering = Position.left_outer_joins(:user,:work_unit).where('users.username = ? and work_units.nama = ?', check_ticket.approval_by, 'Engineering')
+      ### END ###
+
+      # jika approval yang dituju manajer it
+      if positionIt.role.name == "manajer it" 
         Approval.create!(
           :issued_by => current_user.username,
-          :approve_level => 'approval1',
+          :approve_level => 'open',
           :description => 'tiket disetujui',
           :ticket_id => params[:id],
         )
         data = Ticket.find_by_id(params[:id])
-        data.status = 'approval1'
-        data.approval_by =  kadiv.user.username
+        data.status = 'open'
         data.save
     
         if data.save
@@ -29,32 +34,79 @@ class Transaksi::ApproveController < ApplicationController
           }
           flash[:notice] = "Data berhasil disimpan"
         end
-      else
-        if check_ticket.sub_category.approval_berjenjang == "low"
+      else 
+        # jika tidak maka akan dicek apakah approval yang dituju kadiv engineering
+        if positionsKadivEngineering.count == 1
           checkRole = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
           approval_by = checkRole.username
           status = "approval3"
-        elsif check_ticket.sub_category.approval_berjenjang == "medium"
-          checkRole = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
-          approval_by = checkRole.username
-          status = "approval2"
-        end
-        Approval.create!(
-          :issued_by => current_user.username,
-          :approve_level => status,
-          :description => 'tiket disetujui',
-          :ticket_id => params[:id],
-        )
-        data = Ticket.find_by_id(params[:id])
-        data.status = status
-        data.approval_by =  approval_by
-        data.save
-    
-        if data.save
-          render json:{
-            status: 200
-          }
-          flash[:notice] = "Data berhasil disimpan"
+          Approval.create!(
+            :issued_by => current_user.username,
+            :approve_level => 'approval2',
+            :description => 'tiket disetujui',
+            :ticket_id => params[:id],
+          )
+          data = Ticket.find_by_id(params[:id])
+          data.status = status
+          data.approval_by =  approval_by
+          data.save
+      
+          if data.save
+            render json:{
+              status: 200
+            }
+            flash[:notice] = "Data berhasil disimpan"
+          end
+        else
+          # jika tidak maka akan dicek apakah approval yang dituju projek manajer
+          if positions.count == 0
+            kadiv = Position.find_by_work_unit_id(check_ticket.work_unit_id)
+            Approval.create!(
+              :issued_by => current_user.username,
+              :approve_level => 'approval1',
+              :description => 'tiket disetujui',
+              :ticket_id => params[:id],
+            )
+            data = Ticket.find_by_id(params[:id])
+            data.status = 'approval1'
+            data.approval_by =  kadiv.user.username
+            data.save
+        
+            if data.save
+              render json:{
+                status: 200
+              }
+              flash[:notice] = "Data berhasil disimpan"
+            end
+          # jika tidak maka approval yang dituju kadiv masing - masing satuan kerja
+          else 
+            if check_ticket.sub_category.approval_berjenjang == "low"
+              checkRole = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+              approval_by = checkRole.username
+              status = "approval3"
+            elsif check_ticket.sub_category.approval_berjenjang == "medium"
+              checkRole = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
+              approval_by = checkRole.username
+              status = "approval2"
+            end
+            Approval.create!(
+              :issued_by => current_user.username,
+              :approve_level => status,
+              :description => 'tiket disetujui',
+              :ticket_id => params[:id],
+            )
+            data = Ticket.find_by_id(params[:id])
+            data.status = status
+            data.approval_by =  approval_by
+            data.save
+        
+            if data.save
+              render json:{
+                status: 200
+              }
+              flash[:notice] = "Data berhasil disimpan"
+            end
+          end
         end
       end
 
