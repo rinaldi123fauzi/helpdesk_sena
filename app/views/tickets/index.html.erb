@@ -579,6 +579,7 @@
     var id = $('#id-eskalasi').val();
     var deskripsi = $('.deskripsi-eskalasi').val();
     $('#kirimEskalasi').text('Loading...');
+    $('.notice-eskalasi').empty();
     $.ajax({
       url: "/transaksi/teknisi/ticket-eskalasi",
       method: 'POST',
@@ -591,6 +592,7 @@
         if (data['status'] == 200) {
           window.location.href = "/tickets";
         }else if (data['status'] == 204) {
+          $('#kirimEskalasi').text('Simpan');
           $('.notice-eskalasi').html(`<span class="text-danger">${data['msg']}</span>`);
         }
       }
