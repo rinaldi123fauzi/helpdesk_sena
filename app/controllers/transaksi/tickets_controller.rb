@@ -17,7 +17,6 @@ class Transaksi::TicketsController < ApplicationController
       sequence_number += int_sequence_number.to_s
     end
 
-    @rand = rand(111..999)
     @categories = Category.all
     @work_units = WorkUnit.all
     @areas = Area.all
@@ -55,21 +54,39 @@ class Transaksi::TicketsController < ApplicationController
           ticket.work_unit_id = params[:satuan_kerja]
           ticket.area_id = params[:area]
           if params[:file_tiket].present?
-            params[:file_tiket].each do |data|
-              ticket.file_ticket = data
+            if params[:size_file].to_i <= 4
+              params[:file_tiket].each do |data|
+                ticket.file_ticket = data
+              end
+
+              if ticket.save
+                render json:{
+                  status: 200
+                }
+                flash[:notice] = "Data berhasil disimpan"
+              else
+                render json:{
+                  status: 500,
+                  msg: ticket.errors
+                }
+              end
+            else
+              render json:{
+                status: 204
+              }
             end
-          end
-    
-          if ticket.save
-            render json:{
-              status: 200
-            }
-            flash[:notice] = "Data berhasil disimpan"
           else
-            render json:{
-              status: 500,
-              msg: ticket.errors
-            }
+            if ticket.save
+              render json:{
+                status: 200
+              }
+              flash[:notice] = "Data berhasil disimpan"
+            else
+              render json:{
+                status: 500,
+                msg: ticket.errors
+              }
+            end
           end
         end
       else
@@ -104,20 +121,35 @@ class Transaksi::TicketsController < ApplicationController
           ticket.work_unit_id = params[:satuan_kerja]
           ticket.area_id = params[:area]
           if params[:file_tiket].present?
-            params[:file_tiket].each do |data|
-              ticket.file_ticket = data
+            if params[:size_file].to_i <= 4
+              params[:file_tiket].each do |data|
+                ticket.file_ticket = data
+              end
+            else
+              if ticket.save
+                render json: { 
+                  status: 200
+                }
+                flash[:notice] = "Data berhasil disimpan"
+              else
+                render json: { 
+                  status: 500,
+                  msg: ticket.errors
+                }
+              end
             end
-          end
-          if ticket.save
-            render json: { 
-              status: 200
-            }
-            flash[:notice] = "Data berhasil disimpan"
           else
-            render json: { 
-              status: 500,
-              msg: ticket.errors
-            }
+            if ticket.save
+              render json: { 
+                status: 200
+              }
+              flash[:notice] = "Data berhasil disimpan"
+            else
+              render json: { 
+                status: 500,
+                msg: ticket.errors
+              }
+            end
           end
         end
       else
