@@ -18,3 +18,6 @@ RUN apt-get update
 RUN apt-get install -y nodejs
 
 RUN apt-get update && apt-get -y install cron
+
+RUN chmod +x /usr/src/app/start.sh
+ENTRYPOINT "/usr/src/app/start.sh"

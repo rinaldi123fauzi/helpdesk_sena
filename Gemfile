@@ -80,3 +80,4 @@ gem 'rails_performance' #monitoring
 gem "annotate"
 gem 'active_model_serializers'
 gem 'whenever'
+gem "foreman", "~> 0.87.2"
