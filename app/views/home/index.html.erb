@@ -390,8 +390,13 @@
                       <td><%= ticket.closed_respon.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
                       <td><%= ticket.try(:assigned_by) %></td>
                       <td>
-                        <% result = (ticket.closed_respon - ticket.inprogress_respon) %>
-                        <%= Time.at(result.to_f).strftime("%H:%M:%S") %> 
+                        <% 
+                          result = (ticket.closed_respon - ticket.inprogress_respon) 
+                          seconds = result % 60
+                          minutes = (result / 60) % 60
+                          hours = result / (60 * 60)    
+                        %>
+                        <%= format("%02d:%02d:%02d", hours, minutes, seconds) %> 
                       </td>
                       <td>
                         <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>" title="Detail"><i class="fa fa-eye"></i></button>
