@@ -326,7 +326,7 @@
     <div class="col-lg-12">
       <div class="card card-primary">
         <div class="card-header">
-          <h4>Tiket</h4>
+          <h4>Grafik Tiket</h4>
         </div>
         <div class="card-body">
           <div id="chart1"></div>
@@ -337,9 +337,21 @@
   <% if current_user.roles.any? { |r| r.name == 'manajer it'} %>
     <div class="row">
       <div class="col-lg-12">
+        <div class="card card-primary">
+          <div class="card-header">
+            <h4>Grafik Pengerjaan Tiket</h4>
+          </div>
+          <div class="card-body">
+            <div id="chart2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
         <div class="card shadow mb-4">
           <div class="card-header mt-2">
-            <h4>Durasi Teknisi</h4>
+            <h4>Detail Durasi Pengerjaan</h4>
           </div>
 
           <div class="card-body">
@@ -465,6 +477,17 @@
         success: function(data)
         {
           chart1(data['grafik_dashboard']);
+        }
+      });
+      $.ajax({
+        url: "/transaksi/dashboard/get-teknisi",
+        method: 'POST',
+        data :{
+          authenticity_token: '<%= form_authenticity_token %>',
+          tahun: tahun
+        },
+        success: function(data){
+          chart2(data['grafik_teknisi']);
         }
       });
     });
@@ -608,6 +631,87 @@
 
       var chart = new ApexCharts(
           document.querySelector("#chart1"),
+          options
+      );
+
+      chart.render();
+    }
+
+    function chart2(data) {
+      let array_teknisi1 = [];
+      for (let i = 0; i < 12; i++) {
+        const element = data['closed'][i];
+        array_teknisi1.push(element['durasi']);
+      }
+
+      let array_teknisi2 = [];
+      for (let i = 12; i < 24; i++) {
+        const element = data['closed'][i];
+        array_teknisi2.push(element['durasi']);
+      }
+
+      var options = {
+          chart: {
+              height: 350,
+              type: 'bar',
+          },
+          plotOptions: {
+              bar: {
+                  horizontal: false,
+                  endingShape: 'rounded',
+                  columnWidth: '40%',
+              },
+          },
+          dataLabels: {
+              enabled: false
+          },
+          stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent']
+          },
+          series: [{
+              name: 'Riki',
+              data: array_teknisi1
+          },
+          {
+              name: 'Arief',
+              data: array_teknisi2
+          } 
+          ],
+          xaxis: {
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Des'],
+              labels: {
+                  style: {
+                      colors: '#9aa0ac',
+                  }
+              }
+          },
+          yaxis: {
+              title: {
+                  text: 'Jam'
+              },
+              labels: {
+                  style: {
+                      color: '#9aa0ac',
+                  }
+              }
+          },
+          fill: {
+              opacity: 1
+
+          },
+          tooltip: {
+              y: {
+                  formatter: function (val) {
+                      return val + " Jam"
+                  }
+              }
+          }
+      }
+
+      var chart = new ApexCharts(
+          document.querySelector("#chart2"),
           options
       );
 

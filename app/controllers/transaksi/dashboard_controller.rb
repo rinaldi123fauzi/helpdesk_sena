@@ -76,4 +76,32 @@ class Transaksi::DashboardController < ApplicationController
       }
     }
   end
+
+  def teknisiGraph
+    @tahun = params[:tahun]
+    array_closed = []
+    @teknisis = RoleAssignment.left_outer_joins(:user,:role).where('roles.name = ?', 'teknisi').select('users.username')
+
+    @teknisis.each do |data|
+      for a in 1..12 do
+        if a <= 9
+          bulan = "0"+a.to_s
+        else
+          bulan = a.to_s
+        end
+
+        @closed = Ticket.where("status = ? and extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ? and assigned_by = ?", 'closed', @tahun, bulan, data.username).sum(:duration)
+        array_closed.push(
+          'teknisi' => data.username,
+          'durasi' => @closed.round(2)
+        )
+      end
+    end
+
+    render json:{
+      grafik_teknisi:{
+        closed: array_closed
+      }
+    }
+  end
 end

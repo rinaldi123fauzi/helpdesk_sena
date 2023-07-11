@@ -133,6 +133,7 @@ Rails.application.routes.draw do
 
     scope :dashboard do
       post 'get-all' => 'dashboard#getAll'
+      post 'get-teknisi' => 'dashboard#teknisiGraph'
     end
   end
 

@@ -19,6 +19,7 @@
 #  inprogress_respon :datetime
 #  closed_respon     :datetime
 #  pause_respon      :boolean          default(FALSE)
+#  duration          :decimal(, )
 #
 require 'test_helper'
 
