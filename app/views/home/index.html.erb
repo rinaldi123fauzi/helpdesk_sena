@@ -467,18 +467,20 @@
     'use strict';
     $(document).ready(function(){
       var tahun = $('#tahun option:selected').val();
-      $.ajax({
-        url: "/transaksi/dashboard/get-all",
-        method: 'POST',
-        data:{
-          authenticity_token: '<%= form_authenticity_token %>',
-          tahun:tahun
-        },
-        success: function(data)
-        {
-          chart1(data['grafik_dashboard']);
-        }
-      });
+      resetChart1(tahun);
+      resetChart2(tahun);
+    });
+
+    $(document).on('click', '.searching', function(e){
+      e.preventDefault();
+      var tahun = $('#tahun').val();
+      $('#chart1').empty();
+      $('#chart2').empty();
+      resetChart1(tahun);
+      resetChart2(tahun);
+    });
+
+    function resetChart2(tahun){
       $.ajax({
         url: "/transaksi/dashboard/get-teknisi",
         method: 'POST',
@@ -490,25 +492,21 @@
           chart2(data['grafik_teknisi']);
         }
       });
-    });
-
-    $(document).on('click', '.searching', function(e){
-      e.preventDefault();
-      var tahun = $('#tahun').val();
-      $('#chart1').empty();
+    }
+    
+    function resetChart1(tahun){
       $.ajax({
         url: "/transaksi/dashboard/get-all",
         method: 'POST',
-        data:{
+        data :{
           authenticity_token: '<%= form_authenticity_token %>',
-          tahun:tahun
+          tahun: tahun
         },
-        success: function(data)
-        {
+        success: function(data){
           chart1(data['grafik_dashboard']);
         }
       });
-    });
+    }
 
     function chart1(data) {
       let array_created = [];
