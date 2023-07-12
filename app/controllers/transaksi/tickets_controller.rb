@@ -250,7 +250,7 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def getApprovalBerjenjang
-    if getRole == "kepala divisi"
+    if getRole.include? "kepala divisi"
       render json:{
         status_approval: "none"
       }
@@ -288,7 +288,7 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def check_flow(sub_layanan, approval_by)
-    if getRole == "kepala divisi"
+    if getRole.include? "kepala divisi"
       check_user = Position.left_outer_joins(:user,:role).where(['users.username = ? and roles.name = ?', current_user.username, "Engineering"])
       @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', sub_layanan, 'none')
       if check_user.count == 1 # untuk role Engineering

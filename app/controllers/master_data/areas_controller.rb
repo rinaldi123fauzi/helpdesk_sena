@@ -42,7 +42,7 @@ class MasterData::AreasController < ApplicationController
 
   private
   def checkRole
-    unless getRole == "superadmin"
+    unless getRole.include? "superadmin"
       render json:{
         status: 401,
         msg: "Unauthorized"

@@ -11,7 +11,13 @@ class ApplicationController < ActionController::Base
 
   def getRole
     @roleAssign = RoleAssignment.left_outer_joins(:role).where(user_id: current_user.id).select('roles.name AS nameroles, role_assignments.role_id')
-    @value = @roleAssign.each_with_index.map { |role| "#{role.try(:nameroles)}" }.join(", ").gsub(",","")
-    return @value
+    # @value = @roleAssign.each_with_index.map { |role| "#{role.try(:nameroles)}" }.join(", ").gsub(",","")
+    array_role = []
+    @roleAssign.each do |data|
+      array_role.push(
+        data.nameroles
+      )
+    end
+    return array_role
   end
 end

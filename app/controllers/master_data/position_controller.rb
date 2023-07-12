@@ -65,7 +65,7 @@ class MasterData::PositionController < ApplicationController
 
   private
   def checkRole
-    unless getRole == "superadmin" || getRole == "admin"
+    unless getRole.include? "superadmin" || getRole.include? "admin"
       render json:{
         status: 401,
         msg: "Unauthorized"

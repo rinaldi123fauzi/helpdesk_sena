@@ -456,7 +456,7 @@
         $('.assign-teknisi').empty();
         $('.approval-button').empty();
         $('.history').empty();
-        if (data['data_ticket']['current_user'] == "admin" || data['data_ticket']['current_user'] == "superadmin") {
+        if (data['data_ticket']['current_user'].includes("admin") == true || data['data_ticket']['current_user'].includes("superadmin") == true) {
           if (data['data_ticket']['status'] == "open" && data['data_ticket']['pause_respon'] == 0) {
             $('.approval-button').append(`
               <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
@@ -464,7 +464,7 @@
           }
         }
 
-        if (data['data_ticket']['current_user'] == "teknisi") {
+        if (data['data_ticket']['current_user'].includes("teknisi") == true) {
           if (data['data_ticket']['status'] == "open" && data['data_ticket']['pause_respon'] == 0) {
             $('.approval-button').append(`
               <button class="btn btn-info btn-sm take-ticket" data-id="${id}">Take a ticket</button>
@@ -472,7 +472,7 @@
           }
         }
 
-        if (data['data_ticket']['current_user'] == "teknisi" && data['data_ticket']['teknisi'] == data['data_ticket']['user']) {
+        if (data['data_ticket']['current_user'].includes("teknisi") == true && data['data_ticket']['teknisi'] == data['data_ticket']['user']) {
           if (data['data_ticket']['status'] == "inprogress") {
             $('.approval-button').append(`
               <button class="btn btn-info btn-sm eskalasi" data-backdrop="true" data-toggle="modal" data-target="#eskalasi" data-id="${id}">Eskalasi</button>
