@@ -14,7 +14,7 @@ class MasterData::PositionController < ApplicationController
   end
 
   def update
-    @data = Position.update(params[:id_area],
+    @data = Position.update(params[:id_kepala_divisi],
       {
         :user_id => params[:user],
         :role_id => params[:role],
@@ -65,7 +65,7 @@ class MasterData::PositionController < ApplicationController
 
   private
   def checkRole
-    unless getRole.include? "superadmin" || getRole.include? "admin"
+    unless getRole.include? "superadmin" or getRole.include? "admin"
       render json:{
         status: 401,
         msg: "Unauthorized"
