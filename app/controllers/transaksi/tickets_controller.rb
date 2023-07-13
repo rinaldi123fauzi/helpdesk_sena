@@ -125,7 +125,7 @@ class Transaksi::TicketsController < ApplicationController
               params[:file_tiket].each do |data|
                 ticket.file_ticket = data
               end
-            else
+
               if ticket.save
                 render json: { 
                   status: 200
@@ -137,6 +137,10 @@ class Transaksi::TicketsController < ApplicationController
                   msg: ticket.errors
                 }
               end
+            else
+              render json:{
+                status: 204
+              }
             end
           else
             if ticket.save
