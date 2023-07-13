@@ -6,9 +6,9 @@ class TicketsController < ApplicationController
     if current_user.roles.any? {|r| r.name == "user"}
       @tickets = Ticket.where('issued_by = :value or approval_by = :value', :value => current_user.username).user_ordering
     elsif current_user.roles.any? {|r| r.name == "manajer it"}
-      @tickets = Ticket.where('status IN (?) and approval_by = ?', ['created','approval3'], current_user.username).urgency_ordering
+      @tickets = Ticket.where('(status IN (?) and approval_by = ?) or issued_by = ?', ['created','approval3'], current_user.username, current_user.username).urgency_ordering
     elsif current_user.roles.any? {|r| r.name == "teknisi"}
-      @tickets = Ticket.left_outer_joins(:sub_category).where('(tickets.assigned_by = ? and tickets.status IN (?)) or (tickets.assigned_by IS ? and tickets.status = ?)', current_user.username, ['inprogress','open','overdue'], nil, 'open').urgency_ordering
+      @tickets = Ticket.left_outer_joins(:sub_category).where('tickets.issued_by = ? or (tickets.assigned_by = ? and tickets.status IN (?)) or (tickets.assigned_by IS ? and tickets.status = ?)', current_user.username, current_user.username, ['inprogress','open','overdue'], nil, 'open').urgency_ordering
     elsif current_user.roles.any? {|r| r.name == "kepala divisi"}
       @tickets = Ticket.where('issued_by = :value or approval_by = :value', :value => current_user.username).urgency_ordering
     else

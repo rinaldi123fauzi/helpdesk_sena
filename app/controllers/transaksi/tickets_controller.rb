@@ -250,7 +250,7 @@ class Transaksi::TicketsController < ApplicationController
   end
 
   def getApprovalBerjenjang
-    if getRole.include? "kepala divisi"
+    if getRole.include? "kepala divisi" or getRole.include? "teknisi" or getRole.include? "manajer it"
       render json:{
         status_approval: "none"
       }
@@ -314,7 +314,7 @@ class Transaksi::TicketsController < ApplicationController
           @status = "open"
         end
       end
-    else # untuk users
+    elsif getRole.include? "user" # untuk users
       @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', sub_layanan, 'none')
       if @check_approval.count == 1
         @status = "created"
@@ -322,6 +322,8 @@ class Transaksi::TicketsController < ApplicationController
         @status = "open"
       end
       @approval_by = approval_by
+    else
+      @status = "open"
     end
     
     return @status, @approval_by

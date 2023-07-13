@@ -382,6 +382,9 @@
                 <td><%= ticket.created_at.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
                 <td>
                   <button class="btn btn-primary btn-sm detailTiket" data-backdrop="true" data-toggle="modal" data-target="#detail" data-id="<%= ticket.id %>" title="Detail"><i class="fa fa-eye"></i></button>
+                  <%
+                    @checkRole = RoleAssignment.left_outer_joins(:user,:role).where('users.username = ? and roles.name IN (?)', ticket.issued_by, ['teknisi', 'manajer it'])
+                  %>
 
                   <% if current_user.roles.any? {|r| r.name == "kepala divisi"} %>
                     <% unless ticket.status == "open" || ticket.status == "closed" %>
@@ -393,11 +396,18 @@
                       <% end %>
                     <% end %>
                   <% else %>
-                    <% if ticket.status == "created" || (ticket.status == "open" && ticket.sub_category.approval_berjenjang == "none") %>
-                      <% if ticket.issued_by == current_user.username %>
-                        <% if ticket.pause_respon == false %>
-                          <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
-                          <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>" title="Hapus"><i class="fa fa-trash"></i></button>
+                    <% if @checkRole.count == 1%>
+                      <% unless ticket.status == "closed" %>
+                        <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
+                        <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>" title="Hapus"><i class="fa fa-trash"></i></button>
+                      <% end %>
+                    <% else %>
+                      <% if ticket.status == "created" || (ticket.status == "open" && ticket.sub_category.approval_berjenjang == "none") %>
+                        <% if ticket.issued_by == current_user.username %>
+                          <% if ticket.pause_respon == false %>
+                            <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
+                            <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>" title="Hapus"><i class="fa fa-trash"></i></button>
+                          <% end %>
                         <% end %>
                       <% end %>
                     <% end %>
@@ -456,10 +466,10 @@
         $('.assign-teknisi').empty();
         $('.approval-button').empty();
         $('.history').empty();
-        if (data['data_ticket']['current_user'].includes("admin") == true || data['data_ticket']['current_user'].includes("superadmin") == true) {
+        if (data['data_ticket']['current_user'].includes("admin") == true || data['data_ticket']['current_user'].includes("superadmin") == true || data['data_ticket']['current_user'].includes("manajer it") == true) {
           if (data['data_ticket']['status'] == "open" && data['data_ticket']['pause_respon'] == 0) {
             $('.approval-button').append(`
-              <button class="btn btn-info btn-sm assign" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
+              <button class="btn btn-primary btn-sm assign mb-2" data-backdrop="true" data-toggle="modal" data-target="#assign" data-id="${id}">Assigning</button>
             `);
           }
         }
