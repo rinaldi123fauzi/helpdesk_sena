@@ -209,48 +209,20 @@ class Transaksi::TicketsController < ApplicationController
 
   def detail
     @id = params[:id]
-    @getStatus = Ticket.where('id = ?', @id)
     @data = Ticket.find(@id)
-    @history = Approval.where(ticket_id: @id).order(:created_at => :desc)
-    @data_history = []
-    @data_attach = []
 
-    @data.file_ticket.order(:created_at => :desc).each do |data|
-      @data_attach.push(
-        "link" => url_for(data),
-        "nama_file" => data.filename
-      )
-    end
-
-    @history.each do |data|
-      @data_history.push(
-        "created_at" => data.created_at.strftime('%d %b %Y %H:%M:%S'),
-        "issued_by" => data.issued_by,
-        "approve_level" => data.approve_level,
-        "description" => data.description
-      )
-    end
-    
     render json:{
-      data_ticket:{
-        nomor_tiket: @data.no_ticket,
-        dibuat_oleh: @data.issued_by,
-        layanan: @data.category.nama_kategori,
-        sub_layanan: @data.sub_category.nama_sub_kategori,
-        satuan_kerja: @data.work_unit.nama,
-        area: @data.area.nama,
-        deskripsi: @data.description,
-        teknisi: @data.assigned_by,
-        status: @data.status,
-        approval_by: @data.approval_by,
-        pause_respon: @data.pause_respon,
-        current_user: getRole,
-        user: current_user.username,
-        file: @data_attach,
-        history: @data_history,
-        pending_approval: @getStatus.first
-      }
-    }
+      data_ticket: ActiveModelSerializers::SerializableResource.new(@data, 
+        each_serializer: TicketSerializer, 
+        role: getRole, 
+        current_user: current_user.username,
+        file: @data.file_ticket,
+        nama_kategori: @data.category.nama_kategori,
+        nama_sub_kategori: @data.sub_category.nama_sub_kategori,
+        work_unit: @data.work_unit.nama,
+        area: @data.area.nama
+      )
+    }, status: :ok
   end
 
   def getApprovalBerjenjang

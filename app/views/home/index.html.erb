@@ -490,6 +490,11 @@
         },
         success: function(data){
           chart2(data['grafik_teknisi']);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+          setInterval(() => {
+            window.location.href = "/";
+          }, 5000);
         }
       });
     }
@@ -504,6 +509,11 @@
         },
         success: function(data){
           chart1(data['grafik_dashboard']);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+          setInterval(() => {
+            window.location.href = "/";
+          }, 5000);
         }
       });
     }
