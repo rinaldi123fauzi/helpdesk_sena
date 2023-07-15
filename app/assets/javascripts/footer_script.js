@@ -43,3 +43,6 @@ $("#dataTable_sub_kategori").dataTable();
 $("#dataTable_area").dataTable();
 $("#dataTable_material").dataTable();
 $("#dataTable_unit").dataTable();
+$("#dataTable_ticket").dataTable(
+    {bFilter: false, "bLengthChange": false, }
+);
