@@ -34,3 +34,28 @@ Things you may want to cover:
 
 * Diubah counting ticket open ke blink
 
+* dashboard di JavaScript
+=======================
+array_teknisi = [];
+for (let i = 0; i < data['grafik_teknisi']['closed'].length; i++) {
+  const element = data['grafik_teknisi']['closed'][i];
+  const teknisi = element['teknisi'];
+  const durasi = element['durasi'];
+  array_teknisi.push(teknisi);
+}
+          
+let teknisi_final = array_teknisi.filter(onlyUnique);
+
+result_teknisi = [];
+for (let i = 0; i < teknisi_final.length; i++) {
+  const element = teknisi_final[i];
+  for (let i = 0; i < data['grafik_teknisi']['closed'].length; i++) {
+    const element = data['grafik_teknisi']['closed'][i];
+  }
+  result_teknisi.push(element);
+}
+          
+result_final = { ...result_teknisi }
+
+console.log(result_final);
+=========================

@@ -14,7 +14,11 @@ class TicketsController < ApplicationController
       filterKepalaDivisi(@no_ticket)
     else
       if @no_ticket.present?
-        @tickets = Ticket.where(['no_ticket LIKE ?', "#{@no_ticket}%"]).urgency_ordering
+        if @no_ticket.length >= 6
+          @tickets = Ticket.where(['no_ticket LIKE ?', "#{@no_ticket}%"]).urgency_ordering
+        else
+          @tickets = Ticket.limit(10).urgency_ordering
+        end
       else
         @tickets = Ticket.limit(10).urgency_ordering
       end
