@@ -405,7 +405,7 @@
                     <% end %>
                   <% else %>
                     <% if @checkRole.count == 1%>
-                      <% unless ticket.status == "closed" or ticket.status == "inprogress" %>
+                      <% unless ticket.status == "closed" or ticket.status == "inprogress" or ticket.status == "overdue" %>
                         <button class="btn btn-info btn-sm editTiket" data-backdrop="true" data-toggle="modal" data-target="#form-ticket" data-id="<%= ticket.id %>" title="Edit"><i class="fa fa-pencil-square-o"></i></button>
                         <button class="btn btn-danger btn-sm hapusTiket" data-id="<%= ticket.id %>" title="Hapus"><i class="fa fa-trash"></i></button>
                       <% end %>
