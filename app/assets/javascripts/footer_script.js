@@ -37,7 +37,9 @@ $(document).on('click','#close-modal',function(){
 });
 
 $("#dataTable_role").dataTable();
-$("#dataTable_user").dataTable();
+$("#dataTable_user").dataTable(
+    {bFilter: false, "bLengthChange": false, }
+);
 $("#dataTable_kategori").dataTable();
 $("#dataTable_sub_kategori").dataTable();
 $("#dataTable_area").dataTable();

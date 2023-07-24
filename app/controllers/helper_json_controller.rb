@@ -367,6 +367,7 @@ class HelperJsonController < ApplicationController
             render json: [  
                 "status" => "terubah",
             ]
+            flash[:notice] = "Data status berhasil disimpan"
         end
     end
 
