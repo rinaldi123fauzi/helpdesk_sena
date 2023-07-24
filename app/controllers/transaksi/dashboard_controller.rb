@@ -82,7 +82,7 @@ class Transaksi::DashboardController < ApplicationController
     array_closed = []
     @filter = RoleAssignment.left_outer_joins(:user,:role).where('users.username = ? and roles.name = ?', current_user.username, 'manajer it')
     if @filter.count == 1
-      @teknisis = RoleAssignment.left_outer_joins(:user,:role).where('roles.name = ?', 'teknisi').select('users.username')
+      @teknisis = RoleAssignment.left_outer_joins(:user,:role).where('roles.name = ?', 'teknisi').select('users.username').order(:id => :asc)
 
       @teknisis.each do |data|
         for a in 1..12 do

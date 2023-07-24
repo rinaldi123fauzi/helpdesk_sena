@@ -649,13 +649,13 @@
       let array_teknisi1 = [];
       for (let i = 0; i < 12; i++) {
         const element = data['closed'][i];
-        array_teknisi1.push(element['durasi']);
+        array_teknisi1.push(parseFloat(element['durasi']));
       }
 
       let array_teknisi2 = [];
       for (let i = 12; i < 24; i++) {
         const element = data['closed'][i];
-        array_teknisi2.push(element['durasi']);
+        array_teknisi2.push(parseFloat(element['durasi']));
       }
 
       var options = {

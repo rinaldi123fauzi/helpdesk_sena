@@ -134,8 +134,8 @@
               <thead>
                 <tr>
                   <th class="text-center" style="width: 20px;">No</th>
-                  <th>Nama</th>
                   <th>Username</th>
+                  <th>Email</th>
                   <th>Role</th>
                   <th>Status</td>
                   <th class="text-center" style="width: 100px;">Action</th>
@@ -145,8 +145,8 @@
               <% @users.each_with_index do |user, index| %>
                 <tr>
                   <td class="text-center"><%= index+1 %></td>
-                  <td><%= user.name %></td>
                   <td><%= user.username %></td>
+                  <td><%= user.email %></td>
                   <td><%= user.role_assignments.each_with_index.map {|role_assignment| "#{role_assignment.role.try(:name)}"}.join(", ") %></td>
                   <% if user.state %>
                     <td>Aktif</td>
