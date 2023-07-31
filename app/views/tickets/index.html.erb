@@ -438,6 +438,11 @@
 </div>
 
 <script>
+  <% if @checkRole.count == 1 %>
+    setInterval(() => {
+      window.location.href = "/tickets";
+    }, 500000);
+  <% end %>
   $(document).on('keyup', '.deskripsi-eskalasi', function(){
     var value = $(this).val();
     $(".count-character").text("Characters left: " + (100 - value.length));
