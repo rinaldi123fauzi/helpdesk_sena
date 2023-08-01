@@ -1,8 +1,9 @@
 class NumberingTicketService  < ApplicationService
   def call
-    ticket = Ticket.where("extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ? ", Time.current.strftime('%Y'), Time.current.strftime('%m')).last
+    ticket = Ticket.where("extract(year from created_at AT TIME ZONE '+07') = ? and extract(month from created_at AT TIME ZONE '+07') = ? ", Time.current.strftime('%Y'), Time.current.strftime('%m'))
     sequence_number = "001"
-    if Ticket.exists? and (Time.current.strftime('%m') == ticket.created_at.strftime("%m"))
+    if ticket.count == 1
+      ticket = ticket.first
       sequence_number = ticket.no_ticket[6..8]
       int_sequence_number = Integer(sequence_number, 10) + 1
       zero_length = 3 - int_sequence_number.to_s.size
