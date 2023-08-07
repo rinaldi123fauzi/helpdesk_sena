@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tx_errors
   resources :tickets
   devise_for :users, controllers: {
     sessions: 'users/sessions'

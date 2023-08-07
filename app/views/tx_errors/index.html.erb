@@ -1,0 +1,30 @@
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header mt-2">
+      <h4>Data Transaksi Errors</h4>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable_txerror" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Description</th>
+              <th>Waktu</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @tx_errors.each_with_index do |tx_error, index| %>
+              <tr>
+                <td><%= index+1 %></td>
+                <td><%= tx_error.description %></td>
+                <td><%= tx_error.created_at.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

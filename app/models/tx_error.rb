@@ -1,0 +1,2 @@
+class TxError < ApplicationRecord
+end

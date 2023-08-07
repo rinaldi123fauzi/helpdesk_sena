@@ -61,4 +61,10 @@ module ApplicationHelper
         return option
     end
    end
+
+   def txError(description)
+    TxError.create!(
+      :description => description
+    )
+  end
 end

@@ -28,5 +28,8 @@
       %>
       <a class="nav-link" href="<%= tickets_path %>"><i data-feather="file-plus"></i><span>Tiket</span><p class="mb-0"><span class="badge badge-danger"><%= @countTicket %></span></p></a>
     </li>
+    <% if current_user.username == ENV['DEVELOPER'] %>
+      <li class="<%= params[:controller] == "tx_errors" ? " active" : ""%>"><a class="nav-link" href="<%= tx_errors_path %>"><i data-feather="database"></i><span>Transaksi Error</span></a></li>
+    <% end %>
   </ul>
 </aside>
