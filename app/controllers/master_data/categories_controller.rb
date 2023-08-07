@@ -2,49 +2,73 @@ class MasterData::CategoriesController < ApplicationController
   before_action :checkRole
   
   def create
-    Category.create!(
-      'nama_kategori' => params[:namaKategori]
-    )
-    render json: [  
-      "status" => "tersimpan"
-    ]
+    begin
+      Category.create!(
+        'nama_kategori' => params[:namaKategori]
+      )
+      render json: [  
+        "status" => "tersimpan"
+      ]
+    rescue StandardError => e
+      txError(e)
+    end
   end
 
   def update
-    @data = Category.update(params[:id_Kategori],
-      {
-        :nama_kategori => params[:namaKategori]
-      }
-    )
-    if (@data)
-      render json: [  
-        "status" => "tersimpan",
-        "kategori" => params[:namaKategori]
-      ]
+    begin
+      @data = Category.update(params[:id_Kategori],
+        {
+          :nama_kategori => params[:namaKategori]
+        }
+      )
+      if (@data)
+        render json: [  
+          "status" => "tersimpan",
+          "kategori" => params[:namaKategori]
+        ]
+      else
+        txError(@data.to_json)
+      end
+    rescue StandardError => e
+      txError(e)
     end
   end
 
   def detail
-    @data = Category.find(params[:id])
-    render json:[
-      "nama" => @data.nama_kategori
-    ]
+    begin
+      @data = Category.find(params[:id])
+      render json:[
+        "nama" => @data.nama_kategori
+      ]
+    rescue StandardError => e
+      txError(e)
+    end
   end
 
   def delete
-    @data = Category.find(params[:id]).destroy
-    if (@data)
-      render json: [  
-          "status" => "terhapus",
-      ]
+    begin
+      @data = Category.find(params[:id]).destroy
+      if (@data)
+        render json: [  
+            "status" => "terhapus",
+        ]
+      else
+        txError(@data.to_json)
+      end
+    rescue StandardError => e
+      txError(e)
     end
   end
 
   def getAll
-    @data = Category.all
-    render json: [
-      "data_categories" => @data
-    ]
+    begin
+      @data = Category.all
+      render json: [
+        "data_categories" => @data
+      ]
+    rescue StandardError => e
+      txError(e)
+    end
   end
 
   private
