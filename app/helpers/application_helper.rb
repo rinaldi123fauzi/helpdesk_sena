@@ -64,7 +64,9 @@ module ApplicationHelper
 
    def txError(description)
     TxError.create!(
-      :description => description
+      :description => description,
+      :controller => controller_name,
+      :action => action_name
     )
   end
 end
