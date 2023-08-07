@@ -63,8 +63,12 @@ module ApplicationHelper
    end
 
    def txError(description)
+    @array = [
+        "#{description}",
+        current_user.username
+    ]
     TxError.create!(
-      :description => description,
+      :description => @array,
       :controller => controller_name,
       :action => action_name
     )
