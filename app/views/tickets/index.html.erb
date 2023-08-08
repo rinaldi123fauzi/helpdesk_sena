@@ -338,7 +338,7 @@
       <%= form_for :tickets, url: tickets_path, method: :get, html: {class: "form-horizontal", role: "form"} do |f| %>
         <div class="row mb-2" style="margin-bottom: 0px;">
           <div class="col-sm-3">
-            <input type="text" class="form-control number-ticket" name="nomor_tiket" placeholder="Search by nomor tiket">
+            <input type="text" class="form-control number-ticket" name="nomor_tiket" placeholder="Search by nomor tiket" value="<%= params[:nomor_tiket] ? params[:nomor_tiket] : "" %>">
           </div>
           <button class="btn btn-md btn-info search-ticket" type="submit">Filter</button>
         </div>
