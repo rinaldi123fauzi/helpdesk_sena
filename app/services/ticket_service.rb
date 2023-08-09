@@ -10,7 +10,7 @@ class TicketService  < ApplicationService
 
   def call
     if @getRole.include? "kepala divisi"
-      check_user = Position.left_outer_joins(:user,:role).where(['users.username = ? and roles.name = ?', @current_user, "Engineering"])
+      check_user = Position.left_outer_joins(:user,:role).where(['users.username = ? and roles.name = ?', @current_user, ENV["DIVISI_DIATAS_IT"]])
       @check_approval = SubCategory.where('id = ? and approval_berjenjang != ?', @sub_layanan, 'none')
       if check_user.count == 1 # untuk role Engineering
         if @check_approval.first.approval_berjenjang == "none"
@@ -27,7 +27,7 @@ class TicketService  < ApplicationService
             @status = "approval3"
             @approval_by = check_manajer_it.username
           elsif @check_approval.first.approval_berjenjang == "medium"
-            check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
+            check_kadiv = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', ENV["DIVISI_DIATAS_IT"]).select('users.username').first
             @status = "approval2"
             @approval_by = check_kadiv.username
           end

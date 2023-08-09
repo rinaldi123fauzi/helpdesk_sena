@@ -14,7 +14,7 @@ class Transaksi::ApproveController < ApplicationController
         # ini untuk pengajuan ticket langsung ke manajer it / kepala divisi engineering
         positionsIt = RoleAssignment.left_outer_joins(:role, :user).where('users.username = ?', check_ticket.approval_by)
         positionIt = positionsIt.first
-        positionsKadivEngineering = Position.left_outer_joins(:user,:work_unit).where('users.username = ? and work_units.nama = ?', check_ticket.approval_by, 'Engineering')
+        positionsKadivEngineering = Position.left_outer_joins(:user,:work_unit).where('users.username = ? and work_units.nama = ?', check_ticket.approval_by, ENV["DIVISI_DIATAS_IT"])
         ### END ###
 
         # jika approval yang dituju manajer it
@@ -86,7 +86,7 @@ class Transaksi::ApproveController < ApplicationController
                 approval_by = checkRole.username
                 status = "approval3"
               elsif check_ticket.sub_category.approval_berjenjang == "medium"
-                checkRole = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
+                checkRole = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', ENV["DIVISI_DIATAS_IT"]).select('users.username').first
                 approval_by = checkRole.username
                 status = "approval2"
               end
@@ -113,7 +113,7 @@ class Transaksi::ApproveController < ApplicationController
 
       elsif check_ticket.status == "approval1"
         check_ticket = Ticket.find_by_id(params[:id])
-        if check_ticket.work_unit.nama == "Engineering"
+        if check_ticket.work_unit.nama == ENV["DIVISI_DIATAS_IT"]
           check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
           approval_by = check_manajer_it.username
           status = "approval3"
@@ -123,7 +123,7 @@ class Transaksi::ApproveController < ApplicationController
             approval_by = check_manajer_it.username
             status = "approval3"
           elsif check_ticket.sub_category.approval_berjenjang == "medium"
-            checkRole = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', 'Engineering').select('users.username').first
+            checkRole = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', ENV["DIVISI_DIATAS_IT"]).select('users.username').first
             approval_by = checkRole.username
             status = "approval2"
           end
