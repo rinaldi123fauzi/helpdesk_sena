@@ -5,7 +5,7 @@ class Transaksi::TeknisiController < ApplicationController
     begin
       ticket = Ticket.find_by_id(params[:id])
       result = (Time.current - ticket.inprogress_respon) / 1.hours   
-      duration = result.round(2)
+      duration = result.round(2) + ticket.duration
 
       ticket.status = "closed"
       ticket.closed_respon = Time.current
@@ -80,8 +80,13 @@ class Transaksi::TeknisiController < ApplicationController
               :description => params[:deskripsi]
             )
             data = Ticket.find_by_id(params[:id])
+
+            result = (Time.current - data.inprogress_respon) / 1.hours   
+            duration = result.round(2)
+
             data.status = 'open'
             data.pause_respon = 1
+            data.duration = duration
         
             if data.save
               render json:{
@@ -114,6 +119,7 @@ class Transaksi::TeknisiController < ApplicationController
         ticket = check_ticket.first
         ticket.status = 'inprogress'
         ticket.pause_respon = 0
+        ticket.inprogress_respon = Time.current
         ticket.save
 
         ticket = Ticket.find_by_id(params[:id])

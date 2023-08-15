@@ -403,7 +403,7 @@
                       <td><%= ticket.try(:assigned_by) %></td>
                       <td>
                         <% 
-                          result = (ticket.closed_respon - ticket.inprogress_respon) 
+                          result = ticket.duration.hours + ticket.duration.minutes 
                           seconds = result % 60
                           minutes = (result / 60) % 60
                           hours = result / (60 * 60)    
@@ -489,6 +489,7 @@
           tahun: tahun
         },
         success: function(data){
+          console.log(data);
           chart2(data['grafik_teknisi']);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) { 
@@ -658,6 +659,12 @@
         array_teknisi2.push(parseFloat(element['durasi']));
       }
 
+      let array_teknisi5 = [];
+      for (let i = 48; i < 60; i++) {
+        const element = data['closed'][i];
+        array_teknisi5.push(parseFloat(element['durasi']));
+      }
+
       var options = {
           chart: {
               height: 350,
@@ -685,6 +692,10 @@
           {
               name: 'Arief',
               data: array_teknisi2
+          },
+          {
+              name: 'Rinaldi',
+              data: array_teknisi5
           } 
           ],
           xaxis: {
