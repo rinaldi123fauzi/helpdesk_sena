@@ -60,11 +60,11 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'mail.pt-sena.co.id',
+    address:              ENV["EMAIL_ADDRESS"],
     port:                 465,
-    domain:               'pt-sena.co.id',
-    :user_name            => 'mohamad.rinaldi@pt-sena.co.id',
-    :password             => 'PTsena123!@#',
+    domain:               ENV["EMAIL_DOMAIN"],
+    :user_name            => ENV["EMAIL"],
+    :password             => ENV["PASSWORD_EMAIL"],
     ssl:                  true,
     authentication:       :plain,
     enable_starttls_auto: true  }
