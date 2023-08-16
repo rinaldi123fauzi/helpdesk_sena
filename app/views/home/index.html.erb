@@ -364,8 +364,12 @@
                     <th>Satuan Kerja</th>
                     <th>Dibuat Oleh</th>
                     <th>Status Tiket</th>
-                    <th>Waktu Pengerjaan</th>
-                    <th>Waktu Selesai</th>
+                    <%
+=begin%>
+ <th>Waktu Pengerjaan</th>
+                    <th>Waktu Selesai</th> 
+<%
+=end%>
                     <th>Teknisi</th>
                     <th>Durasi Pengerjaan <br> <small>hh:mm:ss</small></th>
                     <th class="text-center" style="width: 100px;">Action</th>
@@ -398,8 +402,12 @@
                           end
                         %>
                       </td>
-                      <td><%= ticket.inprogress_respon.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
-                      <td><%= ticket.closed_respon.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
+                      <%
+=begin%>
+ <td><%= ticket.inprogress_respon.try(:strftime, "%d %b %Y %H:%M:%S") %></td>
+                      <td><%= ticket.closed_respon.try(:strftime, "%d %b %Y %H:%M:%S") %></td> 
+<%
+=end%>
                       <td><%= ticket.try(:assigned_by) %></td>
                       <td>
                         <% 

@@ -307,7 +307,7 @@
       <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5>Eskalasi Tiket</h5>
+            <h5>Pending Tiket</h5>
             <button type="button" class="close" id="close-modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -498,7 +498,7 @@
         if (data['data_ticket']['current_user'].includes("teknisi") == true && data['data_ticket']['teknisi'] == data['data_ticket']['user']) {
           if (data['data_ticket']['status'] == "inprogress") {
             $('.approval-button').append(`
-              <button class="btn btn-info btn-sm eskalasi" data-backdrop="true" data-toggle="modal" data-target="#eskalasi" data-id="${id}">Eskalasi</button>
+              <button class="btn btn-info btn-sm eskalasi" data-backdrop="true" data-toggle="modal" data-target="#eskalasi" data-id="${id}">Pending Tiket</button>
             `);
           }else if(data['data_ticket']['status'] == "open" && data['data_ticket']['pause_respon'] == 1){
             $('.approval-button').append(`
