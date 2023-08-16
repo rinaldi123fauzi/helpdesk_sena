@@ -105,6 +105,7 @@ Rails.application.routes.draw do
 
   namespace :transaksi do
     scope :tickets do
+      get 'sendemail' => 'tickets#tesEmail'
       get 'detail' => 'tickets#detail'
       get 'detail-tiket' => 'tickets#detailTicket'
       get 'list-form' => 'tickets#listForm'

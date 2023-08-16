@@ -1,5 +1,10 @@
 class Transaksi::TicketsController < ApplicationController 
   before_action :checkRole, only: %i[ create update deleteTicket]
+  def tesEmail
+    @email = "rinalfauzi@gmail.com"
+    UserMailer.approval_confirmation(@email).deliver_now
+    # open('https://google.com').read
+  end
 
   def listForm
     begin
