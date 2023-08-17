@@ -1,5 +1,52 @@
-<h1>User#approval_confirmation</h1>
+<h3>Informasi Tiket :</h3>
+<table border="0">
+  <tr>
+    <td>Nomor Tiket</td>
+    <td witdh="20"> : </td>
+    <td><%= @ticket.no_ticket %></td>
+  </tr>
+  <tr>
+    <td>Layanan</td>
+    <td> : </td>
+    <td><%= @ticket.category.nama_kategori %></td>
+  </tr>
+  <tr>
+    <td>Sub Layanan</td>
+    <td> : </td>
+    <td><%= @ticket.sub_category.nama_sub_kategori %></td>
+  </tr>
+  <tr>
+    <td>Dibuat Oleh</td>
+    <td> : </td>
+    <td><%= @ticket.issued_by %></td>
+  </tr>
+  <tr>
+    <td>Divisi</td>
+    <td> : </td>
+    <td><%= @ticket.work_unit.nama  %></td>
+  </tr>
+  <tr>
+    <td>Area</td>
+    <td> : </td>
+    <td><%= @ticket.area.nama  %></td>
+  </tr>
+  <tr>
+    <td>Deskripsi</td>
+    <td> : </td>
+    <td><%= @ticket.description  %></td>
+  </tr>
+</table>
 
-<p>
-  <%= @greeting %>, find me in app/views/user_mailer/approval_confirmation.html.erb
-</p>
+<table border="0">
+  <tr>
+    <td><button id="button"><a href="<%= ENV["WEBSITE"] %>/approval_email/approve?ticket_id=<%= @ticket.id %>&username=<%= @ticket.approval_by %>&token=<%= @token %>" style="color: green;">Approve</a></button></td>
+    <td><button id="button"><a href="<%= ENV["WEBSITE"] %>/approval_email/reject?ticket_id=<%= @ticket.id %>&username=<%= @ticket.approval_by %>&token=<%= @token %>" style="color: red;">Reject</a></button></td>
+  </tr>
+</table>
+
+<small>*Untuk informasi lebih lanjut, silahkan kunjungi website Helpdesk di <a href="<%= ENV["WEBSITE"] %>"><%= ENV["WEBSITE"] %></a></small>
+
+<br>
+<img src="https://www.pt-sena.co.id/images/logo/logo.png" witdh="50">
+
+

@@ -105,7 +105,6 @@ Rails.application.routes.draw do
 
   namespace :transaksi do
     scope :tickets do
-      get 'sendemail' => 'tickets#tesEmail'
       get 'detail' => 'tickets#detail'
       get 'detail-tiket' => 'tickets#detailTicket'
       get 'list-form' => 'tickets#listForm'
@@ -139,6 +138,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :approval_email do
+    collection do
+      get 'approve' => 'approval_email#approval'
+      get 'reject' => 'approval_email#reject'
+    end
+  end
   # resources :categories do
   #   resources :contacts, only: [:index], module: :categories
   # end

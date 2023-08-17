@@ -5,10 +5,11 @@ class UserMailer < ApplicationMailer
   #
   #   en.user_mailer.approval_confirmation.subject
   #
-  def approval_confirmation(user)
+  def approval_confirmation(user,ticket,token)
     @greeting = "Hi"
     @user = user
-
-    mail to: @user, subject: "Test"
+    @ticket = ticket
+    @token = token
+    mail to: @user, subject: "Helpdesk SENA"
   end
 end

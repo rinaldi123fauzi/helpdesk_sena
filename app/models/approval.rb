@@ -13,4 +13,12 @@
 #
 class Approval < ApplicationRecord
   belongs_to :ticket
+
+  after_create :resetToken
+
+  def resetToken
+    user = User.find_by(username: self.issued_by)
+    user.token = nil
+    user.save
+  end
 end
