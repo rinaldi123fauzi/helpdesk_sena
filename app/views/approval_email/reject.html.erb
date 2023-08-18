@@ -57,7 +57,7 @@
           window.location.href = "/approval_email/rejected";
         }else if (data['status'] == 204) {
           $('#kirimReject').text('Submit');
-          $('.notice-reject').html(`<span class="text-danger">Deskripsi wajib diisi</span>`);
+          $('.notice-reject').html(`<span class="text-danger">${data['msg']}</span>`);
         }
       }
     });

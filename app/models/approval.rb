@@ -14,11 +14,17 @@
 class Approval < ApplicationRecord
   belongs_to :ticket
 
-  after_create :resetToken
+  after_create :resetToken, :resetTokenTicket
 
   def resetToken
     user = User.find_by(username: self.issued_by)
     user.token = nil
     user.save
+  end
+
+  def resetTokenTicket
+    ticket = Ticket.find_by(id: self.ticket_id)
+    ticket.token = nil
+    ticket.save
   end
 end

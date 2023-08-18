@@ -35,6 +35,7 @@ class Transaksi::TicketsController < ApplicationController
     begin
       if params[:layanan].length >= 1
         if params[:sub_layanan].length >= 1
+          @token = rand(1111..9999)
           @data = TicketService.call(params[:sub_layanan],params[:approval_by],current_user.username,getRole)
           ActiveRecord::Base.transaction do
             ticket = Ticket.new
@@ -58,8 +59,12 @@ class Transaksi::TicketsController < ApplicationController
                     users = User.where(username: params[:approval_by])
                     if users.count == 1
                       user = users.first
-                      user.token = rand(1111..9999)
+                      user.token = @token
                       user.save
+
+                      ticket = Ticket.find_by(id: ticket.id)
+                      ticket.token = @token
+                      ticket.save
                       UserMailer.approval_confirmation(user.email,ticket,user.token).deliver_now
                     end
                   end
@@ -85,8 +90,12 @@ class Transaksi::TicketsController < ApplicationController
                   users = User.where(username: params[:approval_by])
                   if users.count == 1
                     user = users.first
-                    user.token = rand(1111..9999)
+                    user.token = @token
                     user.save
+
+                    ticket = Ticket.find_by(id: ticket.id)
+                    ticket.token = @token
+                    ticket.save
                     UserMailer.approval_confirmation(user.email,ticket,user.token).deliver_now
                   end
                 end
