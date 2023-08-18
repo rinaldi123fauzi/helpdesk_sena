@@ -142,6 +142,9 @@ Rails.application.routes.draw do
     collection do
       get 'approve' => 'approval_email#approval'
       get 'reject' => 'approval_email#reject'
+      get 'approved' => 'approval_email#approved'
+      get 'rejected' => 'approval_email#rejected'
+      post 'send-reject' => 'approval_email#sendReject'
     end
   end
   # resources :categories do

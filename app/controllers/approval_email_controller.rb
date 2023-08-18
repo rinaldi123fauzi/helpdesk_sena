@@ -1,31 +1,60 @@
 class ApprovalEmailController < ApplicationController 
   skip_before_action :authenticate_user!
+  layout 'approval'
+
+  def approved
+  end
+
+  def rejected
+  end
 
   def reject
-    tickets = Ticket.where(id: params[:ticket_id])
+    checkToken = User.where(username: params[:username], token: params[:token])
+    if checkToken.count == 1 and params[:token].length > 1
+      @ticket_id = params[:ticket_id]
+      @username = params[:username]
+      @token = params[:token]
+    else
+      render json:{
+        status: 404
+      }
+    end
+  end
 
-    if tickets.count == 1
-      @tiket = tickets.first
-
-     
-      @data_attach = []
-      @tiket.file_ticket.order(:created_at => :desc).each do |data|
-        @data_attach.push(
-          "link" => Rails.application.routes.url_helpers.rails_blob_url(data, only_path: true),
-          "nama_file" => data.filename
-        )
+  def sendReject
+    begin
+      checkToken = User.where(username: params[:username], token: params[:token])
+      if checkToken.count == 1 and params[:token].length > 1
+        check_ticket = Ticket.find_by_id(params[:id])
+        unless check_ticket.status == "open"
+          if params[:deskripsi].length != 0
+            Approval.create!(
+              :issued_by => params[:username],
+              :approve_level => 'rejected',
+              :ticket_id => params[:id],
+              :description => params[:deskripsi]
+            )
+            data = Ticket.find_by_id(params[:id])
+            data.status = 'rejected'
+            data.approval_by = params[:username]
+            data.save
+            render json:{
+              status: 200
+            }
+            flash[:notice] = "Data berhasil disimpan"
+          else
+            render json:{
+              status: 204
+            }
+          end
+        end
+      else
+        render json:{
+          status: 404
+        }
       end
-  
-      @history = Approval.where(ticket_id: @tiket.id).order(:created_at => :desc)
-      @data_history = []
-      @history.each do |data|
-        @data_history.push(
-          "created_at" => data.created_at.strftime('%d %b %Y %H:%M:%S'),
-          "issued_by" => data.issued_by,
-          "approve_level" => data.approve_level,
-          "description" => data.description
-        )
-      end
+    rescue StandardError => e
+      txError(e)
     end
   end
 
@@ -59,10 +88,7 @@ class ApprovalEmailController < ApplicationController
             data.save
         
             if data.save
-              render json:{
-                status: 200
-              }
-              flash[:notice] = "Data berhasil disimpan"
+              redirect_to '/approval_email/approved'
             end
           else 
             # jika tidak maka akan dicek apakah approval yang dituju kadiv engineering
@@ -90,10 +116,7 @@ class ApprovalEmailController < ApplicationController
               end
           
               if data.save
-                render json:{
-                  status: 200
-                }
-                flash[:notice] = "Data berhasil disimpan"
+                redirect_to '/approval_email/approved'
               end
             else
               # jika tidak maka akan dicek apakah approval yang dituju projek manajer
@@ -119,10 +142,7 @@ class ApprovalEmailController < ApplicationController
                 end
             
                 if data.save
-                  render json:{
-                    status: 200
-                  }
-                  flash[:notice] = "Data berhasil disimpan"
+                  redirect_to '/approval_email/approved'
                 end
               # jika tidak maka approval yang dituju kadiv masing - masing satuan kerja
               else 
@@ -155,10 +175,7 @@ class ApprovalEmailController < ApplicationController
                 end
             
                 if data.save
-                  render json:{
-                    status: 200
-                  }
-                  flash[:notice] = "Data berhasil disimpan"
+                  redirect_to '/approval_email/approved'
                 end
               end
             end
@@ -202,10 +219,7 @@ class ApprovalEmailController < ApplicationController
           end
       
           if data.save
-            render json:{
-              status: 200
-            }
-            flash[:notice] = "Data berhasil disimpan"
+            redirect_to '/approval_email/approved'
           end
         elsif check_ticket.status == "approval2"
           check_manajer_it = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
@@ -230,10 +244,7 @@ class ApprovalEmailController < ApplicationController
           end
           
           if data.save!
-            render json:{
-              status: 200
-            }
-            flash[:notice] = "Data berhasil disimpan"
+            redirect_to '/approval_email/approved'
           end
         elsif check_ticket.status == "approval3"
           Approval.create!(
@@ -247,10 +258,7 @@ class ApprovalEmailController < ApplicationController
           data.save
       
           if data.save
-            render json:{
-              status: 200
-            }
-            flash[:notice] = "Data berhasil disimpan"
+            redirect_to '/approval_email/approved'
           end
         end
       else

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Helpdesk</title>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= favicon_link_tag 'sena.png', rel: 'icon' %>
+    <link 
+  href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" 
+  rel="stylesheet"  type='text/css'>
+</head>
+  <body>
+    <div class="loader"></div>
+      <div id="app">
+        <div class="main-wrapper main-wrapper-1">
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+    <!-- General JS Scripts -->
+    <%= javascript_include_tag 'footer_script', 'data-turbolinks-track': 'reload' %>
+  </body>
+</html>

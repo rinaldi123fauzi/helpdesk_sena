@@ -1,125 +1,65 @@
 <div class="container w-80">
   <div class="card shadow mb-4">
     <div class="card-header mt-2">
-      <h4>Detail Tiket</h4>
+      <h4>Reject Tiket</h4>
     </div>
     <hr>
     <div class="card-body">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Nomor Tiket</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="detail-nomor-tiket" value="<%= @tiket.no_ticket %>" disabled>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Layanan</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="detail-layanan" value="<%= @tiket.category.nama_kategori %>" disabled>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Dibuat Oleh</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="detail-dibuat-oleh" value="<%= @tiket.issued_by %>" disabled>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Sub Layanan</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="detail-sub-layanan" value="<%= @tiket.sub_category.nama_sub_kategori %>" disabled>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Divisi</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="detail-satuan-kerja" value="<%= @tiket.work_unit.nama %>" disabled>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Area</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="detail-area" value="<%= @tiket.area.nama %>" disabled>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-12">
-          <div class="form-group">
-            <label>Deskripsi</label>
-            <div class="input-group">
-              <textarea id="detail-deskripsi" class="w-100" style="height: 90px;" value="<%= @tiket.description %>" readonly></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Teknisi</label>
-            <input type="text" class="form-control" id="detail-area" value="<%= @tiket.assigned_by %>" disabled>
-          </div>
-        </div>
-
-        <div class="col-md-7">
-          <div class="form-group">
-            <label>Attachment</label>
-            <br>
-            <% @data_attach.each do |data_file| %>
-              <a href="<%= data_file['link'] %>" target="_blank"><%= data_file['nama_file'] %></a><br>
-            <% end %>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label style="color: transparent;">approval</label>
-            <div class="row">
-             <button class="btn btn-info btn-sm col-md-6 approve" data-id="${id}">Approve</button>
-             <button class="btn btn-danger btn-sm col-md-5 ml-2 reject" data-backdrop="true" data-toggle="modal" data-target="#reject" data-id="${id}">Reject</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <hr>
-      <div class="section-body">
-        <h5 class="section-title">Histories</h5>
+      <form>
         <div class="row">
-          <div class="col-12">
-            <div class="activities">
-
-              <% @data_history.each do |data|%>
-                <div class="activity">
-                  <div class="activity-icon bg-primary text-white">
-                    <i class="fas fa-history"></i>
-                  </div>
-                  <div class="activity-detail">
-                    <div class="mb-2">
-                      <span class="text-job"><%= data['created_at'] %></span>
-                      <span class="bullet"></span>
-                      <a class="text-job" href="#"><%= data['issued_by'] %></a>
-                    </div>
-                    <small style="font-weight: bold;">Status : <%= data['approve_level'] %></small>
-                    <p><%= data['description'] %></p>
-                  </div>
-                </div>
-              <% end %>
-
+          <input type="hidden" id="id" value="<%= @ticket_id %>">
+          <input type="hidden" id="username" value="<%= @username %>">
+          <input type="hidden" id="token" value="<%= @token %>">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label>Deskripsi</label>
+              <textarea class="deskripsi-reject" maxlength="100"></textarea>
+              <div class="count-character-reject"></div>
+              <div class="notice-reject"></div>
             </div>
           </div>
+          <div class="col-md-4">
+            <button class="btn btn-sm btn-info" id="kirimReject">Simpan</button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>
 
 <script>
+  $(document).on('keyup', '.deskripsi-reject', function(){
+    var value = $(this).val();
+    console.log(value);
+    $(".count-character-reject").text("Characters left: " + (100 - value.length));
+    $('.notice-reject').empty();
+  });
 
+  $(document).on('click', '#kirimReject', function(e){
+    e.preventDefault();
+    var id = $('#id').val();
+    var username = $('#username').val();
+    var token = $('#token').val();
+    var deskripsi = $('.deskripsi-reject').val();
+    $('#kirimReject').text('Loading...');
+    $.ajax({
+      url: "/approval_email/send-reject",
+      method: 'POST',
+      data : {
+        authenticity_token: '<%= form_authenticity_token %>',
+        id:id,
+        username:username,
+        token:token,
+        deskripsi:deskripsi
+      },
+      success: function(data){
+        if (data['status'] == 200) {
+          window.location.href = "/approval_email/rejected";
+        }else if (data['status'] == 204) {
+          $('#kirimReject').text('Submit');
+          $('.notice-reject').html(`<span class="text-danger">Deskripsi wajib diisi</span>`);
+        }
+      }
+    });
+  });
 </script>
