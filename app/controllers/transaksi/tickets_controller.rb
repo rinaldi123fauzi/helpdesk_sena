@@ -65,7 +65,12 @@ class Transaksi::TicketsController < ApplicationController
                       ticket = Ticket.find_by(id: ticket.id)
                       ticket.token = @token
                       ticket.save
-                      UserMailer.approval_confirmation(user.email,ticket,user.token).deliver_now
+                      SenderEmail.create!(
+                        email_to: user.email,
+                        parent_id: ticket.id,
+                        token: user.token,
+                        status: 'not-yet-sent'
+                      )
                     end
                   end
                   render json:{
@@ -96,7 +101,12 @@ class Transaksi::TicketsController < ApplicationController
                     ticket = Ticket.find_by(id: ticket.id)
                     ticket.token = @token
                     ticket.save
-                    UserMailer.approval_confirmation(user.email,ticket,user.token).deliver_now
+                    SenderEmail.create!(
+                      email_to: user.email,
+                      parent_id: ticket.id,
+                      token: user.token,
+                      status: 'not-yet-sent'
+                    )
                   end
                 end
                 render json:{

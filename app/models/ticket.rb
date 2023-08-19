@@ -20,6 +20,7 @@
 #  closed_respon     :datetime
 #  pause_respon      :boolean          default(FALSE)
 #  duration          :decimal(, )
+#  token             :integer
 #
 class Ticket < ApplicationRecord
   belongs_to :category

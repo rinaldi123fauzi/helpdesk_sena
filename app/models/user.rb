@@ -14,6 +14,7 @@
 #  username               :string
 #  state                  :boolean          default(TRUE)
 #  user_type              :string
+#  token                  :integer
 #
 class User < ApplicationRecord
   # Include default devise modules. Others available are:

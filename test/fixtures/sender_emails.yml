@@ -1,0 +1,24 @@
+# == Schema Information
+#
+# Table name: sender_emails
+#
+#  id         :bigint           not null, primary key
+#  email_to   :string
+#  parent_id  :integer
+#  token      :integer
+#  status     :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  email_to: MyString
+  parent_id: 1
+  token: 1
+  status: MyString
+
+two:
+  email_to: MyString
+  parent_id: 1
+  token: 1
+  status: MyString

@@ -22,6 +22,7 @@ set :output, {:error => "log/cron_error_log.log"}
 ENV.each { |k, v| env(k, v) }
 every 1.minute do
     rake 'respon_ticket:set_respon'
+    rake 'sender_email:set_respon'
 end
 
 # Learn more: http://github.com/javan/whenever

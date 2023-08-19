@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :sender_emails
   resources :tx_errors
   resources :tickets
   devise_for :users, controllers: {

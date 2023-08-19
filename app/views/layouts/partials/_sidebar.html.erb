@@ -28,8 +28,9 @@
       %>
       <a class="nav-link" href="<%= tickets_path %>"><i data-feather="file-plus"></i><span>Tiket</span><p class="mb-0"><span class="badge badge-danger"><%= @countTicket %></span></p></a>
     </li>
-    <% if current_user.username == ENV['DEVELOPER'] %>
-      <li class="<%= params[:controller] == "tx_errors" ? " active" : ""%>"><a class="nav-link" href="<%= tx_errors_path %>"><i data-feather="database"></i><span>Transaksi Error</span></a></li>
+    <% if current_user.roles.any? { |r| r.name == 'teknisi'} %>
+      <li class="<%= params[:controller] == "tx_errors" ? " active" : ""%>"><a class="nav-link" href="<%= tx_errors_path %>"><i data-feather="database"></i><span>Log Error</span></a></li>
+      <li class="<%= params[:controller] == "sender_emails" ? " active" : ""%>"><a class="nav-link" href="<%= sender_emails_path %>"><i data-feather="database"></i><span>Log Transaksi Email</span></a></li>
     <% end %>
   </ul>
 </aside>

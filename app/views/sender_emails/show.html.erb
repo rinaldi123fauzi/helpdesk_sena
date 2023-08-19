@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Email to:</strong>
+  <%= @sender_email.email_to %>
+</p>
+
+<p>
+  <strong>Parent:</strong>
+  <%= @sender_email.parent_id %>
+</p>
+
+<p>
+  <strong>Token:</strong>
+  <%= @sender_email.token %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @sender_email.status %>
+</p>
+
+<%= link_to 'Edit', edit_sender_email_path(@sender_email) %> |
+<%= link_to 'Back', sender_emails_path %>

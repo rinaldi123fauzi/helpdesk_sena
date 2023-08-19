@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header mt-2">
+      <h4>Data Transaksi Email</h4>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable_txerror" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Email to</th>
+              <th>Nomor Tiket</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @sender_emails.each_with_index do |sender_email, index| %>
+              <tr>
+                <td><%= index+1 %></td>
+                <td><%= sender_email.email_to %></td>
+                <td>
+                  <% ticket = Ticket.find_by(id: sender_email.parent_id) %>
+                  <%= ticket.no_ticket %>
+                </td>
+                <td><%= sender_email.status %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+

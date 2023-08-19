@@ -119,7 +119,12 @@ class ApprovalEmailController < ApplicationController
                   user = users.first
                   user.token = @token
                   user.save
-                  UserMailer.approval_confirmation(user.email,data,user.token).deliver_now
+                  SenderEmail.create!(
+                    email_to: user.email,
+                    parent_id: data.id,
+                    token: user.token,
+                    status: 'not-yet-sent'
+                  )
                 end
             
                 if data.save
@@ -146,7 +151,12 @@ class ApprovalEmailController < ApplicationController
                     user = users.first
                     user.token = @token
                     user.save
-                    UserMailer.approval_confirmation(user.email,data,user.token).deliver_now
+                    SenderEmail.create!(
+                      email_to: user.email,
+                      parent_id: data.id,
+                      token: user.token,
+                      status: 'not-yet-sent'
+                    )
                   end
               
                   if data.save
@@ -180,7 +190,12 @@ class ApprovalEmailController < ApplicationController
                     user = users.first
                     user.token = @token
                     user.save
-                    UserMailer.approval_confirmation(user.email,data,user.token).deliver_now
+                    SenderEmail.create!(
+                      email_to: user.email,
+                      parent_id: data.id,
+                      token: user.token,
+                      status: 'not-yet-sent'
+                    )
                   end
               
                   if data.save
@@ -225,7 +240,12 @@ class ApprovalEmailController < ApplicationController
               user = users.first
               user.token = @token
               user.save
-              UserMailer.approval_confirmation(user.email,data,user.token).deliver_now
+              SenderEmail.create!(
+                email_to: user.email,
+                parent_id: data.id,
+                token: user.token,
+                status: 'not-yet-sent'
+              )
             end
         
             if data.save
@@ -251,7 +271,12 @@ class ApprovalEmailController < ApplicationController
               user = users.first
               user.token = @token
               user.save
-              UserMailer.approval_confirmation(user.email,data,user.token).deliver_now
+              SenderEmail.create!(
+                email_to: user.email,
+                parent_id: data.id,
+                token: user.token,
+                status: 'not-yet-sent'
+              )
             end
             
             if data.save!
