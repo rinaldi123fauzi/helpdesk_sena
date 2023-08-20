@@ -12,6 +12,7 @@
               <th>Email to</th>
               <th>Nomor Tiket</th>
               <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
 
@@ -22,9 +23,14 @@
                 <td><%= sender_email.email_to %></td>
                 <td>
                   <% ticket = Ticket.find_by(id: sender_email.parent_id) %>
-                  <%= ticket.no_ticket %>
+                  <%= ticket ? ticket.no_ticket : "" %>
                 </td>
                 <td><%= sender_email.status %></td>
+                <td>
+                  <%= link_to sender_email_path(sender_email), method: :delete, class: 'btn btn-danger btn-circle btn-sm' do %>
+                    <i class="fas fa-trash-alt"></i>
+                  <% end %>
+                </td>
               </tr>
             <% end %>
           </tbody>
