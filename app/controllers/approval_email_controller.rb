@@ -125,6 +125,7 @@ class ApprovalEmailController < ApplicationController
                     token: user.token,
                     status: 'not-yet-sent'
                   )
+                  Resque.enqueue_in(0, SenderEmailWorker)
                 end
             
                 if data.save
@@ -157,6 +158,7 @@ class ApprovalEmailController < ApplicationController
                       token: user.token,
                       status: 'not-yet-sent'
                     )
+                    Resque.enqueue_in(0, SenderEmailWorker)
                   end
               
                   if data.save
@@ -196,6 +198,7 @@ class ApprovalEmailController < ApplicationController
                       token: user.token,
                       status: 'not-yet-sent'
                     )
+                    Resque.enqueue_in(0, SenderEmailWorker)
                   end
               
                   if data.save
@@ -246,6 +249,7 @@ class ApprovalEmailController < ApplicationController
                 token: user.token,
                 status: 'not-yet-sent'
               )
+              Resque.enqueue_in(0, SenderEmailWorker)
             end
         
             if data.save
@@ -277,6 +281,7 @@ class ApprovalEmailController < ApplicationController
                 token: user.token,
                 status: 'not-yet-sent'
               )
+              Resque.enqueue_in(0, SenderEmailWorker)
             end
             
             if data.save!

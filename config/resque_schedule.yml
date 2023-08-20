@@ -1,0 +1,4 @@
+my_delayed_job:
+  every: false
+  queue: my_queue
+  class: MyWorker

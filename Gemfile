@@ -81,3 +81,5 @@ gem "annotate"
 gem 'active_model_serializers'
 gem 'whenever'
 gem "foreman", "~> 0.87.2"
+gem 'resque'
+gem 'resque-scheduler'
