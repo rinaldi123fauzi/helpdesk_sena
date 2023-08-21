@@ -39,8 +39,8 @@
 
 <table border="0">
   <tr>
-    <td><button id="button"><a href="<%= ENV["WEBSITE"] %>/approval_email/approve?ticket_id=<%= @ticket.id %>&username=<%= @ticket.approval_by %>&token=<%= @token %>" style="color: green;">Approve</a></button></td>
-    <td><button id="button"><a href="<%= ENV["WEBSITE"] %>/approval_email/reject?ticket_id=<%= @ticket.id %>&username=<%= @ticket.approval_by %>&token=<%= @token %>" style="color: red;">Reject</a></button></td>
+    <td><a href="<%= ENV["WEBSITE"] %>/approval_email/approve?ticket_id=<%= @ticket.id %>&username=<%= @ticket.approval_by %>&token=<%= @token %>" style="color: green;">Approve</a></td>
+    <td><a href="<%= ENV["WEBSITE"] %>/approval_email/reject?ticket_id=<%= @ticket.id %>&username=<%= @ticket.approval_by %>&token=<%= @token %>" style="color: red;">Reject</a></td>
   </tr>
 </table>
 

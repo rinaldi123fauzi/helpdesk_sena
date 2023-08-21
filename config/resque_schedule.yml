@@ -1,4 +1,5 @@
 my_delayed_job:
-  every: false
+  every: '2s'
   queue: my_queue
   class: MyWorker
+  description: "This job puts something every 1 minute"
