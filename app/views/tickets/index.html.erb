@@ -992,7 +992,8 @@
     $('#id_tiket_assign').val(id);
   });
 
-  $(document).on('click', '#kirimTiket', function(){
+  $(document).on('click', '#kirimTiket', function(e){
+    e.preventDefault();
     var id = $('#id_tiket_assign').val();
     var teknisi = $('#assign_teknisi').val();
     $('#kirimTiket').text('Loading...');
