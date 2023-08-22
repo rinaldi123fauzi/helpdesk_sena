@@ -1,9 +1,9 @@
 class MyWorker
   @queue = :my_queue
 
-  def self.perform
+  def self.perform(argument1)
     # Perform your task here
-    puts "Performing task"
+    puts "Performing task #{argument1}"
   end
 end
   

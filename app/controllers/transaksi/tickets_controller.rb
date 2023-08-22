@@ -71,7 +71,8 @@ class Transaksi::TicketsController < ApplicationController
                         token: user.token,
                         status: 'not-yet-sent'
                       )
-                      Resque.enqueue_in(0, SenderEmailWorker)
+                      @sender = SenderEmail.last
+                      Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
                     end
                   end
                   render json:{
@@ -108,7 +109,8 @@ class Transaksi::TicketsController < ApplicationController
                       token: user.token,
                       status: 'not-yet-sent'
                     )
-                    Resque.enqueue_in(0, SenderEmailWorker)
+                    @sender = SenderEmail.last
+                    Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
                   end
                 end
                 render json:{

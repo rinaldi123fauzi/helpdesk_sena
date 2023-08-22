@@ -148,6 +148,7 @@ Rails.application.routes.draw do
       post 'send-reject' => 'approval_email#sendReject'
     end
   end
+  mount Resque::Server.new, at: "/resque"
   # resources :categories do
   #   resources :contacts, only: [:index], module: :categories
   # end

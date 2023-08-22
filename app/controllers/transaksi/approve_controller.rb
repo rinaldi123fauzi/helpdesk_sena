@@ -3,6 +3,7 @@ class Transaksi::ApproveController < ApplicationController
 
   def approval
     begin
+      @token = rand(1111..9999)
       check_ticket = Ticket.find_by_id(params[:id])
 
       if check_ticket.status == "created"
@@ -50,7 +51,22 @@ class Transaksi::ApproveController < ApplicationController
             data = Ticket.find_by_id(params[:id])
             data.status = status
             data.approval_by =  approval_by
+            data.token = @token
             data.save
+            users = User.where(username: data.approval_by)
+            if users.count == 1
+              user = users.first
+              user.token = @token
+              user.save
+              SenderEmail.create!(
+                email_to: user.email,
+                parent_id: data.id,
+                token: user.token,
+                status: 'not-yet-sent'
+              )
+              @sender = SenderEmail.last
+              Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
+            end
         
             if data.save
               render json:{
@@ -71,7 +87,23 @@ class Transaksi::ApproveController < ApplicationController
               data = Ticket.find_by_id(params[:id])
               data.status = 'approval1'
               data.approval_by =  kadiv.user.username
+              data.token = @token
               data.save
+
+              users = User.where(username: data.approval_by)
+              if users.count == 1
+                user = users.first
+                user.token = @token
+                user.save
+                SenderEmail.create!(
+                  email_to: user.email,
+                  parent_id: data.id,
+                  token: user.token,
+                  status: 'not-yet-sent'
+                )
+                @sender = SenderEmail.last
+                Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
+              end
           
               if data.save
                 render json:{
@@ -99,7 +131,23 @@ class Transaksi::ApproveController < ApplicationController
               data = Ticket.find_by_id(params[:id])
               data.status = status
               data.approval_by =  approval_by
+              data.token = @token
               data.save
+
+              users = User.where(username: data.approval_by)
+              if users.count == 1
+                user = users.first
+                user.token = @token
+                user.save
+                SenderEmail.create!(
+                  email_to: user.email,
+                  parent_id: data.id,
+                  token: user.token,
+                  status: 'not-yet-sent'
+                )
+                @sender = SenderEmail.last
+                Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
+              end
           
               if data.save
                 render json:{
@@ -138,7 +186,23 @@ class Transaksi::ApproveController < ApplicationController
         data = Ticket.find_by_id(params[:id])
         data.status = status
         data.approval_by = approval_by
+        data.token = @token
         data.save
+
+        users = User.where(username: data.approval_by)
+        if users.count == 1
+          user = users.first
+          user.token = @token
+          user.save
+          SenderEmail.create!(
+            email_to: user.email,
+            parent_id: data.id,
+            token: user.token,
+            status: 'not-yet-sent'
+          )
+          @sender = SenderEmail.last
+          Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
+        end
     
         if data.save
           render json:{
@@ -159,7 +223,22 @@ class Transaksi::ApproveController < ApplicationController
         data = Ticket.find_by_id(params[:id])
         data.status = status
         data.approval_by = approval_by
+        data.token = @token
         if data.save!
+          users = User.where(username: data.approval_by)
+          if users.count == 1
+            user = users.first
+            user.token = @token
+            user.save
+            SenderEmail.create!(
+              email_to: user.email,
+              parent_id: data.id,
+              token: user.token,
+              status: 'not-yet-sent'
+            )
+            @sender = SenderEmail.last
+            Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
+          end
           render json:{
             status: 200
           }

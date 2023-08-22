@@ -3,3 +3,5 @@ my_delayed_job:
   queue: my_queue
   class: MyWorker
   description: "This job puts something every 1 minute"
+  args:
+    - argument1
