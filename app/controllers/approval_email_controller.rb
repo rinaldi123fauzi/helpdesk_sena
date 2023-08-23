@@ -143,16 +143,31 @@ class ApprovalEmailController < ApplicationController
               else
                 # jika tidak maka akan dicek apakah approval yang dituju projek manajer
                 if positions.count == 0
+                  if check_ticket.work_unit.nama == ENV["DIVISI_DIATAS_IT"]
+                    if check_ticket.sub_category.approval_berjenjang == "low"
+                      checkRole = RoleAssignment.left_outer_joins(:role, :user).where('roles.name = ?', 'manajer it').select('users.username').first
+                      approval_by = checkRole.username
+                      status = "approval3"
+                    elsif check_ticket.sub_category.approval_berjenjang == "medium"
+                      checkRole = Position.left_outer_joins(:work_unit,:user).where('work_units.nama = ?', ENV["DIVISI_DIATAS_IT"]).select('users.username').first
+                      approval_by = checkRole.username
+                      status = "approval2"
+                    end
+                  else
+                    kadiv = Position.find_by_work_unit_id(check_ticket.work_unit_id)
+                    status = "approval1"
+                    approval_by = kadiv.user.username
+                  end
                   kadiv = Position.find_by_work_unit_id(check_ticket.work_unit_id)
                   Approval.create!(
                     :issued_by => params[:username],
-                    :approve_level => 'approval1',
+                    :approve_level => status,
                     :description => 'tiket disetujui',
                     :ticket_id => params[:ticket_id],
                   )
                   data = Ticket.find_by_id(params[:ticket_id])
-                  data.status = 'approval1'
-                  data.approval_by =  kadiv.user.username
+                  data.status = status
+                  data.approval_by =  approval_by
                   data.token = @token
                   data.save
   

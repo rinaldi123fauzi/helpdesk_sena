@@ -2,7 +2,11 @@ class MasterController < ApplicationController
   def index
     @roles = Role.all.order("CREATED_AT ASC")
     if params[:user_email].present?
-      @users = User.where(['email LIKE (?)', "#{params[:user_email]}%"]).order("CREATED_AT ASC").limit(20)
+      if params[:user_email].match(/(@)/)
+        @users = User.where(['email LIKE (?)', "#{params[:user_email]}%"]).order("CREATED_AT ASC").limit(20)
+      else
+        @users = User.where(['username LIKE (?)', "#{params[:user_email]}%"]).order("CREATED_AT ASC").limit(20)
+      end
     else
       @users = User.all.order("CREATED_AT ASC").limit(10)
     end
