@@ -141,6 +141,7 @@ Rails.application.routes.draw do
 
   resources :approval_email do
     collection do
+      get 'completed' => 'approval_email#completed'
       get 'approve' => 'approval_email#approval'
       get 'reject' => 'approval_email#reject'
       get 'approved' => 'approval_email#approved'

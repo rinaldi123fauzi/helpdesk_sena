@@ -8,10 +8,18 @@ class ApprovalEmailController < ApplicationController
   def rejected
   end
 
+  def completed
+  end
+
   def reject
-    @ticket_id = params[:ticket_id]
-    @username = params[:username]
-    @token = params[:token]
+    tickets = Ticket.where(id: params[:ticket_id], token: params[:token])
+    if tickets.count == 1
+      @ticket_id = params[:ticket_id]
+      @username = params[:username]
+      @token = params[:token]
+    else
+      redirect_to '/approval_email/completed'
+    end
   end
 
   def sendReject
@@ -308,14 +316,10 @@ class ApprovalEmailController < ApplicationController
             end
           end
         else
-          render json:{
-            status: 404
-          }
+          redirect_to '/approval_email/completed'
         end
       else
-        render json:{
-          status: 404
-        }
+        redirect_to '/approval_email/completed'
       end
     rescue StandardError => e
       txError(e)
