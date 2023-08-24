@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    if current_user.roles.any? {|r| r.name == "user"}
+    if current_user.roles.any? {|r| r.name == "user" || r.name == "kepala divisi"}
       @status_created = Ticket.where(status: 'created', issued_by: current_user.username).count
       @status_open = Ticket.where(status: 'open', issued_by: current_user.username).count
       @status_approval = Ticket.where('status IN (?) and issued_by = ?', ['approval1','approval2','approval3'], current_user.username).count
