@@ -374,8 +374,6 @@
                       end
                     when "created"
                       concat "<span class='badge badge-transparent'>#{ticket.status}</span>".html_safe
-                    when "approval1"
-                      concat "<span class='badge badge-info'>#{ticket.status}</span>".html_safe
                     when "overdue"
                       concat "<span class='badge badge-warning'>#{ticket.status}</span>".html_safe
                     when "rejected"
@@ -383,7 +381,7 @@
                     when "inprogress"
                       concat "<span class='badge badge-success'>#{ticket.status}</span>".html_safe
                     else
-                      concat "<span class='badge badge-primary'>#{ticket.status}</span>".html_safe
+                      concat "<span class='badge badge-info'>Pending</span> <small class='text-warning'>Approval</small>".html_safe
                     end
                   %>
                 </td>

@@ -15,7 +15,7 @@ class Transaksi::DashboardController < ApplicationController
     array_closed = []
     array_rejected = []
 
-    if current_user.roles.any? {|r| r.name == "user" || r.name == "kepala divisi"}
+    if current_user.roles.any? {|r| r.name == "user" || r.name == "kepala divisi" || r.name == "manajer it"}
       for a in 1..12 do
         if a <= 9
           bulan = "0"+a.to_s

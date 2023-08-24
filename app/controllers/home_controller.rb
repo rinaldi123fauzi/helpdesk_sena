@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    if current_user.roles.any? {|r| r.name == "user" || r.name == "kepala divisi"}
+    if current_user.roles.any? {|r| r.name == "user" || r.name == "kepala divisi" || r.name == "manajer it"}
       @status_created = Ticket.where(status: 'created', issued_by: current_user.username).count
       @status_open = Ticket.where(status: 'open', issued_by: current_user.username).count
       @status_approval = Ticket.where('status IN (?) and issued_by = ?', ['approval1','approval2','approval3'], current_user.username).count
@@ -9,6 +9,7 @@ class HomeController < ApplicationController
       @status_closed = Ticket.where(status: 'closed', issued_by: current_user.username).count
       @status_rejected = Ticket.where(status: 'rejected', issued_by: current_user.username).count
       @all = Ticket.where(issued_by: current_user.username).count
+      @tickets = Ticket.where.not('assigned_by IS ?', nil).where(status: 'closed', pause_respon: 0)
     else
       @status_created = Ticket.where(status: 'created').count
       @status_open = Ticket.where(status: 'open').count
@@ -18,7 +19,6 @@ class HomeController < ApplicationController
       @status_closed = Ticket.where(status: 'closed').count
       @status_rejected = Ticket.where(status: 'rejected').count
       @all = Ticket.count
-      @tickets = Ticket.where.not('assigned_by IS ?', nil).where(status: 'closed', pause_respon: 0)
     end
   end
 end
