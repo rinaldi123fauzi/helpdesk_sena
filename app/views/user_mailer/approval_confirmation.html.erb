@@ -35,6 +35,24 @@
     <td> : </td>
     <td><%= @ticket.description  %></td>
   </tr>
+  <tr>
+    <td>Lampiran</td>
+    <td> : </td>
+    <td>
+      <%
+        @data_attach = []
+        @ticket.file_ticket.order(:created_at => :desc).each do |data|
+          @data_attach.push(
+            "link" => Rails.application.routes.url_helpers.rails_blob_url(data, only_path: true),
+            "nama_file" => data.filename
+          )
+        end
+      %>
+      <% @data_attach.each do |dataFile| %>
+        <a href="<%= ENV["WEBSITE"] %><%= dataFile['link'] %>"><%= dataFile['nama_file'] %></a><br>
+      <% end %>
+    </td>
+  </tr>
 </table>
 
 <table border="0">
