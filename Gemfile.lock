@@ -162,6 +162,7 @@ GEM
     multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
+    mysql2 (0.5.5)
     net-imap (0.3.7)
       date
       net-protocol
@@ -346,6 +347,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)
+  mysql2
   net-ldap
   pg (>= 0.18, < 2.0)
   psych (< 4)

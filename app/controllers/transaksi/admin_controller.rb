@@ -1,4 +1,4 @@
-class Transaksi::TicketsController < ApplicationController 
+class Transaksi::AdminController < ApplicationController 
   before_action :checkRole
   def assignTicket
     begin
@@ -29,7 +29,7 @@ class Transaksi::TicketsController < ApplicationController
   private
   
   def checkRole
-    unless current_user.can? { |permissions| permissions.admin.manage? } 
+    if getRole.include? "user" or getRole.include? "kepala divisi"
       render json:{
         status: 401,
         msg: "Unauthorized"

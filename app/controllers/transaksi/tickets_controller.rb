@@ -35,7 +35,6 @@ class Transaksi::TicketsController < ApplicationController
     begin
       if params[:layanan].length >= 1
         if params[:sub_layanan].length >= 1
-          @token = rand(1111..9999)
           @data = TicketService.call(params[:sub_layanan],params[:approval_by],current_user.username,getRole)
           ActiveRecord::Base.transaction do
             ticket = Ticket.new
@@ -55,25 +54,8 @@ class Transaksi::TicketsController < ApplicationController
                 end
 
                 if ticket.save
-                  unless params[:approval_by].nil?
-                    users = User.where(username: params[:approval_by])
-                    if users.count == 1
-                      user = users.first
-                      user.token = @token
-                      user.save
-
-                      ticket = Ticket.find_by(id: ticket.id)
-                      ticket.token = @token
-                      ticket.save
-                      SenderEmail.create!(
-                        email_to: user.email,
-                        parent_id: ticket.id,
-                        token: user.token,
-                        status: 'not-yet-sent'
-                      )
-                      @sender = SenderEmail.last
-                      Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
-                    end
+                  unless @data[1].nil?
+                    sendNotifEmail(@data[1], ticket)
                   end
                   render json:{
                     status: 200
@@ -93,25 +75,8 @@ class Transaksi::TicketsController < ApplicationController
               end
             else
               if ticket.save
-                unless params[:approval_by].nil?
-                  users = User.where(username: params[:approval_by])
-                  if users.count == 1
-                    user = users.first
-                    user.token = @token
-                    user.save
-
-                    ticket = Ticket.find_by(id: ticket.id)
-                    ticket.token = @token
-                    ticket.save
-                    SenderEmail.create!(
-                      email_to: user.email,
-                      parent_id: ticket.id,
-                      token: user.token,
-                      status: 'not-yet-sent'
-                    )
-                    @sender = SenderEmail.last
-                    Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
-                  end
+                unless @data[1].nil?
+                  sendNotifEmail(@data[1], ticket)
                 end
                 render json:{
                   status: 200
@@ -168,6 +133,9 @@ class Transaksi::TicketsController < ApplicationController
                 end
 
                 if ticket.save
+                  unless @data[1].nil?
+                    sendNotifEmail(@data[1], ticket)
+                  end
                   render json: { 
                     status: 200
                   }
@@ -186,6 +154,9 @@ class Transaksi::TicketsController < ApplicationController
               end
             else
               if ticket.save
+                unless @data[1].nil?
+                  sendNotifEmail(@data[1], ticket)
+                end
                 render json: { 
                   status: 200
                 }
@@ -215,6 +186,28 @@ class Transaksi::TicketsController < ApplicationController
       end
     rescue StandardError => e
       txError(e)
+    end
+  end
+
+  def sendNotifEmail(username, ticket)
+    @token = rand(1111..9999)
+    users = User.where(username: username)
+    if users.count == 1
+      user = users.first
+      user.token = @token
+      user.save
+
+      ticket = Ticket.find_by(id: ticket.id)
+      ticket.token = @token
+      ticket.save
+      SenderEmail.create!(
+        email_to: user.email,
+        parent_id: ticket.id,
+        token: user.token,
+        status: 'not-yet-sent'
+      )
+      @sender = SenderEmail.last
+      Resque.enqueue_in(0, SenderEmailWorker, @sender.id)
     end
   end
 
@@ -290,7 +283,7 @@ class Transaksi::TicketsController < ApplicationController
         }
       else
         data_sub_category = SubCategory.find_by_id(params[:id])
-        data = RoleAssignment.left_outer_joins(:role,:user).where('roles.name IN (?)', ['kepala divisi', 'user', 'manajer it']).where.not('users.username = ?', current_user.username).select('users.username')
+        data = RoleAssignment.left_outer_joins(:role,:user).where('roles.name IN (?)', ['kepala divisi', 'user']).where.not('users.username = ?', current_user.username).select('users.username')
     
         render json:{
           status_approval: data_sub_category.approval_berjenjang,
