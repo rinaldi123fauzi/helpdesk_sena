@@ -79,9 +79,17 @@
               </div>
             </div>
           </li> %>
-          <a href="#"
-              class="text-dark mt-2" style="font-size: 18px;"><%= current_user.username %>
-          </a>
+         <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;">
+              <span class="mr-2 d-none d-lg-inline medium" style="color: black; font-size: 20px;"><%= current_user.username %></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+              <a class="dropdown-item" href="<%= edit_change_password_path(id: current_user.id) %>">
+                <i class="fas fa-lock fa-sm fa-fw mr-2 text-gray-400"></i>
+                Ubah Password
+              </a>
+            </div>
+          </li>
           
           <%#  %>
           <li><a href="<%= destroy_user_session_path %>" data-method="DELETE" 
