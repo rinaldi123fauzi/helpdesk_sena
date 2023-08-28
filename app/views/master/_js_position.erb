@@ -6,6 +6,7 @@
     var role = $('.role option:selected').val();
     var satuan_kerja = $('.satuan-kerja option:selected').val();
     var punya_pm = $('.punya-pm option:selected').val();
+    $('.notice').empty();
     $('#simpanKepalaDivisi').text('Loading...');
     if (id_kepala_divisi == "") {
       $.ajax({
@@ -22,6 +23,9 @@
         {
           if (data[0]['status'] == "tersimpan") {
             window.location = "/master/index?pilihan=Kepala Divisi";
+          }else if(data[0]['status'] == "duplikasi"){
+            $('#simpanKepalaDivisi').text('Simpan');
+            $('.notice').html(`<span class="text-danger">Divisi tidak boleh duplikasi</span>`);
           }
         }
       });

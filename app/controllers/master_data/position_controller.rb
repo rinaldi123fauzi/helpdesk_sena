@@ -3,15 +3,28 @@ class MasterData::PositionController < ApplicationController
   
   def create
     begin
-      Position.create!(
-        'user_id' => params[:user],
-        'role_id' => params[:role],
-        'work_unit_id' => params[:satuan_kerja],
-        'punya_pm' => params[:punya_pm]
-      )
-      render json: [  
-        "status" => "tersimpan"
-      ]
+      @check = Position.where(work_unit_id: params[:satuan_kerja])
+      if @check.count == 0
+        Position.create!(
+          'user_id' => params[:user],
+          'role_id' => params[:role],
+          'work_unit_id' => params[:satuan_kerja],
+          'punya_pm' => params[:punya_pm]
+        )
+        users = User.where(id: params[:user])
+        if users.count == 1
+          user = users.first
+          user.role_ids = [params[:role]]
+          user.save
+        end
+        render json: [  
+          "status" => "tersimpan"
+        ]
+      else
+        render json: [  
+          "status" => "duplikasi"
+        ]
+      end
     rescue StandardError => e
       txError(e)
     end
@@ -28,6 +41,12 @@ class MasterData::PositionController < ApplicationController
         }
       )
       if (@data)
+        users = User.where(id: params[:user])
+        if users.count == 1
+          user = users.first
+          user.role_ids = [params[:role]]
+          user.save
+        end
         render json: [  
           "status" => "tersimpan"
         ]
@@ -58,6 +77,13 @@ class MasterData::PositionController < ApplicationController
 
   def delete
     begin
+      @dataUser = Position.find(params[:id])
+      users = User.where(id: @dataUser.user_id)
+      if users.count == 1
+        user = users.first
+        user.role_ids = [4]
+        user.save
+      end
       @data = Position.find(params[:id]).destroy
       if (@data)
         render json: {
