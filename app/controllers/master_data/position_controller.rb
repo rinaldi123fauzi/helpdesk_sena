@@ -33,11 +33,19 @@ class MasterData::PositionController < ApplicationController
   def update
     begin
       userBefores = Position.where(user_id: params[:user])
+      posisi = Position.find_by(id: params[:id_kepala_divisi])
       if userBefores.count > 1
-        posisi = Position.find_by(id: params[:id_kepala_divisi])
         user = User.find(posisi.user_id)
         user.role_ids = [4]
         user.save
+      else
+        posisis = Position.where(user_id: posisi.user_id)
+        if posisis.count == 1
+          posisi = posisis.first
+          user = User.find(posisi.user_id)
+          user.role_ids = [4]
+          user.save
+        end
       end
       @data = Position.update(params[:id_kepala_divisi],
         {
