@@ -20,6 +20,7 @@
 //= require toastr
 //= require activestorage
 //= require sweetalert_2
+//= require js/app.min.js
 
 function rupiah_formater(angka, prefix) {
   var number_string = angka.replace(/[^,\d]/g, "").toString(),
