@@ -1164,6 +1164,36 @@
             }
           });
         });
+
+        $(document).on('change', '#satuan-kerja', function(){
+          var id = $(this).val();
+          $.ajax({
+            url: "/transaksi/tickets/satuan-kerja",
+            method: 'GET',
+            data :{
+              id:id
+            },
+            success: function(data)
+            {
+              $('#approval-by').empty();
+              $('#approval-by').append(`
+                    <option value="">--Pilih--</option>
+              `);
+              if (data['status']['punya_pm'] == true) {
+                for (let i = 0; i < data['user_biasa'].length; i++) {
+                  const element = data['user_biasa'][i];
+                  $('#approval-by').append(`
+                    <option value="${element['username']}">${element['username']}</option>
+                  `);
+                }
+              }else if(data['status']['punya_pm'] == false){
+                 $('#approval-by').append(`
+                  <option value="${data['username']}">${data['username']}</option>
+                `);
+              }
+            }
+          });
+        });
       }
     });
   });

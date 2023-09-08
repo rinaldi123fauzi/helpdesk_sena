@@ -31,10 +31,10 @@ class Transaksi::TicketsController < ApplicationController
 
   def create
     begin
+      @no_ticket = NumberingTicketService.call()
       if params[:layanan].length >= 1
         if params[:sub_layanan].length >= 1
           @data = TicketService.call(params[:sub_layanan],params[:approval_by],current_user.username,getRole)
-          @no_ticket = NumberingTicketService.call()
           ActiveRecord::Base.transaction do
             Ticket.transaction do
               ticket = Ticket.new
