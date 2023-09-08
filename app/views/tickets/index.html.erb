@@ -13,13 +13,23 @@
             <input type="hidden" name="authenticity_token" id="authenticity_token" value="<%= form_authenticity_token %>">
             <input type="hidden" id="id_tiket" name="id_tiket">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-6 nomor-ticket">
                 <div class="form-group">
                   <label>Nomor Tiket</label>
                   <div class="input-group">
                     <input type="text" class="form-control" id="nomor-tiket" name="nomor_tiket" readonly>
                   </div>
                 </div>
+              </div>
+              <div class="col-md-12 dibuat-oleh">
+                <div class="form-group">
+                  <label>Dibuat Oleh</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" name="dibuat_oleh" id="dibuat-oleh" readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
                 <div class="form-group">
                   <label>Layanan</label>
                   <div class="input-group">
@@ -31,12 +41,6 @@
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group">
-                  <label>Dibuat Oleh</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" name="dibuat_oleh" id="dibuat-oleh" readonly>
-                  </div>
-                </div>
                 <div class="form-group">
                   <label>Sub Layanan</label>
                   <div class="input-group">
@@ -623,6 +627,14 @@
   $(document).on('click', '.editTiket', function(){
     $('.modal-title').text('Ubah Tiket');
     var id = $(this).data('id');
+    $('#post')[0].reset();
+    $('#layanan').find('option:not(:first)').remove();
+    $('#sub-layanan').find('option:not(:first)').remove();
+    $('#area').find('option:not(:first)').remove();
+    $('#satuan-kerja').find('option:not(:first)').remove();
+    $('.nomor-ticket').prop('hidden', false);
+    $('.dibuat-oleh').removeClass('col-md-12');
+    $('.dibuat-oleh').addClass('col-md-6');
     $.ajax({
       url: "/transaksi/tickets/detail-tiket",
       method: 'GET',
@@ -1062,12 +1074,14 @@
     $('#ubah-approval2').removeClass();
     $('#ubah-approval1').addClass('col-md-6');
     $('#ubah-approval2').addClass('col-md-6');
+    $('.nomor-ticket').prop('hidden', true);
+    $('.dibuat-oleh').removeClass('col-md-6');
+    $('.dibuat-oleh').addClass('col-md-12');
     $.ajax({
       url: "/transaksi/tickets/list-form",
       method: 'GET',
       success: function(data)
       {
-        $('#nomor-tiket').val(data[0]['no_ticket']);
         $('#dibuat-oleh').val(data[0]['dibuat_oleh']);
         for (let i = 0; i < data[0]['categories'].length; i++) {
           const element = data[0]['categories'][i];

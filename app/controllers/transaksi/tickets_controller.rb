@@ -6,14 +6,12 @@ class Transaksi::TicketsController < ApplicationController
       @categories = Category.all
       @work_units = WorkUnit.all
       @areas = Area.all
-      @no_ticket = NumberingTicketService.call()
 
       render json:[
         'categories' => @categories,
         'work_units' => @work_units,
         'areas' => @areas,
-        'dibuat_oleh' => current_user.username,
-        'no_ticket' => @no_ticket
+        'dibuat_oleh' => current_user.username
       ]
     rescue StandardError => e
       txError(e)
@@ -36,23 +34,46 @@ class Transaksi::TicketsController < ApplicationController
       if params[:layanan].length >= 1
         if params[:sub_layanan].length >= 1
           @data = TicketService.call(params[:sub_layanan],params[:approval_by],current_user.username,getRole)
+          @no_ticket = NumberingTicketService.call()
           ActiveRecord::Base.transaction do
-            ticket = Ticket.new
-            ticket.no_ticket = params[:nomor_tiket]
-            ticket.category_id = params[:layanan]
-            ticket.sub_category_id = params[:sub_layanan]
-            ticket.issued_by = params[:dibuat_oleh]
-            ticket.description = params[:deskripsi]
-            ticket.status = @data[0]
-            ticket.approval_by = @data[1]
-            ticket.work_unit_id = params[:satuan_kerja]
-            ticket.area_id = params[:area]
-            if params[:file_tiket].present?
-              if params[:size_file].to_i <= ENV['MAX_UPLOAD'].to_i
-                params[:file_tiket].each do |data|
-                  ticket.file_ticket = data
-                end
+            Ticket.transaction do
+              ticket = Ticket.new
+              ticket.no_ticket = @no_ticket
+              ticket.category_id = params[:layanan]
+              ticket.sub_category_id = params[:sub_layanan]
+              ticket.issued_by = params[:dibuat_oleh]
+              ticket.description = params[:deskripsi]
+              ticket.status = @data[0]
+              ticket.approval_by = @data[1]
+              ticket.work_unit_id = params[:satuan_kerja]
+              ticket.area_id = params[:area]
+              if params[:file_tiket].present?
+                if params[:size_file].to_i <= ENV['MAX_UPLOAD'].to_i
+                  params[:file_tiket].each do |data|
+                    ticket.file_ticket = data
+                  end
 
+                  if ticket.save
+                    unless @data[1].nil?
+                      sendNotifEmail(@data[1], ticket)
+                    end
+                    render json:{
+                      status: 200
+                    }
+                    flash[:notice] = "Data berhasil disimpan"
+                  else
+                    render json:{
+                      status: 500,
+                      msg: ticket.errors
+                    }
+                    txError(ticket.errors.to_json)
+                  end
+                else
+                  render json:{
+                    status: 204
+                  }
+                end
+              else
                 if ticket.save
                   unless @data[1].nil?
                     sendNotifEmail(@data[1], ticket)
@@ -68,26 +89,6 @@ class Transaksi::TicketsController < ApplicationController
                   }
                   txError(ticket.errors.to_json)
                 end
-              else
-                render json:{
-                  status: 204
-                }
-              end
-            else
-              if ticket.save
-                unless @data[1].nil?
-                  sendNotifEmail(@data[1], ticket)
-                end
-                render json:{
-                  status: 200
-                }
-                flash[:notice] = "Data berhasil disimpan"
-              else
-                render json:{
-                  status: 500,
-                  msg: ticket.errors
-                }
-                txError(ticket.errors.to_json)
               end
             end
           end
