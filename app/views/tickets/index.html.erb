@@ -344,7 +344,7 @@
           <div class="col-sm-3">
             <input type="text" class="form-control number-ticket" name="nomor_tiket" placeholder="Search by nomor tiket" value="<%= params[:nomor_tiket] ? params[:nomor_tiket] : "" %>">
           </div>
-          <button class="btn btn-md btn-info search-ticket" type="submit">Filter</button>
+          <button class="btn btn-md btn-info search-ticket" type="submit"><i class="fa fa-search"></i> Search</button>
         </div>
       <% end %>
       <div class="table-responsive">
@@ -378,6 +378,8 @@
                       end
                     when "created"
                       concat "<span class='badge badge-transparent'>#{ticket.status}</span>".html_safe
+                    when "closed"
+                      concat "<span class='badge badge-primary'>#{ticket.status}</span>".html_safe
                     when "overdue"
                       concat "<span class='badge badge-warning'>#{ticket.status}</span>".html_safe
                     when "rejected"
@@ -434,6 +436,7 @@
             <% end %>
           </tbody>
         </table>
+        <i class="text-danger">* Data maksimal muncul 100 per bulan</i>
       </div>
     </div>
   </div>

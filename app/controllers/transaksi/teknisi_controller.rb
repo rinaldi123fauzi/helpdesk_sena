@@ -5,7 +5,7 @@ class Transaksi::TeknisiController < ApplicationController
     begin
       ticket = Ticket.find_by_id(params[:id])
       result = (Time.current - ticket.inprogress_respon) / 1.hours   
-      duration = result.round(2) + ticket.duration
+      duration = result.round(2)
 
       ticket.status = "closed"
       ticket.closed_respon = Time.current
