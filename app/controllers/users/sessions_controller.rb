@@ -49,23 +49,24 @@ class Users::SessionsController < Devise::SessionsController
         end
       end
     else
-      if @username.match(/(@)/)
-        @user = User.find_by_email(@username)
-      else  
-        @user = User.find_by_username(@username)
-      end
-      
-      if @user && @user.valid_password?(@password)
-        sign_in(@user)
-        if current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
-          redirect_to "/tickets"
-        else
-          redirect_to root_path
-        end
-      else
+      @user = User.where('username = ? or email = ?', @username, @username).first
+      if @user.email.match(/(@pt-sena.co.id)/) #cek apakah user mengandung email SENA
         reset_session
         flash[:alert] = "Username atau Password anda salah"
         redirect_to new_user_session_path
+      else # tidak, maka lanjut untuk validasi password
+        if @user && @user.valid_password?(@password)
+          sign_in(@user)
+          if current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
+            redirect_to "/tickets"
+          else
+            redirect_to root_path
+          end
+        else
+          reset_session
+          flash[:alert] = "Username atau Password anda salah"
+          redirect_to new_user_session_path
+        end
       end
     end
   end
