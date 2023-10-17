@@ -13,23 +13,60 @@ class Users::SessionsController < Devise::SessionsController
     @username = params[:user][:username]
     @password = params[:user][:password]
 
-    if @username.match(/(@)/)
-      @user = User.find_by_email(@username)
-    else  
-      @user = User.find_by_username(@username)
-    end
-    
-    if @user && @user.valid_password?(@password)
-      sign_in(@user)
-      if current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
-        redirect_to "/tickets"
+    ldap = Net::LDAP.new :host => '182.253.69.21',
+      :port => 389,
+      :auth => {
+          :method => :simple,
+          :username => "#{@username}",
+          :password => "#{@password}"
+      }
+    if ldap.bind
+      checkUser = User.where(email: @username)
+      if checkUser.count == 1
+        @user = checkUser.first
+        @user.password = @password
+        @user.save
+        sign_in(@user)
+        if current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
+          redirect_to "/tickets"
+        else
+          redirect_to root_path
+        end
       else
-        redirect_to root_path
+        splitEmail = @username.split('@')
+        user = User.new
+        user.username = splitEmail[0]
+        user.email = @username
+        user.password = @password
+        user.role_ids = [4]
+        user.state = true
+        user.save
+        sign_in(user)
+        if current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
+          redirect_to "/tickets"
+        else
+          redirect_to root_path
+        end
       end
     else
-      reset_session
-      flash[:alert] = "Username atau Password anda salah"
-      redirect_to new_user_session_path
+      if @username.match(/(@)/)
+        @user = User.find_by_email(@username)
+      else  
+        @user = User.find_by_username(@username)
+      end
+      
+      if @user && @user.valid_password?(@password)
+        sign_in(@user)
+        if current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
+          redirect_to "/tickets"
+        else
+          redirect_to root_path
+        end
+      else
+        reset_session
+        flash[:alert] = "Username atau Password anda salah"
+        redirect_to new_user_session_path
+      end
     end
   end
 

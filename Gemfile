@@ -84,3 +84,4 @@ gem 'whenever'
 gem "foreman", "~> 0.87.2"
 gem 'resque'
 gem 'resque-scheduler'
+gem 'net-ldap'

@@ -24,5 +24,9 @@ every 1.minute do
     rake 'respon_ticket:set_respon'
     # rake 'sender_email:set_respon'
 end
+every 1.minute do
+    rake 'pull_data_ldap:set_respon'
+    # rake 'sender_email:set_respon'
+end
 
 # Learn more: http://github.com/javan/whenever

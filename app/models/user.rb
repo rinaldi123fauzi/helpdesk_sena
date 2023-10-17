@@ -44,4 +44,41 @@ class User < ApplicationRecord
     super && state
   end
 
+  def pullDataLdap
+    ldap = Net::LDAP.new :host => '182.253.69.21',
+      :port => 389,
+      :auth => {
+          :method => :simple,
+          :username => "mohamad.rinaldi@pt-sena.co.id",
+          :password => "Daanmogot123@"
+      }
+    if ldap.bind
+      filter = Net::LDAP::Filter.eq("cn", "*")
+      treebase = "OU=_PT.SENA,DC=SENA,DC=INTRA"
+      @array_username = []
+      ldap.search(:base => treebase, :filter => filter) do |entry|
+        @array_username.push(
+          "email" => entry['mail']
+        )
+      end
+      @array_username.each do |data|
+        if data['email'].present?
+         emailLdap = data['email'].join("").downcase
+         email = emailLdap.split('@')
+         checkUser = User.where(email: emailLdap)
+         if checkUser.count == 0
+          user = User.new
+          user.username = email[0]
+          user.email = emailLdap
+          user.password = "SENA123"
+          user.role_ids = [4]
+          user.state = true
+          user.save
+         end
+        end
+      end
+    else
+      puts "Gagal"
+    end
+  end
 end
