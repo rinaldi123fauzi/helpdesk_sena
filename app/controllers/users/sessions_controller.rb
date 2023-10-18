@@ -24,8 +24,6 @@ class Users::SessionsController < Devise::SessionsController
       checkUser = User.where(email: @username)
       if checkUser.count == 1
         @user = checkUser.first
-        @user.password = @password
-        @user.save
         sign_in(@user)
         if current_user.roles.any? {|r| r.name == "kepala divisi" || r.name == "projek manajer"}
           redirect_to "/tickets"
@@ -37,7 +35,7 @@ class Users::SessionsController < Devise::SessionsController
         user = User.new
         user.username = splitEmail[0]
         user.email = @username
-        user.password = @password
+        user.password = "82406769c4dadc50fa2924501fdb929e"
         user.role_ids = [4]
         user.state = true
         user.save
