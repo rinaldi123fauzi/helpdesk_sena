@@ -1,7 +1,7 @@
 my_delayed_job:
   every: '2s'
   queue: my_queue
-  class: MyWorker
+  class: SenderEmailWorker
   description: "This job puts something every 1 minute"
   args:
     - argument1
